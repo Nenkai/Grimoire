@@ -60,5 +60,21 @@ namespace GTGrimServer.Helpers
             await fs.CopyToAsync(Response.Body);
         }
 
+        [HttpGet]
+        [Route("{server}/event_{folderId:int}.xml")]
+        public async Task GetOnlineEvent(string server, int folderId)
+        {
+            string eventFile = $"Resources/event/{server}/event_{folderId}.xml";
+            if (!System.IO.File.Exists(eventFile))
+            {
+                // Note: The game will try 5 times, if missing
+                Response.StatusCode = StatusCodes.Status404NotFound;
+                return;
+            }
+
+            using var fs = System.IO.File.OpenRead(eventFile);
+            await fs.CopyToAsync(Response.Body);
+        }
+
     }
 }
