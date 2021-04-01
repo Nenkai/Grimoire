@@ -33,7 +33,7 @@ namespace GTGrimServer.Helpers
         [HttpPost]
         public GrimResult Post()
         {
-            return new GrimResult(1);
+            return GrimResult.FromInt(1);
         }
 
     }

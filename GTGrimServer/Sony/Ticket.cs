@@ -37,7 +37,10 @@ namespace GTGrimServer.Sony
             ticket.VersionMajor = bs.ReadByte() >> 4;
             ticket.VersionMinor = bs.ReadByte();
 
-            bs.Position += 4;
+            if (ticket.VersionMajor >= 4)
+                bs.Position = 0x10;
+            else
+                bs.Position = 0x08;
 
             int headerSize = bs.ReadInt32();
             bs.ReadInt32(); // Blob thing

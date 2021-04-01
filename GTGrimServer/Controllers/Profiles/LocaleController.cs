@@ -15,16 +15,16 @@ using GTGrimServer.Models;
 namespace GTGrimServer.Helpers
 {
     /// <summary>
-    /// Handles profile related requests.
+    /// Handles logging made by the game for the server to keep track of what the player is doing.
     /// </summary>
     [ApiController]
-    [Route("/ap/[controller]/")]
+    [Route("/ap/locale")]
     [Produces("application/xml")]
-    public class ProfileController : ControllerBase
+    public class LocaleController : ControllerBase
     {
-        private readonly ILogger<ProfileController> _logger;
+        private readonly ILogger<LocaleController> _logger;
 
-        public ProfileController(ILogger<ProfileController> logger)
+        public LocaleController(ILogger<LocaleController> logger)
         {
             _logger = logger;
         }
@@ -36,10 +36,18 @@ namespace GTGrimServer.Helpers
             if (requestReq is null)
             {
                 // Handle
-                return GrimResult.FromInt(0);
+                return null;
             }
 
-            return GrimResult.FromInt(1);
+            if (requestReq.Command.Equals("servertime.get"))
+                return GrimResult.FromDateTime(DateTime.Now);
+            else if (requestReq.Command.Equals("language.set"))
+            {
+                return new GrimResult(requestReq.Params.Param[0]);
+            }
+                
+
+            return null;
         }
 
     }
