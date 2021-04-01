@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<servers>
+  <server>
+  	<name>gt</name>
+  	<option key="online.language.set" value="0" />
+  	<option key="online.serverlist2.enable" value="0" />
+  	<option key="online.eula.enable" value="1" />
+  	<option key="online.ranking.license.enable" value="1" />
+  	<option key="online.quickmatch.enable" value="1" />
+
+	<!-- Whether to enable patch checking -->
+  	<option key="patch.enable" value="1" />
+  	<option key="patch.seq469128999" value="1" />
+  
+  	<option key="lobby_id" value="12" />
+  
+  	<option key="online.photo.max" value="8" />
+  	<option key="disqualify_report" value="1" />
+  	<option key="online.gtnews.enable" value="1" />
+  </server>
+  <server>
+  	<name>game</name>
+  	<option key="room.prize_base" value="1500" />
+  	<option key="room.prize_mode_pr" value="100" />
+  	<option key="room.prize_mode_pqr" value="100" />
+  	<option key="room.prize_mode_pt" value="100" />
+  	<option key="room.prize_mode_pd" value="100" />
+  	<option key="room.prize_mode_pe" value="100" />
+  	<option key="room.prize_mode_pqe" value="100" />
+  	<option key="room.prize_order_table" value="100,70,60,55,53,50,48,45,43,40,38,35,33,30,28,25" />
+  	<option key="room.prize_entries_num_table" value="100,100,100,100,100,100,105,110,115,120,125,130,135,140,145,150" />
+  	<option key="qmatch.prize_entries_num_table" value="100,100,100,100,100,100,105,110,115,120,125,130,135,140,145,150" />
+  
+  	<option key="qmatch.prize_base" value="100" />
+  	<option key="qmatch.crowded_threshold" value="1,20,40,60,100" />
+  </server>
+  <server>
+  	<name>network</name>
+  	<option key="qmatch.wpCountDown" value="80,90" />
+  	<option key="qmatch.wpCountDownExtension" value="5" />
+  	<option key="qmatch.joinRetryableCount" value="15" />
+  	<option key="qmatch.joinRetryInterval" value="2000" />
+  	<option key="lobby.joinRetryableCount" value="-1" />
+  	<option key="lobby.joinRetryInterval" value="-1" />
+  
+  	<option key="community.presence" value="180" />
+  </server>
+  <server>
+  	<name>grim_http</name>
+    
+  	<option key="online.log.enable"                 value="1" />
+  	<option key="updater.delay"                     value="1000" />
+  	<option key="online.extendsession.interval"     value="600" />
+  	<option key="maintenance.next"                  value="2021-03-28T21:00:00Z" />
+  	<option key="maintenance.next.display"          value="2021-03-28T20:00:00Z" />
+  	<option key="maintenance"                       value="0" />										 <!-- Use whether to enable maintenance or not -->
+  	<option key="maintenance.message"               value="Custom maintenance messages also work owo" /> <!-- Use this for a custom maintenance message -->
+  </server>
+  <server>
+  	<name>grim2_http</name>
+  	<option key="sendBufferSize" value="8191" />
+  	<option key="recvBufferSize" value="61439" />
+  	<option key="connectionTimeout" value="30000" />
+  	<option key="requestTimeout" value="120000" />
+  	<option key="responseTimeout" value="120000" />
+  	<option key="multiplicity" value="-1" />
+  </server>
+  <server>
+  	<name>gtacademy</name>
+  	<option key="scee.eligible_region" value="fr,it,gb,ru,es,pt,nl,be,lu,pl,cz,se,de,in,au,ae,qa,om,bh,sa,lb,kw" />
+  </server>
+</servers>

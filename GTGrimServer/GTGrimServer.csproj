@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <AssemblyName>GTGrimServer</AssemblyName>
+    <RootNamespace>GTGrimServer</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+	<Content Include="Resources\*.*">
+		<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Resources\event\debug\setting.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Resources\event\debug\setting.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+	
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Formatters.Xml" Version="2.2.0" />
+    <PackageReference Include="Syroot.BinaryData" Version="5.2.2" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,5 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<regions>
+	<region key="debug" value="Debug"/>
+	<region key="no" value="Do not use"/>
+</regions>
