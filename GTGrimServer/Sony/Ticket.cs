@@ -69,7 +69,7 @@ namespace GTGrimServer.Sony
                 case TicketFieldType.UInt64:
                     return bs.ReadUInt64();
                 case TicketFieldType.String:
-                    return bs.ReadString(dataLen);
+                    return bs.ReadString(dataLen).TrimEnd('\0');
                 case TicketFieldType.Timestamp:
                     return bs.ReadUInt64();
                 case TicketFieldType.Binary:
