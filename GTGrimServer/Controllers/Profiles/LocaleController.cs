@@ -40,14 +40,25 @@ namespace GTGrimServer.Helpers
             }
 
             if (requestReq.Command.Equals("servertime.get"))
-                return GrimResult.FromDateTime(DateTime.Now);
+                return GetServerTime();
             else if (requestReq.Command.Equals("language.set"))
             {
-                return new GrimResult(requestReq.Params.Param[0]);
+                return ProcessLanguage(requestReq);
             }
                 
 
             return null;
+        }
+
+        private GrimResult GetServerTime()
+            => GrimResult.FromDateTime(DateTime.Now);
+
+        private GrimResult ProcessLanguage(GrimRequest gRequest)
+        {
+            if (!gRequest.TryGetParameterByKey("language", out GrimRequestParam param))
+                return null;
+
+            return GrimResult.FromString(param.Text.ToLower());
         }
 
     }

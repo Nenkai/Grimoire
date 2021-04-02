@@ -7,9 +7,9 @@
   	<option key="online.eula.enable" value="1" />
   	<option key="online.ranking.license.enable" value="1" />
   	<option key="online.quickmatch.enable" value="1" />
-
-	<!-- Whether to enable patch checking -->
   	<option key="patch.enable" value="0" />
+  	
+  	<!-- Whether to enable patch checking -->
   	<option key="patch.seq469128999" value="1" />
   
   	<option key="lobby_id" value="12" />
@@ -47,7 +47,13 @@
   </server>
   <server>
   	<name>grim_http</name>
-    
+
+	<!-- Required for the redirection -->
+	<host>192.168.0.24</host>
+	<port>80</port>
+	<ipaddress>192.168.0.24</ipaddress>
+	<url>http://192.168.0.24</url>
+	  
   	<option key="online.log.enable"                 value="1" />
   	<option key="updater.delay"                     value="1000" />
   	<option key="online.extendsession.interval"     value="600" />

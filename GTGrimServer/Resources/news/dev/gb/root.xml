@@ -1,0 +1,5 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<categories>
+  <category category_name="test" category_id1="1" category_id2="1" root="1"/>
+  <category category_name="testtest" category_id1="2" category_id2="2" root="2"/>
+</categories>

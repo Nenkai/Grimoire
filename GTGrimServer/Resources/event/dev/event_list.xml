@@ -1,0 +1,155 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!-- Same as an actual folder. Just some extra additions. -->
+<event_list>
+	<event>
+		<title>
+			<JP>The home of the finest events in Gran Turismo</JP>
+			<US>The home of the finest events in Gran Turismo</US>
+			<GB>The home of the finest events in Gran Turismo</GB>
+			<FR>The home of the finest events in Gran Turismo</FR>
+			<DE>The home of the finest events in Gran Turismo</DE>
+			<IT>The home of the finest events in Gran Turismo</IT>
+			<ES>The home of the finest events in Gran Turismo</ES>
+			<PT>The home of the finest events in Gran Turismo</PT>
+			<NL>The home of the finest events in Gran Turismo</NL>
+			<RU>The home of the finest events in Gran Turismo</RU>
+			<KR>The home of the finest events in Gran Turismo</KR>
+			<TW>The home of the finest events in Gran Turismo</TW>
+			<EL>The home of the finest events in Gran Turismo</EL>
+			<TR>The home of the finest events in Gran Turismo</TR>
+			<PL>The home of the finest events in Gran Turismo</PL>
+			<CZ>The home of the finest events in Gran Turismo</CZ>
+			<HU>The home of the finest events in Gran Turismo</HU>
+			<BP>The home of the finest events in Gran Turismo</BP>
+			<MS>The home of the finest events in Gran Turismo</MS>
+		</title>
+		<description>
+			<JP>Test Descriptions</JP>
+			<US>Test Descriptions</US>
+			<GB>Test Descriptions</GB>
+			<FR>Test Descriptions</FR>
+			<DE>Test Descriptions</DE>
+			<IT>Test Descriptions</IT>
+			<ES>Test Descriptions</ES>
+			<PT>Test Descriptions</PT>
+			<NL>Test Descriptions</NL>
+			<RU>Test Descriptions</RU>
+			<KR>Test Descriptions</KR>
+			<TW>Test Descriptions</TW>
+			<EL>Test Descriptions</EL>
+			<TR>Test Descriptions</TR>
+			<PL>Test Descriptions</PL>
+			<CZ>Test Descriptions</CZ>
+			<HU>Test Descriptions</HU>
+			<BP>Test Descriptions</BP>
+			<MS>Test Descriptions</MS>
+		</description>
+		<one_line_title>
+			<JP>Test One Line Title</JP>
+			<US>Test One Line Title</US>
+			<GB>Test One Line Title</GB>
+			<FR>Test One Line Title</FR>
+			<DE>Test One Line Title</DE>
+			<IT>Test One Line Title</IT>
+			<ES>Test One Line Title</ES>
+			<PT>Test One Line Title</PT>
+			<NL>Test One Line Title</NL>
+			<RU>Test One Line Title</RU>
+			<KR>Test One Line Title</KR>
+			<TW>Test One Line Title</TW>
+			<EL>Test One Line Title</EL>
+			<TR>Test One Line Title</TR>
+			<PL>Test One Line Title</PL>
+			<CZ>Test One Line Title</CZ>
+			<HU>Test One Line Title</HU>
+			<BP>Test One Line Title</BP>
+			<MS>Test One Line Title</MS>
+		</one_line_title>
+		<ranking_list>
+			<ranking>
+				<title>
+					<JP>Test</JP>
+					<US>Test</US>
+					<GB>Test</GB>
+					<FR>Test</FR>
+					<DE>Test</DE>
+					<IT>Test</IT>
+					<ES>Test</ES>
+					<PT>Test</PT>
+					<NL>Test</NL>
+					<RU>Test</RU>
+					<KR>Test</KR>
+					<TW>Test</TW>
+					<EL>Test</EL>
+					<TR>Test</TR>
+					<PL>Test</PL>
+					<CZ>Test</CZ>
+					<HU>Test</HU>
+					<BP>Test</BP>
+					<MS>Test</MS>
+				</title>
+				<description>
+					<JP>Test</JP>
+					<US>Test</US>
+					<GB>Test</GB>
+					<FR>Test</FR>
+					<DE>Test</DE>
+					<IT>Test</IT>
+					<ES>Test</ES>
+					<PT>Test</PT>
+					<NL>Test</NL>
+					<RU>Test</RU>
+					<KR>Test</KR>
+					<TW>Test</TW>
+					<EL>Test</EL>
+					<TR>Test</TR>
+					<PL>Test</PL>
+					<CZ>Test</CZ>
+					<HU>Test</HU>
+					<BP>Test</BP>
+					<MS>Test</MS>
+				</description>
+				<copy>
+					<JP>Test</JP>
+					<US>Test</US>
+					<GB>Test</GB>
+					<FR>Test</FR>
+					<DE>Test</DE>
+					<IT>Test</IT>
+					<ES>Test</ES>
+					<PT>Test</PT>
+					<NL>Test</NL>
+					<RU>Test</RU>
+					<KR>Test</KR>
+					<TW>Test</TW>
+					<EL>Test</EL>
+					<TR>Test</TR>
+					<PL>Test</PL>
+					<CZ>Test</CZ>
+					<HU>Test</HU>
+					<BP>Test</BP>
+					<MS>Test</MS>
+				</copy>
+				<board_id>1002268</board_id>
+			</ranking>
+		</ranking_list>
+		<id>146</id> <!-- Should be 146, for seasonals -->
+		<voucher />
+		<registration>0</registration>
+		<bg_image/>
+		<icon_image/>
+		<folder_image/>
+		<event_type>5</event_type>
+		<gameitem_type>0</gameitem_type>
+		<gameitem_category>0</gameitem_category>
+		<gameitem_id>0</gameitem_id>
+		<gameitem_value />
+		<dlc_flag>0</dlc_flag>
+		<begin_date>2021-04-01T16:39:04.5176312+02:00</begin_date>
+		<end_date>2022-04-01T16:39:04.5176312+02:00</end_date>
+		<new_date>2021-04-01T16:39:04.5176312+02:00</new_date>
+		<championship_value>0</championship_value>
+		<event_id_list>1002268</event_id_list> <!-- List of actual ids seperated by commas -->
+	</event>
+</event_list>
+

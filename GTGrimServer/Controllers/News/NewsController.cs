@@ -55,6 +55,12 @@ namespace GTGrimServer.Controllers
             await fs.CopyToAsync(Response.Body);
         }
 
+        /// <summary>
+        /// For GT5
+        /// </summary>
+        /// <param name="serverId"></param>
+        /// <param name="region"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route("{serverId}/{region}/root.xml")]
         public async Task GetNewsRoot(string serverId, string region)

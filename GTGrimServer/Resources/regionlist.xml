@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <regions>
-	<region key="debug" value="Debug"/>
-	<region key="no" value="Do not use"/>
+	<region key="dev" value="Develop"/>
+	<region key="rel" value="Release (Do not use)"/>
 </regions>

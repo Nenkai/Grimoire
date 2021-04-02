@@ -28,8 +28,6 @@ namespace GTGrimServer.Controllers
         [HttpPost]
         public async Task<TicketResult> Post(ulong pfsVersion)
         {
-            _logger.LogDebug("Got auth request ticket with PFS version: {pfsVersion}", pfsVersion);
-
             if (Request.ContentLength == 0)
             {
                 Response.StatusCode = StatusCodes.Status400BadRequest;
@@ -41,10 +39,12 @@ namespace GTGrimServer.Controllers
 
             Ticket ticket = Ticket.FromBuffer(buf);
 
+            _logger.LogDebug("Ticket Auth -> PFS: {pfsVersion} | OnlineID:{OnlineId} | Region: {Region}", pfsVersion, ticket.OnlineId, ticket.Region);
+
             var resp = new TicketResult()
             {
                 Result = "1",
-                Nickname = "Nenkai",
+                Nickname = ticket.OnlineId,
                 UserId = ticket.UserId,
                 UserNumber = "0",
                 ServerTime = DateTime.Now,

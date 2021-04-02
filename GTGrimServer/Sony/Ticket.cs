@@ -40,12 +40,7 @@ namespace GTGrimServer.Sony
             if (ticket.VersionMajor >= 4)
                 bs.Position = 0x10;
             else
-                bs.Position = 0x08;
-
-            int headerSize = bs.ReadInt32();
-            bs.ReadInt32(); // Blob thing
-
-            bs.ReadInt16();
+                bs.Position = 0x0C;
 
             ticket.Signature = (byte[])ReadNext(bs);
             ReadNext(bs);

@@ -33,6 +33,7 @@ namespace GTGrimServer.Helpers
         [HttpPost]
         public GrimResult Post()
         {
+            _logger.LogInformation($"Got session extend request");
             return GrimResult.FromInt(1);
         }
 

@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<newslist>
+	<news>
+		<!-- Both attribute or value works-->
+		<id id="500" lastupdate="now" news_time="lmao"/>
+		<file_id id="123" lastupdate="now" news_time="lmao"/>
+		<news_id id="500" lastupdate="now" news_time="lmao"/>
+	</news>
+</newslist>

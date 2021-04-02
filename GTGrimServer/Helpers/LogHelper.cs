@@ -202,6 +202,9 @@ namespace GTGrimServer.Helpers
             for (int i = 0; i < args.Length; i++)
             {
                 string arg = args[i];
+                if (arg.Length <= 2)
+                    continue;
+
                 string code = arg[0..2];
                 if (Codes.TryGetValue(code, out string humanStr))
                     args[i] = humanStr + arg[2..];                

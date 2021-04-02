@@ -8,21 +8,14 @@ using System.IO;
 
 namespace GTGrimServer.Models
 {
-    [XmlRoot(ElementName="grim")]
+    [XmlRoot(ElementName = "grim")]
     public class GrimRequest
-    {
+    { 
         [XmlElement(ElementName = "command")]
         public string Command { get; set; }
-
         [XmlElement(ElementName = "params")]
-        public GrimResultParam Params { get; set; }
-
-
-        public class GrimResultParam
-        {
-            [XmlElement(ElementName = "param")]
-            public string[] Param { get; set; }
-        }
+        public GrimRequestParams Params { get; set; }
+        
 
         public GrimRequest() { }
 
@@ -37,5 +30,39 @@ namespace GTGrimServer.Models
             GrimRequest requestReq = serializer.Deserialize(ms) as GrimRequest;
             return requestReq;
         }
+
+        public bool TryGetParameterByIndex(int index, out GrimRequestParam param)
+        {
+            if (index < 0 || index >= Params.ParamList.Count)
+            {
+                param = null;
+                return false;
+            }
+
+            param = Params.ParamList[index];
+            return true;
+        }
+
+        public bool TryGetParameterByKey(string key, out GrimRequestParam param)
+        {
+            param = Params.ParamList.FirstOrDefault(p => p.Key == key);
+            return param is not null;
+        }
+    }
+
+    [XmlRoot(ElementName = "params")]
+    public class GrimRequestParams
+    {
+        [XmlElement(ElementName = "param")]
+        public List<GrimRequestParam> ParamList { get; set; }
+    }
+
+    [XmlRoot(ElementName = "param")]
+    public class GrimRequestParam
+    {
+        [XmlAttribute(AttributeName = "key")]
+        public string Key { get; set; }
+        [XmlText]
+        public string Text { get; set; }
     }
 }

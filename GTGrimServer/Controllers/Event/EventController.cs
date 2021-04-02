@@ -29,13 +29,33 @@ namespace GTGrimServer.Helpers
         }
 
         [HttpGet]
+        [Route("{server}/{fileName}")]
+        public async Task GetImageFile(string server, string fileName)
+        {
+            if (fileName.EndsWith(".png") || fileName.EndsWith(".img"))
+            {
+                Response.StatusCode = StatusCodes.Status404NotFound;
+                return;
+            }
+
+            string eventListFile = $"Resources/event/{server}/{fileName}";
+            if (!System.IO.File.Exists(eventListFile))
+            {
+                Response.StatusCode = StatusCodes.Status404NotFound;
+                return;
+            }
+
+            using var fs = System.IO.File.OpenRead(eventListFile);
+            await fs.CopyToAsync(Response.Body);
+        }
+
+        [HttpGet]
         [Route("{server}/setting.xml")]
         public async Task GetSettings(string server)
         {
             string settingsFile = $"Resources/event/{server}/setting.xml";
             if (!System.IO.File.Exists(settingsFile))
             {
-                // Note: The game will try 5 times, if missing
                 Response.StatusCode = StatusCodes.Status404NotFound;
                 return;
             }
@@ -44,6 +64,7 @@ namespace GTGrimServer.Helpers
             await fs.CopyToAsync(Response.Body);
         }
 
+
         [HttpGet]
         [Route("{server}/event_list.xml")]
         public async Task GetOnlineEventList(string server)
@@ -51,7 +72,6 @@ namespace GTGrimServer.Helpers
             string eventListFile = $"Resources/event/{server}/event_list.xml";
             if (!System.IO.File.Exists(eventListFile))
             {
-                // Note: The game will try 5 times, if missing
                 Response.StatusCode = StatusCodes.Status404NotFound;
                 return;
             }

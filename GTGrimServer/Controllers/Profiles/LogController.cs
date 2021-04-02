@@ -35,11 +35,17 @@ namespace GTGrimServer.Helpers
                 return NoContent();
 
             string argStr = hVal.FirstOrDefault();
+            if (argStr.StartsWith("ADHOC"))
+            {
+                _logger.LogInformation($"Received ADHOC crash from client: {argStr}, argStr");
+                return Ok();
+            }
+
             string[] args = argStr.Split(':');
             LogHelper.Humanify(args);
 
             string humanified = string.Join(':', args);
-            _logger.LogDebug(humanified);
+            _logger.LogInformation("L> {args}", humanified);
 
             return Ok();
         }
