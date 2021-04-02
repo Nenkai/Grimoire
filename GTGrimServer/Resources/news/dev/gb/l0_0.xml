@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!-- l0_0 requested by GT5 -->
+<newslist>
+	<news>
+		<!-- Each article here is a news article for a category -->
+		
+		<!-- Both attribute or value works-->
+		<!-- Both ids are fetched as files -->
+		<id id="500" lastupdate="2013/4/01 12:37:00" news_time="2013/4/01 12:37:00" />
+		
+		<!-- Can be either file_id or news_id too -->
+		<!-- <file_id id="501" lastupdate="2013/4/01 12:37:00" news_time="2013/4/01 12:37:00"/>-->
+		<!-- <news_id id="501" lastupdate="2013/4/01 12:37:00" news_time="2013/4/01 12:37:00"/>-->
+	</news>
+</newslist>

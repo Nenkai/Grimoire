@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Globalization;
 
 using System.Xml.Serialization;
 
@@ -55,7 +56,7 @@ namespace GTGrimServer.Models
             => new(result.ToString());
 
         public static GrimResult FromDateTime(DateTime result)
-            => new(result.ToString());
+            => new(result.ToString("yyyy-MM-dd'T'HH:mm:ss.fffzzz", DateTimeFormatInfo.InvariantInfo)); // Rfc3339
 
     }
 }

@@ -2,8 +2,11 @@
 <newslist>
 	<news>
 		<!-- Both attribute or value works-->
-		<id id="500" lastupdate="now" news_time="lmao"/>
-		<file_id id="123" lastupdate="now" news_time="lmao"/>
-		<news_id id="500" lastupdate="now" news_time="lmao"/>
+		<!-- Both ids are fetched as files -->
+		<id id="601" lastupdate="2013/4/01 12:37:00" news_time="2013/4/01 12:37:00"/>
+		<file_id id="602" lastupdate="2013/4/01 12:37:00" news_time="2013/4/01 12:37:00"/>
+
+		<!-- News is not fetched-->
+		<news_id id="601" lastupdate="2013/4/01 12:37:00" news_time="2013/4/01 12:37:00"/>
 	</news>
 </newslist>

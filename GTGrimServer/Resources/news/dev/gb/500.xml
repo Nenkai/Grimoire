@@ -1,4 +1,63 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <news>
+	<news_id>500</news_id>
+	
+	<!-- Used to grab the category name? -->
+	<news_category_id1>0</news_category_id1>
+	<news_category_id2>0</news_category_id2>
+	<news_category_id3>0</news_category_id3>
+	
+	<!-- Title of the news article -->
+	<title>Breaking News</title>
+	
+	<headline>Not clickbait</headline>
+	
+	<!-- Actual Content -->
+	<comment>Du
+Du hast
+Du hast mich
+Du hast mich
+Du hast mich gefragt
+Du hast mich gefragt
+Du hast mich gefragt und ich hab' nichts gesagt
+Willst du bis der Tod euch scheidet
+Treu ihr sein für alle Tage
+Nein
+Nein</comment>
+		
+	<!-- Will show a button allowing to point to a GT TV programme -->
+	<gttv>5</gttv>
+	
+	<news_time>2021-04-02T20:20:27+00:00</news_time> <!-- Rfc time-->
+	<lastupdate>2021-04-02T20:20:27+00:00</lastupdate> <!-- Rfc time-->
+	
+	<!-- result_id -->
+	
+	<images>
+		<image id="0" caption="Kot"/>
+		<image id="1" caption="MEAT"/>
+	    <image id="2" caption="Kaz- Kazunoré-chan??"/>
+		<image id="3" caption="Missing"/>
+	</images>
 
+	<!-- Can be multiple pages -->
+	<results>
+		<result>
+			<name>Game Rating Vote Results</name>
+			<summary>The game rating results are in! Here are the best games according to you:</summary>
+			<!-- $$ to split into rows, ## to split into columns, ** to make a cell bigger -->
+			<content>Ranking##Game##Comment##Rating$$**1st##**GT6##**It's just good##**SS$$2nd##GTPSP##Meh##B$$3rd##GT5##Bad##F</content>
+		</result>
+	
+		<result>
+			<name>Page switching test</name>
+			<summary>Hi</summary>
+			<content>AAAAAAAAAAAAAAAAAAAA$$AAAAAAAAAAAAAAAAAAAA$$AAAAAAAAAAAAAAAAAAAA$$AAAAAAAAAAAAAAAAAAAA
+			$$AAAAAAAAAAAAAAAAAAAA$$AAAAAAAAAAAAAAAAAAAA$$AAAAAAAAAAAAAAAAAAAA$$AAAAAAAAAAAAAAAAAAAA$$AAAAAAAAAAAAAAAAAAAA
+			$$AAAAAAAAAAAAAAAAAAAA$$AAAAAAAAAAAAAAAAAAAA$$AAAAAAAAAAAAAAAAAAAA$$AAAAAAAAAAAAAAAAAAAA$$AAAAAAAAAAAAAAAAAAAA
+			$$AAAAAAAAAAAAAAAAAAAA$$AAAAAAAAAAAAAAAAAAAA$$AAAAAAAAAAAAAAAAAAAA$$AAAAAAAAAAAAAAAAAAAA$$
+			$$AAAAAAAAAAAAAAAAAAAA$$AAAAAAAAAAAAAAAAAAAA$$AAAAAAAAAAAAAAAAAAAA$$AAAAAAAAAAAAAAAAAAAA$$
+			$$AAAAAAAAAAAAAAAAAAAA$$AAAAAAAAAAAAAAAAAAAA$$AAAAAAAAAAAAAAAAAAAA$$AAAAAAAAAAAAAAAAAAAA$$</content>
+		</result>
+	</results>
 </news>

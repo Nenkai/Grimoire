@@ -63,9 +63,31 @@ namespace GTGrimServer.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("{serverId}/{region}/root.xml")]
-        public async Task GetNewsRoot(string serverId, string region)
+        public async Task GetCategoryRoot(string serverId, string region)
         {
             string newsFile = $"Resources/news/{serverId}/{region}/root.xml";
+            if (!System.IO.File.Exists(newsFile))
+            {
+                // Note: The game will try 5 times, if missing
+                Response.StatusCode = StatusCodes.Status404NotFound;
+                return;
+            }
+
+            using var fs = System.IO.File.OpenRead(newsFile);
+            await fs.CopyToAsync(Response.Body);
+        }
+
+        /// <summary>
+        /// For GT5
+        /// </summary>
+        /// <param name="serverId"></param>
+        /// <param name="region"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("common/{newsId}/{imageId}.jpg")]
+        public async Task GetNewsImage(int newsId, int imageId)
+        {
+            string newsFile = $"Resources/news/common/{newsId}/{imageId}.jpg";
             if (!System.IO.File.Exists(newsFile))
             {
                 // Note: The game will try 5 times, if missing

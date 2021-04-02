@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using System.Xml.Serialization;
 using System.IO;
 
+using GTGrimServer.Models;
+using GTGrimServer.Utils;
 using GTGrimServer.Sony;
 
 namespace GTGrimServer.Controllers
@@ -47,44 +49,10 @@ namespace GTGrimServer.Controllers
                 Nickname = ticket.OnlineId,
                 UserId = ticket.UserId,
                 UserNumber = "0",
-                ServerTime = DateTime.Now,
+                ServerTime = DateTime.Now.ToRfc3339String(),
             };
 
             return resp;
-        }
-
-        [XmlRoot("result")]
-        public class TicketResult
-        {
-            /// <summary>
-            /// Whether it succeeded.
-            /// </summary>
-            [XmlElement(ElementName = "result")]
-            public string Result { get; set; }
-
-            /// <summary>
-            /// PSN User ID.
-            /// </summary>
-            [XmlElement(ElementName = "user_id")]
-            public ulong UserId { get; set; }
-
-            /// <summary>
-            /// Nickname.
-            /// </summary>
-            [XmlElement(ElementName = "nickname")]
-            public string Nickname { get; set; }
-
-            /// <summary>
-            /// User Number.
-            /// </summary>
-            [XmlElement(ElementName = "user_no")]
-            public string UserNumber { get; set; }
-
-            /// <summary>
-            /// Server Time.
-            /// </summary>
-            [XmlElement(ElementName = "server_time")]
-            public DateTime ServerTime { get; set; }
         }
     }
 }

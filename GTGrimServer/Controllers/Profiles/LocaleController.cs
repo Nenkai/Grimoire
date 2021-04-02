@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Xml.Serialization;
 using System.IO;
 
+using GTGrimServer.Utils;
 using GTGrimServer.Sony;
 using GTGrimServer.Models;
 
@@ -51,7 +52,7 @@ namespace GTGrimServer.Helpers
         }
 
         private GrimResult GetServerTime()
-            => GrimResult.FromDateTime(DateTime.Now);
+            => GrimResult.FromString(DateTime.Now.ToRfc3339String());
 
         private GrimResult ProcessLanguage(GrimRequest gRequest)
         {
