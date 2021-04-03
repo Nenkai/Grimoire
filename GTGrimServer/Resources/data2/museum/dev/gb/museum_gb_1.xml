@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!-- GT5 -->
+<museum_item>
+	<fileid>123</fileid>
+	<dealer>bmw</dealer>
+	<year>2021</year>
+	<caption>Just a caption test</caption>
+	<lastupdate>2021-04-02T20:20:27+00:00</lastupdate>
+	<online>12345</online>
+	<dealer_id>1</dealer_id>
+</museum_item>
