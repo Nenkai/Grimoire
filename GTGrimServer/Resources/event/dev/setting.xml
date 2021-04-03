@@ -1,4 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
+<!-- GT6's Event Settings, shows "new" or not on the main screen -->
 <event_settings>
 	<quick_match_version>200</quick_match_version>
 	<seasonal_version>200</seasonal_version>
