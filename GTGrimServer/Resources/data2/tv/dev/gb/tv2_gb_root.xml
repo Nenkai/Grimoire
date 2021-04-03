@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!-- For GT5 - Global TV Categories -->
+<categories>
+	<!-- id2 (category_id2) must be 0 -->
+	<category id1="0" id2="0" root="1" name="test"/>
+</categories>
