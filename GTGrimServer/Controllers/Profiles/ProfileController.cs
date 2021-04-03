@@ -39,6 +39,14 @@ namespace GTGrimServer.Helpers
                 return GrimResult.FromInt(0);
             }
 
+            if (requestReq.Command == "profile.getspecialstatus")
+            {
+                // Related to ranking stuff, possibly a cheat? See gtmode -> ATTRIBUTE_EVAL: requestSpecialStatus
+                return GrimResult.FromInt(1);
+            }
+            else
+                _logger.LogDebug($"Received unimplemented profile call: {requestReq.Command}");
+
             return GrimResult.FromInt(1);
         }
 
