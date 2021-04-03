@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!-- GT5 - GTTV Set - Pretty much folders -->
+<tv_set>
+	<lastupdate>2021-04-02T20:20:27+00:00"</lastupdate>
+	<image_id>11</image_id>
+	<image_id2>22</image_id2>
+	<image_id3>33</image_id3>
+
+	<begin_date>2021-04-02T20:20:27+00:00</begin_date>
+
+	<!-- Paid Stuff, do not mess with (PS Store) -->
+	<sku/>
+	
+	<days>0</days>
+	<sort_key>0</sort_key>
+	<new>1</new>
+	
+	<s_image_id>44</s_image_id>
+	<m_image_id>55</m_image_id>
+	
+	<option key="offline" value="0"/>
+	<option key="description" value="-- description --"/>
+	<option key="copyright" value="-- copyright --"/>
+	<option key="title" value="-- title --"/>
+	<option key="hd" value="1"/>
+	<option key="subtitle" value="-- subtitle --"/>
+	<option key="rating" value="rate"/> <!-- requests r_-1 for some reason -->
+</tv_set>

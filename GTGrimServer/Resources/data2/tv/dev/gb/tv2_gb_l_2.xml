@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!-- GT5 - GTTV List -->
+<tv_ids>
+	<!-- Achievement 1 is ENDING1, 2 is ENDING2, 4 is other -->
+	<!-- offline, whether it can be open offline -->
+	<!-- Rating is age rating -->
+	<!-- type can be: set for a bundle (useless, psn?), list to point to another list/folder, or movie -->
+	<file_id id="1" type="movie" hidden="0" lastupdate="2021-04-02T20:20:27+00:00" offline="0" achievement="1" rating="0">
+		<flag>1</flag>
+
+		<!-- Channel Image ID for smaller screens -->
+		<s_image_id>4</s_image_id>
+		
+		<!-- Channel Image ID for large screens -->
+		<m_image_id>4</m_image_id>
+		
+		<bg_image_id>4</bg_image_id>
+		<sort_key>0</sort_key>
+		<provider>Provider Name</provider>
+		<name>Provider Name</name>
+		<new>1</new>
+		<description>Provider Description</description>
+		<copyright>Provider Copyright</copyright>
+	</file_id>
+</tv_ids>

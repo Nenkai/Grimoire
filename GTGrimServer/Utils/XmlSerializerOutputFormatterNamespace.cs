@@ -7,7 +7,7 @@ using System.Xml.Serialization;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.Mvc.Formatters.Xml;
 
-namespace GTGrimServer
+namespace GTGrimServer.Utils
 {
     public class XmlSerializerOutputFormatterNamespace : XmlSerializerOutputFormatter
     {

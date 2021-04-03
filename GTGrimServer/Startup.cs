@@ -13,6 +13,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Xml;
 
+using GTGrimServer.Utils;
+using GTGrimServer.Config;
+
 namespace GTGrimServer
 {
     public class Startup
@@ -28,6 +31,10 @@ namespace GTGrimServer
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            // Config stuff
+            services.Configure<GameServerOptions>(Configuration.GetSection(GameServerOptions.GameServer);
+
             services.AddMvc(options =>
             {
                 var settings = new XmlWriterSettings() { OmitXmlDeclaration = false };

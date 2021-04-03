@@ -1,13 +1,15 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
 using System.IO;
 
+using GTGrimServer.Config;
+using GTGrimServer.Utils;
 namespace GTGrimServer.Controllers
 {
     [ApiController]
@@ -16,10 +18,12 @@ namespace GTGrimServer.Controllers
     public class MuseumController : ControllerBase
     {
         private readonly ILogger<MuseumController> _logger;
+        private readonly GameServerOptions _gameServerOptions;
 
-        public MuseumController(ILogger<MuseumController> logger)
+        public MuseumController(IOptions<GameServerOptions> options, ILogger<MuseumController> logger)
         {
             _logger = logger;
+            _gameServerOptions = options.Value;
         }
 
         [HttpGet]
@@ -39,28 +43,14 @@ namespace GTGrimServer.Controllers
 
         private async Task GetMuseumList(string server, string region, string fileRegion, int listId)
         {
-            string museumListFile = $"Resources/data2/museum/{server}/{region}/museum_{fileRegion}_l_{listId}.xml";
-            if (!System.IO.File.Exists(museumListFile))
-            {
-                Response.StatusCode = StatusCodes.Status404NotFound;
-                return;
-            }
-
-            using var fs = System.IO.File.OpenRead(museumListFile);
-            await fs.CopyToAsync(Response.Body);
+            string museumListFile = $"/data2/museum/{server}/{region}/museum_{fileRegion}_l_{listId}.xml";
+            await this.SendFile(_gameServerOptions.XmlResourcePath, museumListFile);
         }
 
         public async Task GetMuseumItem(string server, string region, string fileRegion, int itemId)
         {
-            string museumItemFile = $"Resources/data2/museum/{server}/{region}/museum_{fileRegion}_{itemId}.xml";
-            if (!System.IO.File.Exists(museumItemFile))
-            {
-                Response.StatusCode = StatusCodes.Status404NotFound;
-                return;
-            }
-
-            using var fs = System.IO.File.OpenRead(museumItemFile);
-            await fs.CopyToAsync(Response.Body);
+            string museumItemFile = $"/data2/museum/{server}/{region}/museum_{fileRegion}_{itemId}.xml";
+            await this.SendFile(_gameServerOptions.XmlResourcePath, museumItemFile);
         }
     }
 }

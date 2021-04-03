@@ -1,12 +1,15 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
 using System.IO;
+
+using GTGrimServer.Config;
+using GTGrimServer.Utils;
 
 namespace GTGrimServer.Controllers
 {
@@ -16,24 +19,19 @@ namespace GTGrimServer.Controllers
     public class RegionListController : ControllerBase
     {
         private readonly ILogger<RegionListController> _logger;
+        private readonly GameServerOptions _gameServerOptions;
 
-        public RegionListController(ILogger<RegionListController> logger)
+        public RegionListController(IOptions<GameServerOptions> options, ILogger<RegionListController> logger)
         {
             _logger = logger;
+            _gameServerOptions = options.Value;
         }
 
         [HttpGet]
         public async Task Get()
         {
-            string regionListFile = "Resources/regionlist.xml";
-            if (!System.IO.File.Exists(regionListFile))
-            {
-                Response.StatusCode = StatusCodes.Status404NotFound;
-                return;
-            }
-
-            using var fs = System.IO.File.OpenRead(regionListFile);
-            await fs.CopyToAsync(Response.Body);
+            string regionListFile = "/regionlist.xml";
+            await this.SendFile(_gameServerOptions.XmlResourcePath, regionListFile);
         }
     }
 }

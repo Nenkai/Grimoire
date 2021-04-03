@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!-- GT5 - GTTV List -->
+<tv_id>
+	<file_id>1</file_id>
+	<digest_id>1</digest_id>
+	<!--
+	<contents_size>929376256</contents_size>
+	<hidden>0</hidden>
+	<remove>0</remove>
+	<bd_only>0</bd_only>
+	<audio>1</audio>
+	<contents_key>2WYaccQnA37wOCA5iKu94o7krOVwjpR5nx0pOud1lwk=</contents_key>
+	<lastupdate>2021-04-02T21:20:27+00:00</lastupdate>
+	<image_id>11</image_id>
+	<image_id2>22</image_id2>
+	<image_id3>33</image_id3>
+	<begin_date>2021-04-02T20:20:27+00:00</begin_date>
+	<end_date>3021-04-02T20:20:27+00:00"</end_date>-->
+	
+	<!-- Paid Stuff, do not mess with (PS Store) -->
+	<sku/>
+	<entitlement/>
+	<spec/>
+	
+	<!--
+	<duration>500</duration>
+	<days>0</days>
+	<sort_key>0</sort_key>
+	<special_price>0</special_price>
+	<reason>what</reason>
+	<new>1</new>
+	<set_text>xdd</set_text>
+	<belt_top>0</belt_top>
+	<belt_bottom>0</belt_bottom>
+	<belt_left>0</belt_left>
+	<belt_right>0</belt_right>
+	<s_image_id>55</s_image_id>
+	<m_image_id>66</m_image_id>
+	<psp_export>0</psp_export>
+	<rating>0</rating>
+	<rating_image_us>0</rating_image_us>
+	<rating_image_eu>0</rating_image_eu>
+	<recommend>0</recommend>-->
+	
+	<option key="flag" value="1"/>
+	<option key="genre" value="genre" />
+	<option key="achievement" value="0" />
+	<option key="offline" value="1" />
+	<option key="description" value="-- description --" />
+	<option key="copyright" value="-- copyright --" />
+	<option key="title" value="-- title -- " />
+	<option key="audiolevel" value="-1" />
+	<option key="width" value="1080" />
+	<option key="height" value="1920" />
+	<option key="hd" value="1" />
+	<option key="fileinfo_size" value="456" />
+	<option key="fileinfo_hash" value="789" />
+	<option key="subtitle" value="1" />
+
+	<!--
+	<chapters>
+		
+	</chapters>-->
+
+	<!--
+	<captions>
+		<text begin_time="lol" scroll="1" text="ok"/>
+	</captions>-->
+</tv_id>
