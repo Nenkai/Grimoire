@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<cars>
+	<car usedcar_id="1" odometer_min="10" odometer_max="20" price="69" color="0" code="_787b_91">
+		<jp>jp</jp>
+		<us>us</us>
+		<gb>gb</gb>
+		<fr>fr</fr>
+		<de>de</de>
+		<it>it</it>
+		<es>es</es>
+		<pt>pt</pt>
+		<nl>nl</nl>
+		<ru>ru</ru>
+		<pl>pl</pl>
+		<tr>tr</tr>
+		<el>el</el>
+		<tw>tw</tw>
+		<kr>kr</kr>
+		<version>200</version>
+		<new_date>2021-04-02T20:20:27+00:00</new_date>
+	</car>
+	<car usedcar_id="2" odometer_min="10" odometer_max="20" price="69" color="0" code="_787b_91"/>
+	<car usedcar_id="3" odometer_min="10" odometer_max="20" price="69" color="0" code="_787b_91"/>
+	<car usedcar_id="4" odometer_min="10" odometer_max="20" price="69" color="0" code="_787b_91"/>
+	<car usedcar_id="5" odometer_min="10" odometer_max="20" price="69" color="0" code="_787b_91"/>
+	<car usedcar_id="6" odometer_min="10" odometer_max="20" price="69" color="0" code="_787b_91"/>
+	<car usedcar_id="7" odometer_min="10" odometer_max="20" price="69" color="0" code="_787b_91"/>
+	<car usedcar_id="8" odometer_min="10" odometer_max="20" price="69" color="0" code="_787b_91"/>
+	<car usedcar_id="9" odometer_min="10" odometer_max="20" price="69" color="0" code="_787b_91"/>
+	<car usedcar_id="10" odometer_min="10" odometer_max="20" price="69" color="0" code="_787b_91"/>
+</cars>
