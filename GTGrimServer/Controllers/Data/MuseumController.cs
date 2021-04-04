@@ -43,13 +43,13 @@ namespace GTGrimServer.Controllers
 
         private async Task GetMuseumList(string server, string region, string fileRegion, int listId)
         {
-            string museumListFile = $"/data2/museum/{server}/{region}/museum_{fileRegion}_l_{listId}.xml";
+            string museumListFile = $"data2/museum/{server}/{region}/museum_{fileRegion}_l_{listId}.xml";
             await this.SendFile(_gameServerOptions.XmlResourcePath, museumListFile);
         }
 
         public async Task GetMuseumItem(string server, string region, string fileRegion, int itemId)
         {
-            string museumItemFile = $"/data2/museum/{server}/{region}/museum_{fileRegion}_{itemId}.xml";
+            string museumItemFile = $"data2/museum/{server}/{region}/museum_{fileRegion}_{itemId}.xml";
             await this.SendFile(_gameServerOptions.XmlResourcePath, museumItemFile);
         }
     }

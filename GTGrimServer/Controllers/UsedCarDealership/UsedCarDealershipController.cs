@@ -29,5 +29,13 @@ namespace GTGrimServer.Controllers
             _logger = logger;
             _gameServerOptions = options.Value;
         }
+
+        [HttpGet]
+        [Route("{server}/used_car_list.xml")]
+        public async Task Get(string server)
+        {
+            string usedCarListFile = $"used_car/{server}/used_car_list.xml";
+            await this.SendFile(_gameServerOptions.XmlResourcePath, usedCarListFile);
+        }
     }
 }

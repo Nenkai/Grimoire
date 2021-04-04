@@ -10,7 +10,6 @@ namespace GTGrimServer.Models
     [XmlRoot(ElementName = "friends")]
     public class SimpleFriendList
     {
-        [XmlAttribute(AttributeName = "profile")]
         public List<SimpleFriend> Items { get; set; }
     }
 }

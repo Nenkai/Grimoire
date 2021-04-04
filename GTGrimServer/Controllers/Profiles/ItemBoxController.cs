@@ -4,7 +4,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.Mvc.Formatters.Xml;
-using Microsoft.AspNetCore.Mvc.Formatters.Xml.Extensions;
 
 using System;
 using System.Collections.Generic;
@@ -58,7 +57,7 @@ namespace GTGrimServer.Controllers
         public ActionResult GetItemList(GrimRequest request)
         {
             var result = new ItemBoxList();
-            return new XmlResult(result);
+            return Ok(result);
         }
     }
 }

@@ -4,7 +4,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.Mvc.Formatters.Xml;
-using Microsoft.AspNetCore.Mvc.Formatters.Xml.Extensions;
 
 using System;
 using System.Collections.Generic;
@@ -69,7 +68,7 @@ namespace GTGrimServer.Controllers
                 CreateTime = DateTime.Now.ToRfc3339String()
             };
 
-            return new XmlResult(result);
+            return Ok(result);
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<events>
+<event_list>
 	<event>
 		<constraint>
 			<abs value="-1" />
@@ -285,5 +285,5 @@
 			<registration value="0" />
 		</ranking>
 	</event>
-</events>
+</event_list>
 

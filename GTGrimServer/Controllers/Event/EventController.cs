@@ -44,7 +44,7 @@ namespace GTGrimServer.Helpers
                 return;
             }
 
-            string eventListFile = $"/event/{server}/{fileName}";
+            string eventListFile = $"event/{server}/{fileName}";
             await this.SendFile(_gameServerOptions.XmlResourcePath, eventListFile);
         }
 
@@ -52,7 +52,7 @@ namespace GTGrimServer.Helpers
         [Route("{server}/setting.xml")]
         public async Task GetSettings(string server)
         {
-            string settingsFile = $"/event/{server}/setting.xml";
+            string settingsFile = $"event/{server}/setting.xml";
             await this.SendFile(_gameServerOptions.XmlResourcePath, settingsFile);
         }
 
@@ -63,9 +63,9 @@ namespace GTGrimServer.Helpers
         {
             string eventListFile;
             if (_gameServerOptions.GameType == "GT5")
-                eventListFile = $"/event/{server}/event_list_gt5.xml";
+                eventListFile = $"event/{server}/event_list_gt5.xml";
             else
-                eventListFile = $"/event/{server}/event_list.xml";
+                eventListFile = $"event/{server}/event_list.xml";
 
             await this.SendFile(_gameServerOptions.XmlResourcePath, eventListFile);
             
@@ -75,7 +75,7 @@ namespace GTGrimServer.Helpers
         [Route("{server}/event_{folderId:int}.xml")]
         public async Task GetOnlineEvent(string server, int folderId)
         {
-            string eventFile = $"/event/{server}/event_{folderId}.xml";
+            string eventFile = $"event/{server}/event_{folderId}.xml";
             await this.SendFile(_gameServerOptions.XmlResourcePath, eventFile);
         }
 

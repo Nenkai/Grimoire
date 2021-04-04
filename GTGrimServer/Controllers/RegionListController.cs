@@ -30,7 +30,7 @@ namespace GTGrimServer.Controllers
         [HttpGet]
         public async Task Get()
         {
-            string regionListFile = "/regionlist.xml";
+            string regionListFile = "regionlist.xml";
             await this.SendFile(_gameServerOptions.XmlResourcePath, regionListFile);
         }
     }

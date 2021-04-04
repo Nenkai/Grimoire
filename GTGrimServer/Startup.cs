@@ -33,7 +33,7 @@ namespace GTGrimServer
             services.AddControllers();
 
             // Config stuff
-            services.Configure<GameServerOptions>(Configuration.GetSection(GameServerOptions.GameServer);
+            services.Configure<GameServerOptions>(Configuration.GetSection(GameServerOptions.GameServer));
 
             services.AddMvc(options =>
             {
@@ -41,6 +41,7 @@ namespace GTGrimServer
                 options.OutputFormatters.Add(new XmlSerializerOutputFormatterNamespace(settings));
 
             }).AddXmlSerializerFormatters();
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

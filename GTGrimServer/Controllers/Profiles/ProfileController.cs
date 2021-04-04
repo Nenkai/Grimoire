@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using Microsoft.AspNetCore.Mvc.Formatters.Xml.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +11,7 @@ using System.IO;
 
 using GTGrimServer.Sony;
 using GTGrimServer.Models;
+using GTGrimServer.Utils;
 
 namespace GTGrimServer.Helpers
 {
@@ -38,7 +38,7 @@ namespace GTGrimServer.Helpers
             {
                 // Handle
                 var res = GrimResult.FromInt(0);
-                return new XmlResult(res);
+                return Ok(res);
             }
 
             _logger.LogDebug("<- {command}", requestReq.Command);
@@ -74,26 +74,26 @@ namespace GTGrimServer.Helpers
                 // Related to ranking stuff, possibly a cheat? See gtmode -> ATTRIBUTE_EVAL: requestSpecialStatus
                 // Saw param "1001"
                 var res = GrimResult.FromInt(1);
-                return new XmlResult(res);
+                return Ok(res);
             }
             else if (requestReq.Command == "profile.updatefriendlist")
             {
                 // Param is "friend_list"
                 // Response should be a string of comma seperated ints (ids?)
                 var res = GrimResult.FromInt(1);
-                return new XmlResult(res);
+                return Ok(res);
             }
             else if (requestReq.Command == "profile.getsimplefriendlist")
             {
                 // Param is "order"
                 var friendList = new SimpleFriendList();
-                return new XmlResult(friendList);
+                return Ok(friendList);
             }
             else
             {
                 _logger.LogDebug("Received unimplemented profile call: {command}", requestReq.Command);
                 var res = GrimResult.FromInt(1);
-                return new XmlResult(res);
+                return Ok(res);
             }
 
             

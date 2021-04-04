@@ -12,7 +12,7 @@ namespace GTGrimServer.Utils
     {
         public static async Task SendFile(this ControllerBase cBase, string mainDir, string fileName)
         {
-            string file = $"{mainDir}/{fileName}";
+            string file = System.IO.Path.Combine(mainDir, fileName);
             if (!System.IO.File.Exists(file))
             {
                 cBase.Response.StatusCode = StatusCodes.Status404NotFound;
