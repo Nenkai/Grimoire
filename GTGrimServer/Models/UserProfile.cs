@@ -59,7 +59,7 @@ namespace GTGrimServer.Models
         [XmlElement(ElementName = "helmet")]
         public int Helmet { get; set; }
 
-        [XmlElement(ElementName = "helmet")]
+        [XmlElement(ElementName = "helmet_color")]
         public int HelmetColor { get; set; }
 
         [XmlElement(ElementName = "menu_helmet")]

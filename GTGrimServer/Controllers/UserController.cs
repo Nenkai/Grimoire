@@ -19,7 +19,7 @@ namespace GTGrimServer.Helpers
     /// Handles profile related requests.
     /// </summary>
     [ApiController]
-    [Route("/[user]/")]
+    [Route("[controller]")]
     [Produces("application/xml")]
     public class UserController : ControllerBase
     {
@@ -30,7 +30,7 @@ namespace GTGrimServer.Helpers
             _logger = logger;
         }
 
-        [HttpPost]
+        [HttpGet]
         [Route("{userId}.xml")]
         public ActionResult Get(long userId)
         {

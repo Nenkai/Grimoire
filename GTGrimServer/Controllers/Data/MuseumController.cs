@@ -13,7 +13,7 @@ using GTGrimServer.Utils;
 namespace GTGrimServer.Controllers
 {
     [ApiController]
-    [Route("/data2/[controller]")]
+    [Route("/")]
     [Produces("application/xml")]
     public class MuseumController : ControllerBase
     {
@@ -27,7 +27,7 @@ namespace GTGrimServer.Controllers
         }
 
         [HttpGet]
-        [Route("{server}/{region}/museum_{fileRegion}_{arg}.xml")]
+        [Route("/data2/[controller]/{server}/{region}/museum_{fileRegion}_{arg}.xml")]
         public async Task GetMuseum(string server, string region, string fileRegion, string arg)
         {
             if (arg.StartsWith("l_") && arg.Length > 2 && int.TryParse(arg.AsSpan(2), out int listId))
@@ -39,6 +39,13 @@ namespace GTGrimServer.Controllers
                 // Handle issue
             }
             
+        }
+
+        [HttpGet]
+        [Route("/data/[controller]/{server}/{region}/museum_{fileRegion}_{imageId:int}.img")]
+        public void GetMuseumImage(string server, string region, string fileRegion, int imageId)
+        {
+            return;
         }
 
         private async Task GetMuseumList(string server, string region, string fileRegion, int listId)

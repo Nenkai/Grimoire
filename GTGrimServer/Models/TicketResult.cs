@@ -30,7 +30,7 @@ namespace GTGrimServer.Models
         public string Nickname { get; set; }
 
         /// <summary>
-        /// User Number.
+        /// User Number, for all users currently online?
         /// </summary>
         [XmlElement(ElementName = "user_no")]
         public string UserNumber { get; set; }
