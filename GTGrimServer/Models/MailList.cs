@@ -6,8 +6,14 @@ using System.Threading.Tasks;
 using System.Xml.Serialization;
 namespace GTGrimServer.Models
 {
+    [XmlRoot(ElementName = "gtmail_list")]
+    public class MailList
+    {
+        public List<Mail> Mails { get; set; }
+    }
+
     [XmlRoot(ElementName = "gtmail")]
-    public class GTMail
+    public class Mail
     {
         [XmlAttribute(AttributeName = "mail_id")]
         public long MailId { get; set; }

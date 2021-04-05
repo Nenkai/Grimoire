@@ -26,12 +26,12 @@ namespace GTGrimServer.Controllers
     public class GTMailController : ControllerBase
     {
         private readonly ILogger<GTMailController> _logger;
-        private readonly GameServerOptions _gameServerOptions;
+        private readonly GameServerOptions _gsOptions;
 
         public GTMailController(IOptions<GameServerOptions> options, ILogger<GTMailController> logger)
         {
             _logger = logger;
-            _gameServerOptions = options.Value;
+            _gsOptions = options.Value;
         }
 
         [HttpPost]
@@ -39,24 +39,36 @@ namespace GTGrimServer.Controllers
         {
             GrimRequest requestReq = await GrimRequest.Deserialize(Request.Body);
             if (requestReq is null)
+                return BadRequest();
+
+            switch (requestReq.Command)
             {
-                // Handle
-                return null;
+                case "mail.getlist":
+                    return OnGetMail(requestReq);
+                case "mail.send":
+                    return OnSendMail(requestReq);
             }
 
-            if (requestReq.Command.Equals("mail.getlist"))
-            {
-                return GetMail(requestReq);
-            }
-            else
-                _logger.LogDebug($"Received unimplemented mail command: {requestReq.Command}");
+            _logger.LogDebug($"Received unimplemented mail command: {requestReq.Command}");
 
-            return Ok();
+            return BadRequest();
         }
 
-        public ActionResult GetMail(GrimRequest request)
+        public ActionResult OnGetMail(GrimRequest request)
         {
-            var result = new GTMail()
+            if (!request.TryGetParameterByKey("mail_id", out var mailId))
+            {
+                _logger.LogWarning($"Got get mail request with missing 'mail_id' parameter");
+                return BadRequest();
+            }
+
+            if (!request.TryGetParameterByKey("by", out var sortType))
+            {
+                _logger.LogWarning($"Got get mail request with missing 'by' parameter");
+                return BadRequest();
+            }
+
+            var result = new Mail()
             {
                 From = 0,
                 To = 0,
@@ -69,6 +81,41 @@ namespace GTGrimServer.Controllers
             };
 
             return Ok(result);
+        }
+
+        public ActionResult OnSendMail(GrimRequest request)
+        {
+            if (!request.TryGetParameterByKey("to", out var toParam))
+            {
+                _logger.LogWarning($"Got get mail send request with missing 'to' parameter");
+                return BadRequest();
+            }
+            else if (!request.TryGetParameterByKey("subject", out var subjectParam))
+            {
+                _logger.LogWarning($"Got get mail send request with missing 'subject' parameter");
+                return BadRequest();
+            }
+            else if (!request.TryGetParameterByKey("body", out var bodyParam))
+            {
+                _logger.LogWarning($"Got get mail send request with missing 'body' parameter");
+                return BadRequest();
+            }
+            else if (!request.TryGetParameterByKey("mail_id", out var mailIdParam))
+            {
+                _logger.LogWarning($"Got get mail send request with missing 'mail_id' parameter");
+                return BadRequest();
+            }
+
+            // Mail list with 1 is sent
+            var mailList = new MailList()
+            {
+                Mails = new List<Mail>()
+                {
+                    new Mail(),
+                }
+            };
+
+            return Ok();
         }
     }
 }
