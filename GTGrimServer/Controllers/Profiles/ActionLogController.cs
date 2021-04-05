@@ -34,23 +34,25 @@ namespace GTGrimServer.Helpers
         {
             GrimRequest requestReq = await GrimRequest.Deserialize(Request.Body);
             if (requestReq is null)
+                return BadRequest();
+
+            switch (requestReq.Command)
             {
-                // Handle
-                return null;
+                case "actionlog.putActionLog":
+                    return OnActionPutLog(requestReq);
             }
 
-            if (requestReq.Command.Equals("actionlog.putActionLog")) // getActionLogListPath - see requestActionLogList in gtmode.ad
-            {
-                // 6 params, returns a path
-                return Ok(GrimResult.FromString("test.txt"));
-            }
-            else
-            {
-                _logger.LogDebug("Got unimplemented actionlog call: {command}", requestReq.Command);
-            }
+            _logger.LogDebug("Got unimplemented actionlog call: {command}", requestReq.Command);
+            
 
-            return NoContent();
+            return BadRequest();
         }
 
+        // getActionLogListPath - see requestActionLogList in gtmode.ad
+        public ActionResult OnActionPutLog(GrimRequest gRequest)
+        {
+            // 6 params, returns a path
+            return Ok(GrimResult.FromString("test.txt"));
+        }
     }
 }

@@ -26,12 +26,12 @@ namespace GTGrimServer.Controllers
     public class ItemBoxController : ControllerBase
     {
         private readonly ILogger<ItemBoxController> _logger;
-        private readonly GameServerOptions _gameServerOptions;
+        private readonly GameServerOptions _gsOptions;
 
         public ItemBoxController(IOptions<GameServerOptions> options, ILogger<ItemBoxController> logger)
         {
             _logger = logger;
-            _gameServerOptions = options.Value;
+            _gsOptions = options.Value;
         }
 
         [HttpPost]
@@ -39,22 +39,20 @@ namespace GTGrimServer.Controllers
         {
             GrimRequest requestReq = await GrimRequest.Deserialize(Request.Body);
             if (requestReq is null)
+                return BadRequest();
+
+            switch (requestReq.Command)
             {
-                // Handle
-                return null;
+                case "itembox.getlist":
+                    return OnGetItemList(requestReq);
             }
 
-            if (requestReq.Command.Equals("itembox.getlist"))
-            {
-                return GetItemList(requestReq);
-            }
-            else
-                _logger.LogDebug($"Received unimplemented itembox command: {requestReq.Command}");
+            _logger.LogDebug("Received unimplemented itembox command: {command}", requestReq.Command);
 
-            return Ok();
+            return BadRequest();
         }
 
-        public ActionResult GetItemList(GrimRequest request)
+        public ActionResult OnGetItemList(GrimRequest request)
         {
             var result = new ItemBoxList();
             return Ok(result);

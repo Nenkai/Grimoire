@@ -28,31 +28,35 @@ namespace GTGrimServer.Controllers
         }
 
         [HttpPost]
-        public async Task<TicketResult> Post(ulong pfsVersion)
+        public async Task<ActionResult> Post(ulong pfsVersion)
         {
             if (Request.ContentLength == 0)
+                return BadRequest();
+
+            try
             {
-                Response.StatusCode = StatusCodes.Status400BadRequest;
-                return null;
+                byte[] buf = new byte[(int)Request.ContentLength];
+                await Request.Body.ReadAsync(buf, 0, buf.Length);
+                Ticket ticket = Ticket.FromBuffer(buf);
+
+                _logger.LogDebug("Ticket Auth -> PFS: {pfsVersion} | OnlineID:{OnlineId} | Region: {Region}", pfsVersion, ticket.OnlineId, ticket.Region);
+
+                var resp = new TicketResult()
+                {
+                    Result = "1",
+                    Nickname = ticket.OnlineId,
+                    UserId = ticket.UserId,
+                    UserNumber = "0",
+                    ServerTime = DateTime.Now.ToRfc3339String(),
+                };
+
+                return Ok(resp);
             }
-
-            byte[] buf = new byte[(int)Request.ContentLength];
-            await Request.Body.ReadAsync(buf, 0, buf.Length);
-
-            Ticket ticket = Ticket.FromBuffer(buf);
-
-            _logger.LogDebug("Ticket Auth -> PFS: {pfsVersion} | OnlineID:{OnlineId} | Region: {Region}", pfsVersion, ticket.OnlineId, ticket.Region);
-
-            var resp = new TicketResult()
+            catch (Exception e)
             {
-                Result = "1",
-                Nickname = ticket.OnlineId,
-                UserId = ticket.UserId,
-                UserNumber = "0",
-                ServerTime = DateTime.Now.ToRfc3339String(),
-            };
-
-            return resp;
+                _logger.LogError(e, "Could not read NP ticket");
+                return BadRequest();
+            }
         }
     }
 }

@@ -10,6 +10,19 @@ namespace GTGrimServer.Models
     [XmlRoot(ElementName = "friends")]
     public class SimpleFriendList
     {
-        public List<SimpleFriend> Items { get; set; }
+        public List<SimpleFriendList> Items { get; set; }
+    }
+
+    [XmlRoot(ElementName = "profile")]
+    public class SimpleFriend
+    {
+        [XmlAttribute(AttributeName = "item")]
+        public long Id { get; set; }
+
+        [XmlAttribute(AttributeName = "aspec_level")]
+        public int ASpecLevel { get; set; }
+
+        [XmlAttribute(AttributeName = "bspec_level")]
+        public int BSpecLevel { get; set; }
     }
 }

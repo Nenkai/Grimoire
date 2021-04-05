@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,7 @@ using System.IO;
 using GTGrimServer.Utils;
 using GTGrimServer.Sony;
 using GTGrimServer.Models;
+using GTGrimServer.Config;
 
 namespace GTGrimServer.Helpers
 {
@@ -24,42 +26,55 @@ namespace GTGrimServer.Helpers
     public class LocaleController : ControllerBase
     {
         private readonly ILogger<LocaleController> _logger;
+        private readonly GameServerOptions _gsOptions;
 
-        public LocaleController(ILogger<LocaleController> logger)
+        public LocaleController(IOptions<GameServerOptions> options, ILogger<LocaleController> logger)
         {
             _logger = logger;
+            _gsOptions = options.Value;
         }
 
         [HttpPost]
-        public async Task<GrimResult> Post()
+        public async Task<ActionResult> Post()
         {
             GrimRequest requestReq = await GrimRequest.Deserialize(Request.Body);
             if (requestReq is null)
+                return BadRequest();
+
+            switch (requestReq.Command)
             {
-                // Handle
-                return null;
+                case "servertime.get":
+                    return OnGetServerTime(requestReq);
+                case "language.set":
+                    return OnSetLanguage(requestReq);
             }
 
-            if (requestReq.Command.Equals("servertime.get"))
-                return GetServerTime();
-            else if (requestReq.Command.Equals("language.set"))
-            {
-                return ProcessLanguage(requestReq);
-            }
-                
+            _logger.LogDebug("Received unimplemented locale command: {command}", requestReq.Command);
 
-            return null;
+            return BadRequest();
         }
 
-        private GrimResult GetServerTime()
-            => GrimResult.FromString(DateTime.Now.ToRfc3339String());
+        private ActionResult OnGetServerTime(GrimRequest gRequest)
+        { 
+            if (_gsOptions.GameType != "GT5")
+            {
+                _logger.LogWarning("Got servertime.get request for non GT5");
+                return BadRequest();
+            }
 
-        private GrimResult ProcessLanguage(GrimRequest gRequest)
+            var result = GrimResult.FromDateTimeRfc3339(DateTime.Now);
+            return Ok(result);
+        }
+
+        private ActionResult OnSetLanguage(GrimRequest gRequest)
         {
             if (!gRequest.TryGetParameterByKey("language", out GrimRequestParam param))
-                return null;
+            {
+                _logger.LogWarning("Got missing language parameter for language.set");
+                return BadRequest();
+            }
 
-            return GrimResult.FromString(param.Text.ToLower());
+            return Ok(GrimResult.FromString(param.Text.ToLower()));
         }
 
     }

@@ -32,7 +32,7 @@ namespace GTGrimServer.Helpers
         public ActionResult Get(string server)
         {
             if (!Request.Headers.TryGetValue("X-gt-log", out var hVal))
-                return NoContent();
+                return BadRequest();
 
             string argStr = hVal.FirstOrDefault();
             if (argStr.StartsWith("ADHOC"))

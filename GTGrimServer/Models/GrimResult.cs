@@ -55,7 +55,7 @@ namespace GTGrimServer.Models
         public static GrimResult FromDouble(double result)
             => new(result.ToString());
 
-        public static GrimResult FromDateTime(DateTime result)
+        public static GrimResult FromDateTimeRfc3339(DateTime result)
             => new(result.ToString("yyyy-MM-dd'T'HH:mm:ss.fffzzz", DateTimeFormatInfo.InvariantInfo)); // Rfc3339
 
     }
