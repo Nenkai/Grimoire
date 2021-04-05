@@ -195,7 +195,7 @@ namespace GTGrimServer.Helpers
                 return BadRequest();
             }
 
-            var result = new SpecialListList();
+            var result = new SpecialList();
             return Ok(result);
         }
     }

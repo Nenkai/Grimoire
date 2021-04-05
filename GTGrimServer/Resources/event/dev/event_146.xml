@@ -24,7 +24,7 @@
 				</constraint>
 				<event_id value="1002268" />
 				<event_type value="RACE" />
-				<game_mode value="MISSION" />
+				<game_mode value="ONLINE_TIME_ATTACK" />
 				<information>
 					<advanced_notice />
 					<flier_other_info value="" />
