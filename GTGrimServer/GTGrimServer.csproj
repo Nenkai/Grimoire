@@ -4,6 +4,7 @@
     <TargetFramework>net5.0</TargetFramework>
     <AssemblyName>GTGrimServer</AssemblyName>
     <RootNamespace>GTGrimServer</RootNamespace>
+    <UserSecretsId>dad7dca7-d08d-49d3-ae30-7442c6550f5c</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>

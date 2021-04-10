@@ -13,6 +13,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Xml;
 
+using GTGrimServer.Database;
 using GTGrimServer.Utils;
 using GTGrimServer.Config;
 
@@ -34,6 +35,8 @@ namespace GTGrimServer
 
             // Config stuff
             services.Configure<GameServerOptions>(Configuration.GetSection(GameServerOptions.GameServer));
+
+            services.AddSingleton<DatabaseController>();
 
             services.AddMvc(options =>
             {
