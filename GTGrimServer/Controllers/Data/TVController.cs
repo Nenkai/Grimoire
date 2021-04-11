@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
@@ -16,6 +17,7 @@ namespace GTGrimServer.Controllers
 {
     [ApiController]
     [PDIClient]
+    [Authorize]
     [Route("/")] // Images grab the /data/ endpoint rather than /data2/
     [Produces("application/xml")]
     public class TVController : ControllerBase

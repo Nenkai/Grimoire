@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
@@ -15,6 +16,7 @@ using GTGrimServer.Utils;
 namespace GTGrimServer.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("/")]
     [PDIClient]
     [Produces("application/xml")]

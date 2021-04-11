@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Mvc.Formatters;
@@ -23,6 +24,7 @@ namespace GTGrimServer.Controllers
     /// </summary>
     [ApiController]
     [PDIClient]
+    [Authorize]
     [Route("/ap/[controller]")]
     [Produces("application/xml")]
     public class ItemBoxController : ControllerBase

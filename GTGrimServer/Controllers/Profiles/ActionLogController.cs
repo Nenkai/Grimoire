@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,7 @@ namespace GTGrimServer.Helpers
     /// </summary>
     [ApiController]
     [PDIClient]
+    [Authorize]
     [Route("/ap/[controller]/")]
     [Produces("application/xml")]
     public class ActionLogController : ControllerBase

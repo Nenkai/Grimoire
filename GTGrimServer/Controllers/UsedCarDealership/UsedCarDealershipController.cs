@@ -2,12 +2,14 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.IO;
 
+using GTGrimServer.Filters;
 using GTGrimServer.Config;
 using GTGrimServer.Utils;
 
@@ -17,6 +19,8 @@ namespace GTGrimServer.Controllers
     /// Provides news to the player.
     /// </summary>
     [ApiController]
+    [Authorize]
+    [PDIClient]
     [Route("/used_car/")]
     [Produces("application/xml")]
     public class UsedCarDealershipController : ControllerBase

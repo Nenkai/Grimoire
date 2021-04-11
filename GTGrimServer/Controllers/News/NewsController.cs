@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
@@ -19,6 +20,7 @@ namespace GTGrimServer.Controllers
     /// </summary>
     [ApiController]
     [PDIClient]
+    [Authorize]
     [Route("/[controller]")]
     [Produces("application/xml")]
     public class NewsController : ControllerBase

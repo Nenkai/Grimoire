@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -21,6 +22,7 @@ namespace GTGrimServer.Helpers
     // Refer to server option 'online.extendsession.interval' for the interval between session extension requests
     [ApiController]
     [PDIClient]
+    [Authorize]
     [Route("/ap/misc/extend/")]
     [Produces("application/xml")]
     public class ExtendSessionController : ControllerBase

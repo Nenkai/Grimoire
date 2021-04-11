@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Authorization;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +11,7 @@ using System.Threading.Tasks;
 using System.Xml.Serialization;
 using System.IO;
 
+using GTGrimServer.Filters;
 using GTGrimServer.Sony;
 using GTGrimServer.Models;
 using GTGrimServer.Utils;
@@ -20,6 +23,7 @@ namespace GTGrimServer.Helpers
     /// Handles profile related requests.
     /// </summary>
     [ApiController]
+    [Authorize]
     [Route("[controller]")]
     [Produces("application/xml")]
     public class UserController : ControllerBase

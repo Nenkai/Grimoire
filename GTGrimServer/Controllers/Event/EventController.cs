@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
@@ -23,6 +24,7 @@ namespace GTGrimServer.Helpers
     /// </summary>
     [ApiController]
     [PDIClient]
+    [Authorize]
     [Route("/[controller]")]
     [Produces("application/xml")]
     public class EventController : ControllerBase
