@@ -11,6 +11,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.IO;
 
+using GTGrimServer.Filters;
 using GTGrimServer.Config;
 using GTGrimServer.Utils;
 using GTGrimServer.Models;
@@ -21,6 +22,7 @@ namespace GTGrimServer.Controllers
     /// Event Rankings
     /// </summary>
     [ApiController]
+    [PDIClient]
     [Route("/ap/[controller]")]
     [Produces("application/xml")]
     public class RankingController : ControllerBase

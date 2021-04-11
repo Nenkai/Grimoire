@@ -10,6 +10,7 @@ using System.IO;
 
 using GTGrimServer.Config;
 using GTGrimServer.Utils;
+using GTGrimServer.Filters;
 
 namespace GTGrimServer.Controllers
 {
@@ -17,6 +18,7 @@ namespace GTGrimServer.Controllers
     /// Provides news to the player.
     /// </summary>
     [ApiController]
+    [PDIClient]
     [Route("/[controller]")]
     [Produces("application/xml")]
     public class NewsController : ControllerBase

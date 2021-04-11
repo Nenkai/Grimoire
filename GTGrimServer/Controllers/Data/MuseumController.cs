@@ -8,12 +8,15 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.IO;
 
+using GTGrimServer.Filters;
 using GTGrimServer.Config;
 using GTGrimServer.Utils;
+
 namespace GTGrimServer.Controllers
 {
     [ApiController]
     [Route("/")]
+    [PDIClient]
     [Produces("application/xml")]
     public class MuseumController : ControllerBase
     {

@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Xml.Serialization;
 using System.IO;
 
+using GTGrimServer.Filters;
 using GTGrimServer.Sony;
 using GTGrimServer.Utils;
 using GTGrimServer.Config;
@@ -21,6 +22,7 @@ namespace GTGrimServer.Helpers
     /// Handles logging made by the game for the server to keep track of what the player is doing.
     /// </summary>
     [ApiController]
+    [PDIClient]
     [Route("/[controller]")]
     [Produces("application/xml")]
     public class EventController : ControllerBase

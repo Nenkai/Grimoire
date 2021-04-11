@@ -9,8 +9,10 @@ using System.Threading.Tasks;
 using System.Xml.Serialization;
 using System.IO;
 
+using GTGrimServer.Filters;
 using GTGrimServer.Sony;
 using GTGrimServer.Models;
+using GTGrimServer.Filters;
 
 namespace GTGrimServer.Helpers
 {
@@ -18,6 +20,7 @@ namespace GTGrimServer.Helpers
     /// Handles logging made by the game for the server to keep track of what the player is doing.
     /// </summary>
     [ApiController]
+    [PDIClient]
     [Route("/ap/[controller]/")]
     [Produces("application/xml")]
     public class ActionLogController : ControllerBase

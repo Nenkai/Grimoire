@@ -11,6 +11,7 @@ using System.IO;
 
 using GTGrimServer.Sony;
 using GTGrimServer.Models;
+using GTGrimServer.Filters;
 
 namespace GTGrimServer.Helpers
 {
@@ -19,6 +20,7 @@ namespace GTGrimServer.Helpers
     /// </summary>
     // Refer to server option 'online.extendsession.interval' for the interval between session extension requests
     [ApiController]
+    [PDIClient]
     [Route("/ap/misc/extend/")]
     [Produces("application/xml")]
     public class ExtendSessionController : ControllerBase

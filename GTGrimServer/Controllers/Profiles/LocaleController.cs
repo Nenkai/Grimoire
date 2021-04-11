@@ -14,6 +14,7 @@ using GTGrimServer.Utils;
 using GTGrimServer.Sony;
 using GTGrimServer.Models;
 using GTGrimServer.Config;
+using GTGrimServer.Filters;
 
 namespace GTGrimServer.Helpers
 {
@@ -21,6 +22,7 @@ namespace GTGrimServer.Helpers
     /// Handles logging made by the game for the server to keep track of what the player is doing.
     /// </summary>
     [ApiController]
+    [PDIClient]
     [Route("/ap/locale")]
     [Produces("application/xml")]
     public class LocaleController : ControllerBase

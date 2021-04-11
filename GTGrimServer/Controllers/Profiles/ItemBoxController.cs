@@ -14,6 +14,7 @@ using System.IO;
 using GTGrimServer.Config;
 using GTGrimServer.Utils;
 using GTGrimServer.Models;
+using GTGrimServer.Filters;
 
 namespace GTGrimServer.Controllers
 {
@@ -21,6 +22,7 @@ namespace GTGrimServer.Controllers
     /// Provides news to the player.
     /// </summary>
     [ApiController]
+    [PDIClient]
     [Route("/ap/[controller]")]
     [Produces("application/xml")]
     public class ItemBoxController : ControllerBase
