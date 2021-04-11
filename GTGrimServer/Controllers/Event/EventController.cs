@@ -62,7 +62,7 @@ namespace GTGrimServer.Helpers
         public async Task GetOnlineEventList(string server)
         {
             string eventListFile;
-            if (_gameServerOptions.GameType == "GT5")
+            if (_gameServerOptions.GameType == GameType.GT5)
                 eventListFile = $"event/{server}/event_list_gt5.xml";
             else
                 eventListFile = $"event/{server}/event_list.xml";
@@ -78,6 +78,5 @@ namespace GTGrimServer.Helpers
             string eventFile = $"event/{server}/event_{folderId}.xml";
             await this.SendFile(_gameServerOptions.XmlResourcePath, eventFile);
         }
-
     }
 }

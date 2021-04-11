@@ -37,7 +37,7 @@ namespace GTGrimServer.Controllers
         [HttpGet]
         public async Task<ActionResult> Get()
         {
-            if (_gsOptions.GameType != "GT6")
+            if (_gsOptions.GameType != GameType.GT6)
             {
                 _logger.LogWarning("Got course getlist request on non GT6");
                 return BadRequest();

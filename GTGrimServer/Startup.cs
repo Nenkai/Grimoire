@@ -5,17 +5,20 @@ using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.AspNetCore.Rewrite;
-using Microsoft.Extensions.Logging;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Xml;
+using System.Data;
 
-using GTGrimServer.Database;
+using Npgsql;
+
+using GTGrimServer.Database.Controllers;
 using GTGrimServer.Utils;
 using GTGrimServer.Config;
+using GTGrimServer.Filters;
 
 namespace GTGrimServer
 {
@@ -31,25 +34,30 @@ namespace GTGrimServer
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            Console.WriteLine("Init: Configuring service provider");
             services.AddControllers();
 
             // Config stuff
             services.Configure<GameServerOptions>(Configuration.GetSection(GameServerOptions.GameServer));
 
-            services.AddSingleton<DatabaseController>();
+            services.AddTransient<IDbConnection>((sp) => new NpgsqlConnection(Configuration["Database:ConnectionString"]));
+            services.AddSingleton<UserDBManager>();
 
             services.AddMvc(options =>
             {
                 var settings = new XmlWriterSettings() { OmitXmlDeclaration = false };
                 options.OutputFormatters.Add(new XmlSerializerOutputFormatterNamespace(settings));
-
+                //options.Filters.Add<PDIClientAttribute>();
             }).AddXmlSerializerFormatters();
-            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            Console.WriteLine("Init: Configuring HTTP server");
+            var db = app.ApplicationServices.GetService<UserDBManager>();
+            db.CreateTableIfNeeded();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

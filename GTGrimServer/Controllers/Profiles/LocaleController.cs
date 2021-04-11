@@ -56,7 +56,7 @@ namespace GTGrimServer.Helpers
 
         private ActionResult OnGetServerTime(GrimRequest gRequest)
         { 
-            if (_gsOptions.GameType != "GT5")
+            if (_gsOptions.GameType != GameType.GT5)
             {
                 _logger.LogWarning("Got servertime.get request for non GT5");
                 return BadRequest();

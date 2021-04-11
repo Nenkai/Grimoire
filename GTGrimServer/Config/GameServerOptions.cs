@@ -9,7 +9,7 @@ namespace GTGrimServer.Config
     {
         public const string GameServer = "GameServer";
 
-        public string GameType { get; set; }
+        public GameType GameType { get; set; }
         public string XmlResourcePath { get; set; }
     }
 }

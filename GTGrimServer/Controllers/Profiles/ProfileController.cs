@@ -11,16 +11,19 @@ using System.Xml.Serialization;
 using System.IO;
 
 using GTGrimServer.Sony;
+using GTGrimServer.Filters;
 using GTGrimServer.Models;
 using GTGrimServer.Utils;
 using GTGrimServer.Config;
+using GTGrimServer.Controllers;
 
-namespace GTGrimServer.Helpers
+namespace GTGrimServer.Controllers.Profiles
 {
     /// <summary>
     /// Handles profile related requests.
     /// </summary>
     [ApiController]
+    [PDIClient]
     [Route("/ap/[controller]/")]
     [Produces("application/xml")]
     public class ProfileController : ControllerBase
@@ -114,7 +117,7 @@ namespace GTGrimServer.Helpers
         /// <returns></returns>
         private ActionResult OnGetSpecialStatus()
         {
-            if (_gsOptions.GameType != "GT5")
+            if (_gsOptions.GameType != GameType.GT5)
             {
                 _logger.LogWarning("Got special status request on a non GT5 server");
                 return Forbid();
@@ -132,7 +135,7 @@ namespace GTGrimServer.Helpers
         /// <returns></returns>
         private ActionResult OnUpdateFriendList()
         {
-            if (_gsOptions.GameType != "GT5")
+            if (_gsOptions.GameType != GameType.GT5)
             {
                 _logger.LogWarning("Got special status request on a non GT5 server");
                 return BadRequest();
@@ -151,7 +154,7 @@ namespace GTGrimServer.Helpers
         /// <returns></returns>
         private ActionResult SetPresence(GrimRequest gRequest)
         {
-            if (_gsOptions.GameType != "GT6")
+            if (_gsOptions.GameType != GameType.GT6)
             {
                 _logger.LogWarning("Got profile.setpresence request on a non GT6 server");
                 return Forbid();
@@ -177,7 +180,7 @@ namespace GTGrimServer.Helpers
         /// <returns></returns>
         private ActionResult OnGetUserSpecialPresentList(GrimRequest gRequest)
         {
-            if (_gsOptions.GameType != "GT6")
+            if (_gsOptions.GameType != GameType.GT6)
             {
                 _logger.LogWarning("Got profile.getSpecialList request on a non GT6 server");
                 return BadRequest();

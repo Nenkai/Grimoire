@@ -6,6 +6,7 @@ using System.Linq;
 using System.Data;
 using System.Net;
 using System.Net.NetworkInformation;
+using Microsoft.Extensions.Logging;
 using Dapper;
 using Npgsql;
 
@@ -16,26 +17,26 @@ namespace GTGrimServer.Database.Controllers
 {
     public class UserDBManager : IDBManager<UserProfile>
     {
-        private DatabaseController _db;
+        private ILogger<UserDBManager> _logger;
+        protected IDbConnection _con;
 
-        public UserDBManager(DatabaseController db)
+        public UserDBManager(ILogger<UserDBManager> logger, IDbConnection con)
         {
-            _db = db;
+            _logger = logger;
+            _con = con;
         }
 
         public UserProfile GetByID(long id)
         {
-            using IDbConnection con = _db.Connection;
-            con.Open();
+            _con.Open();
             var cmd = new NpgsqlCommand();
-            return con.QueryFirstOrDefault<UserProfile>(@"SELECT * FROM users WHERE psnid = @psnid", new { Id = id });
+            return _con.QueryFirstOrDefault<UserProfile>(@"SELECT * FROM users WHERE psnid = @psnid", new { Id = id });
         }
 
         public void Update(UserProfile pData)
         {
-            using IDbConnection con = _db.Connection;
-            con.Open();
-            con.Execute(@"UPDATE users", pData);
+            _con.Open();
+            _con.Execute(@"UPDATE users", pData);
         }
 
         public void Add(UserProfile pData)
@@ -45,20 +46,62 @@ namespace GTGrimServer.Database.Controllers
 
         public void Remove(ulong id)
         {
-            using IDbConnection con = _db.Connection;
-            con.Open();
-            con.Execute(@"DELETE FROM users WHERE psnid=@Id", new { Id = id });
+            _con.Open();
+            _con.Execute(@"DELETE FROM users WHERE psnid=@Id", new { Id = id });
         }
 
-        public void CreateTableIfNeeded()
+        private void CreateTable()
         {
-            string query = @"CREATE TABLE IF NOT EXISTS users (
-						psnid SERIAL PRIMARY KEY NOT NULL,
-					);";
+            string query =
+            @"CREATE TABLE IF NOT EXISTS users (
+                id SERIAL PRIMARY KEY,
+				psnid BIGINT UNIQUE,
+                nickname TEXT,
+                ipaddress TEXT,
+                mac TEXT,
 
-            using IDbConnection con = _db.Connection;
-            con.Open();
-            con.Execute(query);
+                aspec_level INTEGER DEFAULT 0,
+                aspec_exp INTEGER DEFAULT 0,
+                bspec_level INTEGER DEFAULT 0,
+                bspec_exp INTEGER DEFAULT 0,
+                achievement INTEGER DEFAULT 0,
+                credit INTEGER DEFAULT 0,
+                win_count INTEGER DEFAULT 0,
+                car_count INTEGER DEFAULT 0,
+                trophy INTEGER DEFAULT 0,
+                odometer INTEGER DEFAULT 0,
+                license_level INTEGER DEFAULT 0,
+                license_gold INTEGER DEFAULT 0,
+                license_silver INTEGER DEFAULT 0,
+                license_bronze INTEGER DEFAULT 0,
+
+                helmet INTEGER DEFAULT 0,
+                helmet_color INTEGER DEFAULT 0,
+            
+                wear INTEGER DEFAULT 0,
+                wear_color INTEGER DEFAULT 0
+			);";
+
+            _con.Open();
+            _con.Execute(query);
+
+            string query2 = @"CREATE INDEX IF NOT EXISTS users_psnid_idx ON users (psnid)";
+            _con.Execute(query2);
+        }
+
+        public bool CreateTableIfNeeded()
+        {
+            try
+            {
+                CreateTable();
+                return true;
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Unable to create table if needed");
+            }
+
+            return false;
         }
     }
 }

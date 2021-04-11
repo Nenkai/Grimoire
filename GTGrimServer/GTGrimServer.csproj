@@ -23,5 +23,9 @@
     <PackageReference Include="Npgsql" Version="5.0.4" />
     <PackageReference Include="Syroot.BinaryData" Version="5.2.2" />
   </ItemGroup>
+	
+  <ItemGroup>
+    <Folder Include="Database\Scripts\" />
+  </ItemGroup>
 
 </Project>
