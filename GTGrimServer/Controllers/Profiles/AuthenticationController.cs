@@ -51,33 +51,39 @@ namespace GTGrimServer.Controllers.Profiles
         public async Task<ActionResult> Post(ulong pfsVersion)
         {
             PFSType pfsType = (PFSType)pfsVersion;
-            _logger.LogDebug("Login request from {host} with PFS: ", Request.Host, pfsType);
+            _logger.LogDebug("Login request from {host} with PFS: {pfsType} ({pfsNum})", Request.Host, pfsType, (long)pfsType);
 
             if (!EnsureVersion(pfsType))
                 return Forbid();
+
+            if (Request.ContentLength >= 0x300)
+            {
+                _logger.LogWarning("Received a ticket too big - {size} from {host}", Request.ContentLength, Request.Host);
+                return BadRequest();
+            }
 
             NPTicket ticket;
             try
             {
                 byte[] buf = new byte[(int)Request.ContentLength];
-                await Request.Body.ReadAsync(buf, 0, buf.Length);
+                await Request.Body.ReadAsync(buf.AsMemory(0, buf.Length));
                 ticket = NPTicket.FromBuffer(buf);
             }
             catch (Exception e)
             {
-                _logger.LogError(e, "Could not read NP ticket provided by client");
+                _logger.LogWarning(e, "Could not read NP ticket provided by client");
                 return BadRequest();
             }
 
             if (!VerifyTicket(ticket))
                 return BadRequest();
 
-            _logger.LogDebug("Got auth request - NP_Ticket -> PFS: {pfsVersion} | OnlineID: {OnlineId} | Region: {Region}", pfsVersion, ticket.OnlineId, ticket.Region);
-            User user = _users.GetByID((long)ticket.UserId);
-
-            user ??= CreateUser(ticket);
+            _logger.LogDebug("Auth Request: NP_Ticket -> PFS: {pfsVersion} | OnlineID: {OnlineId} | Region: {Region}", pfsVersion, ticket.OnlineId, ticket.Region);
+            User user = _users.GetByID((long)ticket.UserId) ?? CreateUser(ticket);
             if (user is null)
             {
+                _logger.LogError("Failed to get or create user from db: Name: {name}, PSN Id {psnId}", ticket.OnlineId, ticket.UserId);
+
                 return Problem();    
             }
 
@@ -90,8 +96,7 @@ namespace GTGrimServer.Controllers.Profiles
                 ServerTime = DateTime.Now.ToRfc3339String(),
             };
 
-            var cookieOptions = new CookieOptions();
-            cookieOptions.Expires = DateTime.Now.AddHours(1);
+            var cookieOptions = new CookieOptions() { Expires = DateTime.Now.AddHours(1) };
             Response.Cookies.Append("X-gt-token", GenerateToken(), cookieOptions);
 
             return Ok(resp);
@@ -102,13 +107,14 @@ namespace GTGrimServer.Controllers.Profiles
         /// </summary>
         /// <param name="pfs"></param>
         /// <returns></returns>
+        [NonAction]
         private bool EnsureVersion(PFSType pfs)
         {
             if (_gsOptions.GameType == GameType.GT6)
             {
                 if (pfs < PFSType.GT6_V1_22)
                 {
-                    _logger.LogInformation("Client Fail: Received PFS type {type} - expected 1.22.", pfs);
+                    _logger.LogInformation("Client Fail: Received PFS type {type} (num) - expected GT6 1.22.", pfs, (long)pfs);
                     return false;
                 }
             }
@@ -116,11 +122,13 @@ namespace GTGrimServer.Controllers.Profiles
             return true;
         }
 
+        [NonAction]
         private bool VerifyTicket(NPTicket ticket)
         {
             return true;
         }
 
+        [NonAction]
         public User CreateUser(NPTicket ticket)
         {
             var user = new User()
@@ -137,14 +145,15 @@ namespace GTGrimServer.Controllers.Profiles
             }
             catch (Exception e)
             {
-                _logger.LogError("Failed to create new user {userName} - PSNId: {psnId}", ticket.OnlineId, ticket.UserId, 0);
+                _logger.LogError("Failed to create new user {userName} - PSNId: {psnId}", ticket.OnlineId, ticket.UserId);
                 return null;
             }
 
-            _logger.LogInformation("Created user {userName} - PSNId: {psnId} - ServId: {id}", ticket.OnlineId, ticket.UserId, 0);
+            _logger.LogInformation("Created user {userName} - PSNId: {psnId} - ServId: {id}", ticket.OnlineId, ticket.UserId, id);
             return user;
         }
 
+        [NonAction]
         public string GenerateToken()
         {
             var secKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));

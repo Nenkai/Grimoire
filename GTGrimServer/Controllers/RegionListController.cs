@@ -8,12 +8,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.IO;
 
+using GTGrimServer.Filters;
 using GTGrimServer.Config;
 using GTGrimServer.Utils;
 
 namespace GTGrimServer.Controllers
 {
     [ApiController]
+    [PDIClient]
     [Route("/init/regionlist.xml")]
     [Produces("application/xml")]
     public class RegionListController : ControllerBase

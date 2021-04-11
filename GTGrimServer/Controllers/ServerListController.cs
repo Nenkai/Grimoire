@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.IO;
 
+using GTGrimServer.Filters;
 using GTGrimServer.Config;
 using GTGrimServer.Utils;
 
@@ -16,6 +17,7 @@ namespace GTGrimServer.Controllers
     [ApiController]
     [Route("/init/{region}/serverlist.xml")]
     [Produces("application/xml")]
+    [PDIClient]
     public class ServerListController : ControllerBase
     {
         private readonly ILogger<ServerListController> _logger;

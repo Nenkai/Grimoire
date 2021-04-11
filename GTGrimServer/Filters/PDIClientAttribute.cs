@@ -25,7 +25,7 @@ namespace GTGrimServer.Filters
                 return;
             }
 
-            if (userAgent.Count != 1 && !userAgent[0].Equals(GTConstants.PDIUserAgent))
+            if (userAgent.Count != 1 || !userAgent[0].Equals(GTConstants.PDIUserAgent))
             {
                 context.Result = new UnauthorizedResult();
                 return;

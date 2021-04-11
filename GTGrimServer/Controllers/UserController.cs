@@ -24,6 +24,7 @@ namespace GTGrimServer.Helpers
     /// </summary>
     [ApiController]
     [Authorize]
+    [PDIClient]
     [Route("[controller]")]
     [Produces("application/xml")]
     public class UserController : ControllerBase
