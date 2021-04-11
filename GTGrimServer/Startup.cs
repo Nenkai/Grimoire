@@ -2,13 +2,19 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+
+using Microsoft.IdentityModel.Tokens;
+
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Data;
@@ -37,18 +43,21 @@ namespace GTGrimServer
             Console.WriteLine("Init: Configuring service provider");
             services.AddControllers();
 
-            // Config stuff
-            services.Configure<GameServerOptions>(Configuration.GetSection(GameServerOptions.GameServer));
-
-            services.AddTransient<IDbConnection>((sp) => new NpgsqlConnection(Configuration["Database:ConnectionString"]));
-            services.AddSingleton<UserDBManager>();
+            AddJWTAuthentication(services);
 
             services.AddMvc(options =>
             {
                 var settings = new XmlWriterSettings() { OmitXmlDeclaration = false };
                 options.OutputFormatters.Add(new XmlSerializerOutputFormatterNamespace(settings));
-                //options.Filters.Add<PDIClientAttribute>();
             }).AddXmlSerializerFormatters();
+
+
+            // Grim Related Services
+            services.Configure<GameServerOptions>(Configuration.GetSection(GameServerOptions.GameServer));
+
+            services.AddTransient<IDbConnection>((sp) => new NpgsqlConnection(Configuration["Database:ConnectionString"]));
+            services.AddSingleton<UserDBManager>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -62,6 +71,9 @@ namespace GTGrimServer
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.Use(async (context, next) =>
             {
@@ -81,6 +93,34 @@ namespace GTGrimServer
                 endpoints.MapControllers();
             });
  
+        }
+
+        public void AddJWTAuthentication(IServiceCollection services)
+        {
+            var authBuilder = services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme);
+            authBuilder.AddJwtBearer(jwt =>
+            {
+                jwt.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"])),
+                    ValidateIssuer = true,
+                    ValidIssuer = Configuration["Jwt:Issuer"],
+                    ValidateAudience = true,
+                    ValidAudience = Configuration["Jwt:Audience"],
+                    ValidateLifetime = true,
+                };
+                
+                jwt.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
+                    {
+                        context.Token = context.Request.Cookies["X-gt-token"];
+                        return Task.CompletedTask;
+                    },
+                };
+                
+            });
         }
     }
 }

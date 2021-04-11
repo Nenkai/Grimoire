@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
@@ -26,6 +27,7 @@ namespace GTGrimServer.Controllers.Profiles
     [PDIClient]
     [Route("/ap/[controller]/")]
     [Produces("application/xml")]
+    [Authorize]
     public class ProfileController : ControllerBase
     {
         private readonly ILogger<ProfileController> _logger;

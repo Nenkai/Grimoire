@@ -1,14 +1,19 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
 
-using System.Xml.Serialization;
-using System.IO;
+using System;
+using System.Text;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Security.Claims;
+
 
 using GTGrimServer.Controllers;
 using GTGrimServer.Database.Controllers;
@@ -28,15 +33,17 @@ namespace GTGrimServer.Controllers.Profiles
     public class AuthenticationController : ControllerBase
     {
         private readonly ILogger<AuthenticationController> _logger;
+        private readonly IConfiguration _config;
         private readonly GameServerOptions _gsOptions;
         private readonly UserDBManager _users;
 
-        public AuthenticationController(IOptions<GameServerOptions> gsOptions, 
+        public AuthenticationController(IConfiguration config, 
             ILogger<AuthenticationController> logger,
             UserDBManager users)
         {
             _logger = logger;
-            _gsOptions = gsOptions.Value;
+            _config = config;
+            _gsOptions = _config.GetSection(GameServerOptions.GameServer).Get<GameServerOptions>();
             _users = users;
         }
 
@@ -68,19 +75,24 @@ namespace GTGrimServer.Controllers.Profiles
             _logger.LogDebug("Got auth request - NP_Ticket -> PFS: {pfsVersion} | OnlineID: {OnlineId} | Region: {Region}", pfsVersion, ticket.OnlineId, ticket.Region);
             User user = _users.GetByID((long)ticket.UserId);
 
+            user ??= CreateUser(ticket);
             if (user is null)
             {
-                user = CreateUser(ticket);
+                return Problem();    
             }
 
             var resp = new TicketResult()
             {
-                Result = "1",
+                Result = "0", // Doesn't seem to do much.
                 Nickname = ticket.OnlineId,
                 UserId = ticket.UserId,
-                UserNumber = "0",
+                UserNumber = user.Id.ToString(),
                 ServerTime = DateTime.Now.ToRfc3339String(),
             };
+
+            var cookieOptions = new CookieOptions();
+            cookieOptions.Expires = DateTime.Now.AddHours(1);
+            Response.Cookies.Append("X-gt-token", GenerateToken(), cookieOptions);
 
             return Ok(resp);
         }
@@ -118,8 +130,30 @@ namespace GTGrimServer.Controllers.Profiles
                 Nickname = ticket.OnlineId,
             };
 
-            _users.Add(user);
+            long id;
+            try
+            {
+                id = _users.Add(user);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError("Failed to create new user {userName} - PSNId: {psnId}", ticket.OnlineId, ticket.UserId, 0);
+                return null;
+            }
+
+            _logger.LogInformation("Created user {userName} - PSNId: {psnId} - ServId: {id}", ticket.OnlineId, ticket.UserId, 0);
             return user;
+        }
+
+        public string GenerateToken()
+        {
+            var secKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
+            var creds = new SigningCredentials(secKey, SecurityAlgorithms.HmacSha256);
+
+            var token = new JwtSecurityToken(_config["Jwt:Issuer"], _config["Jwt:Audience"], null, 
+                expires: DateTime.Now.AddHours(1), signingCredentials: creds);
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }
 }
