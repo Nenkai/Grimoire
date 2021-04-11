@@ -12,6 +12,7 @@ using System.IO;
 using GTGrimServer.Sony;
 using GTGrimServer.Models;
 using GTGrimServer.Utils;
+using GTGrimServer.Database.Tables;
 
 namespace GTGrimServer.Helpers
 {

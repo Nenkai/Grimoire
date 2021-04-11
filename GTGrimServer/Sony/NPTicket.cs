@@ -8,7 +8,7 @@ using System.IO;
 using Syroot.BinaryData;
 namespace GTGrimServer.Sony
 {
-    public class Ticket
+    public class NPTicket
     {
         public int VersionMajor { get; set; }
         public int VersionMinor { get; set; }
@@ -22,15 +22,15 @@ namespace GTGrimServer.Sony
         public string Domain { get; set; }
         public byte[] ServiceID { get; set; }
 
-        public static Ticket FromBuffer(byte[] buffer)
+        public static NPTicket FromBuffer(byte[] buffer)
         {
             using var ms = new MemoryStream(buffer);
             return FromStream(ms);
         }
 
-        public static Ticket FromStream(Stream stream)
+        public static NPTicket FromStream(Stream stream)
         {
-            var ticket = new Ticket();
+            var ticket = new NPTicket();
             var bs = new BinaryStream(stream);
             bs.ByteConverter = ByteConverter.Big;
 

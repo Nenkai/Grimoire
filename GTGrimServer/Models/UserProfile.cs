@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
 
-namespace GTGrimServer.Models
+namespace GTGrimServer.Database.Tables
 {
     [XmlRoot(ElementName = "user")]
     public class UserProfile

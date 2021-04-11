@@ -11,6 +11,8 @@ using System.Xml.Serialization;
 using System.IO;
 
 using GTGrimServer.Controllers;
+using GTGrimServer.Database.Controllers;
+using GTGrimServer.Database.Tables;
 using GTGrimServer.Filters;
 using GTGrimServer.Config;
 using GTGrimServer.Models;
@@ -27,11 +29,15 @@ namespace GTGrimServer.Controllers.Profiles
     {
         private readonly ILogger<AuthenticationController> _logger;
         private readonly GameServerOptions _gsOptions;
+        private readonly UserDBManager _users;
 
-        public AuthenticationController(IOptions<GameServerOptions> gsOptions, ILogger<AuthenticationController> logger)
+        public AuthenticationController(IOptions<GameServerOptions> gsOptions, 
+            ILogger<AuthenticationController> logger,
+            UserDBManager users)
         {
             _logger = logger;
             _gsOptions = gsOptions.Value;
+            _users = users;
         }
 
         [HttpPost]
@@ -43,12 +49,12 @@ namespace GTGrimServer.Controllers.Profiles
             if (!EnsureVersion(pfsType))
                 return Forbid();
 
-            Ticket ticket;
+            NPTicket ticket;
             try
             {
                 byte[] buf = new byte[(int)Request.ContentLength];
                 await Request.Body.ReadAsync(buf, 0, buf.Length);
-                ticket = Ticket.FromBuffer(buf);
+                ticket = NPTicket.FromBuffer(buf);
             }
             catch (Exception e)
             {
@@ -56,7 +62,16 @@ namespace GTGrimServer.Controllers.Profiles
                 return BadRequest();
             }
 
-            _logger.LogDebug("Got auth request - NP_Ticket-> PFS: {pfsVersion} | OnlineID: {OnlineId} | Region: {Region}", pfsVersion, ticket.OnlineId, ticket.Region);
+            if (!VerifyTicket(ticket))
+                return BadRequest();
+
+            _logger.LogDebug("Got auth request - NP_Ticket -> PFS: {pfsVersion} | OnlineID: {OnlineId} | Region: {Region}", pfsVersion, ticket.OnlineId, ticket.Region);
+            User user = _users.GetByID((long)ticket.UserId);
+
+            if (user is null)
+            {
+                user = CreateUser(ticket);
+            }
 
             var resp = new TicketResult()
             {
@@ -89,9 +104,22 @@ namespace GTGrimServer.Controllers.Profiles
             return true;
         }
 
-        private bool VerifyTicket(Ticket ticket)
+        private bool VerifyTicket(NPTicket ticket)
         {
             return true;
+        }
+
+        public User CreateUser(NPTicket ticket)
+        {
+            var user = new User()
+            {
+                PsnId = (long)ticket.UserId,
+                IPAddress = Request.Host.Host,
+                Nickname = ticket.OnlineId,
+            };
+
+            _users.Add(user);
+            return user;
         }
     }
 }

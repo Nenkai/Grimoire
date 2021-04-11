@@ -26,6 +26,7 @@
 	
   <ItemGroup>
     <Folder Include="Database\Scripts\" />
+    <Folder Include="Services\" />
   </ItemGroup>
 
 </Project>

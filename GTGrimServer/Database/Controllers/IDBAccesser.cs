@@ -10,8 +10,8 @@ namespace GTGrimServer.Database.Controllers
         /// Adds a new entity and saves the database.
         /// </summary>
         /// <param name="t"></param>
-        /// <returns></returns>
-        void Add(T t);
+        /// <returns>Row ID.</returns>
+        long Add(T t);
 
         /// <summary>
         /// Removes an entity and saves the database.

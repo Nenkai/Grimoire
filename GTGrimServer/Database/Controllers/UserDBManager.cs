@@ -15,7 +15,7 @@ using GTGrimServer.Database.Tables;
 
 namespace GTGrimServer.Database.Controllers
 {
-    public class UserDBManager : IDBManager<UserProfile>
+    public class UserDBManager : IDBManager<User>
     {
         private ILogger<UserDBManager> _logger;
         protected IDbConnection _con;
@@ -26,27 +26,28 @@ namespace GTGrimServer.Database.Controllers
             _con = con;
         }
 
-        public UserProfile GetByID(long id)
+        public User GetByID(long id)
         {
-            _con.Open();
-            var cmd = new NpgsqlCommand();
-            return _con.QueryFirstOrDefault<UserProfile>(@"SELECT * FROM users WHERE psnid = @psnid", new { Id = id });
+            return _con.QueryFirstOrDefault<User>(@"SELECT * FROM users WHERE psnid = @psnid", new { Id = id });
         }
 
-        public void Update(UserProfile pData)
+        public void Update(User pData)
         {
-            _con.Open();
             _con.Execute(@"UPDATE users", pData);
         }
 
-        public void Add(UserProfile pData)
+        public long Add(User pData)
         {
+            var query =
+@"INSERT INTO users (psnid, nickname, ipaddress, mac)
+  VALUES(@PsnId, @Nickname, @IPAddress, @MacAddress)
+  returning id";
 
+            return _con.ExecuteScalar<long>(query, new { pData.PsnId, pData.Nickname, pData.IPAddress, pData.MacAddress });
         }
 
         public void Remove(ulong id)
         {
-            _con.Open();
             _con.Execute(@"DELETE FROM users WHERE psnid=@Id", new { Id = id });
         }
 
@@ -65,7 +66,7 @@ namespace GTGrimServer.Database.Controllers
                 bspec_level INTEGER DEFAULT 0,
                 bspec_exp INTEGER DEFAULT 0,
                 achievement INTEGER DEFAULT 0,
-                credit INTEGER DEFAULT 0,
+                credit BIGINT DEFAULT 0,
                 win_count INTEGER DEFAULT 0,
                 car_count INTEGER DEFAULT 0,
                 trophy INTEGER DEFAULT 0,
@@ -82,7 +83,6 @@ namespace GTGrimServer.Database.Controllers
                 wear_color INTEGER DEFAULT 0
 			);";
 
-            _con.Open();
             _con.Execute(query);
 
             string query2 = @"CREATE INDEX IF NOT EXISTS users_psnid_idx ON users (psnid)";
