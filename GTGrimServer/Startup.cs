@@ -25,6 +25,7 @@ using GTGrimServer.Database.Controllers;
 using GTGrimServer.Utils;
 using GTGrimServer.Config;
 using GTGrimServer.Filters;
+using GTGrimServer.Services;
 
 namespace GTGrimServer
 {
@@ -54,6 +55,7 @@ namespace GTGrimServer
 
             // Grim Related Services
             services.Configure<GameServerOptions>(Configuration.GetSection(GameServerOptions.GameServer));
+            services.AddSingleton<PlayerManager>();
 
             services.AddTransient<IDbConnection>((sp) => new NpgsqlConnection(Configuration["Database:ConnectionString"]));
             services.AddSingleton<UserDBManager>();

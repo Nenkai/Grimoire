@@ -16,7 +16,7 @@ using GTGrimServer.Filters;
 using GTGrimServer.Models;
 using GTGrimServer.Utils;
 using GTGrimServer.Config;
-using GTGrimServer.Controllers;
+using GTGrimServer.Services;
 
 namespace GTGrimServer.Controllers.Profiles
 {
@@ -28,12 +28,15 @@ namespace GTGrimServer.Controllers.Profiles
     [Route("/ap/[controller]/")]
     [Produces("application/xml")]
     [Authorize]
-    public class ProfileController : ControllerBase
+    public class ProfileController : GrimControllerBase
     {
         private readonly ILogger<ProfileController> _logger;
         private readonly GameServerOptions _gsOptions;
 
-        public ProfileController(IOptions<GameServerOptions> gsOptions, ILogger<ProfileController> logger)
+        public ProfileController(PlayerManager players, 
+            IOptions<GameServerOptions> gsOptions, 
+            ILogger<ProfileController> logger)
+            : base(players)
         {
             _logger = logger;
             _gsOptions = gsOptions.Value;

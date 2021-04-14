@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 using System.Security.Claims;
 
 
-using GTGrimServer.Controllers;
+using GTGrimServer.Services;
 using GTGrimServer.Database.Controllers;
 using GTGrimServer.Database.Tables;
 using GTGrimServer.Filters;
@@ -26,6 +26,9 @@ using GTGrimServer.Sony;
 
 namespace GTGrimServer.Controllers.Profiles
 {
+    /// <summary>
+    /// Endpoint that handles all grim authentication requests.
+    /// </summary>
     [ApiController]
     [PDIClient]
     [Route("/ap/ticket/login/{pfsVersion}/")]
@@ -34,15 +37,18 @@ namespace GTGrimServer.Controllers.Profiles
     {
         private readonly ILogger<AuthenticationController> _logger;
         private readonly IConfiguration _config;
+        private readonly PlayerManager _players;
         private readonly GameServerOptions _gsOptions;
         private readonly UserDBManager _users;
 
         public AuthenticationController(IConfiguration config, 
             ILogger<AuthenticationController> logger,
+            PlayerManager players,
             UserDBManager users)
         {
             _logger = logger;
             _config = config;
+            _players = players;
             _gsOptions = _config.GetSection(GameServerOptions.GameServer).Get<GameServerOptions>();
             _users = users;
         }
@@ -79,25 +85,43 @@ namespace GTGrimServer.Controllers.Profiles
                 return BadRequest();
 
             _logger.LogDebug("Auth Request: NP_Ticket -> PFS: {pfsVersion} | OnlineID: {OnlineId} | Region: {Region}", pfsVersion, ticket.OnlineId, ticket.Region);
+
+            // Check if already connected
+            if (CheckAlreadyConnected(ticket.OnlineId))
+                _logger.LogTrace("Auth Request from OnlineID: {OnlineId} which was already connected", ticket.OnlineId);
+
             User user = _users.GetByID((long)ticket.UserId) ?? CreateUser(ticket);
             if (user is null)
             {
                 _logger.LogError("Failed to get or create user from db: Name: {name}, PSN Id {psnId}", ticket.OnlineId, ticket.UserId);
-
                 return Problem();    
             }
 
+            var now = DateTime.Now;
+
+            // From this point, auth is OK
             var resp = new TicketResult()
             {
                 Result = "0", // Doesn't seem to do much.
                 Nickname = ticket.OnlineId,
                 UserId = ticket.UserId,
                 UserNumber = user.Id.ToString(),
-                ServerTime = DateTime.Now.ToRfc3339String(),
+                ServerTime = now.ToRfc3339String(),
             };
 
-            var cookieOptions = new CookieOptions() { Expires = DateTime.Now.AddHours(1) };
-            Response.Cookies.Append("X-gt-token", GenerateToken(), cookieOptions);
+            var expiryTime = now.AddHours(1);
+            var sToken = new SessionToken(GenerateToken(expiryTime), expiryTime);
+
+            var cookieOptions = new CookieOptions() { Expires = sToken.ExpiryDate };
+            Response.Cookies.Append("X-gt-token", sToken.Token, cookieOptions);
+
+            var player = new Player()
+            {
+                Token = sToken,
+                Data = user,
+                LastUpdate = now,
+            };
+            _players.AddUser(player);
 
             return Ok(resp);
         }
@@ -105,7 +129,7 @@ namespace GTGrimServer.Controllers.Profiles
         /// <summary>
         /// Checks if the game version provided is suitable for the server.
         /// </summary>
-        /// <param name="pfs"></param>
+        /// <param name="pfs">PFS Version to check against.</param>
         /// <returns></returns>
         [NonAction]
         private bool EnsureVersion(PFSType pfs)
@@ -125,9 +149,24 @@ namespace GTGrimServer.Controllers.Profiles
         [NonAction]
         private bool VerifyTicket(NPTicket ticket)
         {
+            // TODO: Log ticket verification problems
+            if (ticket.OnlineId.Length > 32)
+                return false;
+
+            if (ticket.Region.Length > 4)
+                return false;
+
+            if (ticket.Domain.Length > 4)
+                return false;
+
             return true;
         }
 
+        /// <summary>
+        /// Creates an user in the grim database.
+        /// </summary>
+        /// <param name="ticket">NP Login ticket of the player.</param>
+        /// <returns>User object from the database.</returns>
         [NonAction]
         public User CreateUser(NPTicket ticket)
         {
@@ -153,16 +192,38 @@ namespace GTGrimServer.Controllers.Profiles
             return user;
         }
 
+        /// <summary>
+        /// Generates a new session token.
+        /// </summary>
+        /// <returns>Token as a string.</returns>
         [NonAction]
-        public string GenerateToken()
+        public string GenerateToken(DateTime expiryTime)
         {
             var secKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
             var creds = new SigningCredentials(secKey, SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(_config["Jwt:Issuer"], _config["Jwt:Audience"], null, 
-                expires: DateTime.Now.AddHours(1), signingCredentials: creds);
+                expires: expiryTime, signingCredentials: creds);
 
             return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+        /// <summary>
+        /// Checks if the player is already connected, and removes them from the registered list if so.
+        /// </summary>
+        /// <param name="psnOnlineName">PSN Name of the player.</param>
+        /// <returns>Whether if the player was already assumed to be connected to the server.</returns>
+        [NonAction]
+        public bool CheckAlreadyConnected(string psnOnlineName)
+        {
+            var potentialOnlinePlayer = _players.GetPlayerByName(psnOnlineName);
+            if (potentialOnlinePlayer != null)
+            {
+                _players.RemoveByToken(potentialOnlinePlayer.Token);
+                return true;
+            }
+
+            return false;
         }
     }
 }

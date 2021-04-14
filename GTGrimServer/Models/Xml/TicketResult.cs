@@ -8,6 +8,9 @@ using System.Xml.Serialization;
 
 namespace GTGrimServer.Models
 {
+    /// <summary>
+    /// Represents a NP Login Ticket result.
+    /// </summary>
     [XmlRoot("result")]
     public class TicketResult
     {
