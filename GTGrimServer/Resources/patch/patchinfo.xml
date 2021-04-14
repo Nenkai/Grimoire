@@ -1,0 +1,10 @@
+<?xml version="1.0" ?>
+<!-- PatchInfoList -->
+<patchs>
+	    <!-- PatchInfo - level is the PFS Version, if its higher than the client's PFS, update prompt will show up -->
+        <patch base-path="PATCHPACKAGE" level="469128999" type="diff" version="1.22">
+			<!-- PatchPackageInfo -->
+            <package desc-path="desc-fr.txt" lang="fr" package-path="/path" region="scee"/>-->
+			<!-- <sequence pfsver="469128999"/> --> <!-- PFS Version, found in volume header - Appears to be unread on 1.22 -->
+        </patch>
+</patchs>

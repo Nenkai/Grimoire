@@ -10,6 +10,8 @@
 
 	<!-- Whether to enable patch checking -->
   	<option key="patch.enable" value="0" />
+	  
+	<!-- Used to specifically enable a patch -->
   	<option key="patch.seq469128999" value="1" />
   
   	<option key="lobby_id" value="12" />
