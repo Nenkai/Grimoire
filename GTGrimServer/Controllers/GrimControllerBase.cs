@@ -29,5 +29,24 @@ namespace GTGrimServer.Controllers
         {
             Players = players;
         }
+
+        /// <summary>
+        /// Current player for this request.
+        /// </summary>
+        public Player Player
+        {
+            get
+            {
+                string token = Request.Cookies["X-gt-token"];
+                if (token is null)
+                    return null;
+
+                Player player = Players.GetPlayerByToken(token);
+
+                // TODO: Check if expired
+
+                return player;
+            }
+        }
     }
 }

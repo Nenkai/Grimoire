@@ -14,28 +14,28 @@ namespace GTGrimServer.Services
     /// </summary>
     public class PlayerManager
     {
-        public ConcurrentDictionary<SessionToken, Player> Players { get; set; } = new();
+        public ConcurrentDictionary<string, Player> Players { get; set; } = new();
 
         public PlayerManager()
         {
             
         }
 
-        public bool RemoveByToken(SessionToken token)
-            => Players.TryRemove(token, out _);
+        public bool RemoveByToken(SessionToken sToken)
+            => Players.TryRemove(sToken.Token, out _);
 
-        public bool AddByToken(SessionToken token, Player player)
-            => Players.TryAdd(token, player);
+        public bool AddByToken(SessionToken sToken, Player player)
+            => Players.TryAdd(sToken.Token, player);
 
         public bool RemovePlayer(Player player)
-            => Players.TryRemove(player.Token, out _);
+            => Players.TryRemove(player.Token.Token, out _);
 
         public bool AddUser(Player player)
-            => Players.TryAdd(player.Token, player);
+            => Players.TryAdd(player.Token.Token, player);
 
-        public Player GetPlayerByToken(SessionToken token)
+        public Player GetPlayerByToken(string sToken)
         {
-            if (Players.TryGetValue(token, out Player player))
+            if (Players.TryGetValue(sToken, out Player player))
                 return player;
 
             return null; // TODO Handle
@@ -43,10 +43,10 @@ namespace GTGrimServer.Services
 
         public void UpdatePlayerToken(Player player, SessionToken newToken)
         {
-            if (Players.TryRemove(player.Token, out _))
+            if (Players.TryRemove(player.Token.Token, out _))
             {
                 player.Token = newToken;
-                Players.TryAdd(player.Token, player);
+                Players.TryAdd(player.Token.Token, player);
             }
         }
 

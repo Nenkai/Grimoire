@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 using System.Xml.Serialization;
 using System.IO;
 
+using GTGrimServer.Controllers;
+using GTGrimServer.Services;
 using GTGrimServer.Sony;
 using GTGrimServer.Filters;
 
@@ -23,11 +25,12 @@ namespace GTGrimServer.Helpers
     [Authorize]
     [Route("/log/{server}/")]
     [Produces("application/xml")]
-    public class LogController : ControllerBase
+    public class LogController : GrimControllerBase
     {
         private readonly ILogger<LogController> _logger;
 
-        public LogController(ILogger<LogController> logger)
+        public LogController(PlayerManager playerManager, ILogger<LogController> logger)
+            : base(playerManager)
         {
             _logger = logger;
         }
@@ -37,6 +40,12 @@ namespace GTGrimServer.Helpers
         {
             if (!Request.Headers.TryGetValue("X-gt-log", out var hVal))
                 return BadRequest();
+
+            if (Player is null)
+            {
+                _logger.LogInformation("Could not get current player");
+                return BadRequest();
+            }
 
             string argStr = hVal.FirstOrDefault();
             if (argStr.StartsWith("ADHOC"))

@@ -15,5 +15,8 @@ namespace GTGrimServer.Models
 
         public void SetLastUpdatedNow()
             => LastUpdate = DateTime.Now;
+
+        public override string ToString()
+            => Data.Nickname;
     }
 }
