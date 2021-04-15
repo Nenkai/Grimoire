@@ -2,7 +2,7 @@
 An Open-source, work in progress Gran Turismo 5/6 Custom Server.
 
 ## State of the project
-So far the server allows GT5 and GT6 to go past boot.
+So far the server allows GT5 and GT6 to go past boot. Everything is still very stub and very likely subject to change
 
 Working/figured out list:
 
