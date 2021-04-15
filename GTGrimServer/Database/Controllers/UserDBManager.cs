@@ -45,10 +45,10 @@ namespace GTGrimServer.Database.Controllers
             return await _con.ExecuteScalarAsync<long>(query, new { pData.PsnId, pData.Nickname, pData.IPAddress, pData.MacAddress });
         }
 
-        public async Task RemoveAsync(ulong id)
+        public async Task RemoveAsync(long id)
             => await _con.ExecuteAsync(@"DELETE FROM users WHERE id=@Id", new { Id = id });
 
-        public async Task RemoveByPSNIdAsync(ulong psnId)
+        public async Task RemoveByPSNIdAsync(long psnId)
             => await _con.ExecuteAsync(@"DELETE FROM users WHERE psnid=@Id", new { PsnId = psnId });
 
         private void CreateTable()

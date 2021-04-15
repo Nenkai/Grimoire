@@ -10,7 +10,7 @@ namespace GTGrimServer.Models
     [XmlRoot(ElementName = "user_special_list")]
     public class SpecialList
     {
-        public List<UserSpecial> Items { get; set; }
+        public List<UserSpecial> Items { get; set; } = new List<UserSpecial>();
     }
 
     /// <summary>
@@ -30,5 +30,15 @@ namespace GTGrimServer.Models
 
         [XmlAttribute(AttributeName = "type")]
         public int Type { get; set; }
+
+        public UserSpecial() { }
+
+        public UserSpecial(long userId, int type, string key, string value)
+        {
+            UserId = userId;
+            Key = key;
+            Value = value;
+            Type = type;
+        }
     }
 }

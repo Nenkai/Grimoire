@@ -33,20 +33,25 @@ namespace GTGrimServer.Controllers.Profiles
     {
         private readonly ILogger<ProfileController> _logger;
         private readonly GameServerOptions _gsOptions;
+
         private readonly FriendDBManager _friendDB;
         private readonly UserDBManager _userDB;
+        private readonly UserSpecialDBManager _userSpecialDB;
 
         public ProfileController(PlayerManager players,
             UserDBManager userDB,
             FriendDBManager friendDB,
+            UserSpecialDBManager userSpecialDB,
             IOptions<GameServerOptions> gsOptions, 
             ILogger<ProfileController> logger)
             : base(players)
         {
             _logger = logger;
             _gsOptions = gsOptions.Value;
+
             _userDB = userDB;
             _friendDB = friendDB;
+            _userSpecialDB = userSpecialDB;
         }
 
         [HttpPost]
@@ -82,7 +87,7 @@ namespace GTGrimServer.Controllers.Profiles
                 case "profile.setpresence":
                     return SetPresence(requestReq);
                 case "profile.getSpecialList":
-                    return OnGetUserSpecialPresentList(requestReq);
+                    return await OnGetUserSpecialPresentList(requestReq);
             }
 
             _logger.LogDebug("Received unimplemented profile call: {command}", requestReq.Command);
@@ -206,7 +211,7 @@ namespace GTGrimServer.Controllers.Profiles
         /// </summary>
         /// <param name="gRequest"></param>
         /// <returns></returns>
-        private ActionResult OnGetUserSpecialPresentList(GrimRequest gRequest)
+        private async Task<ActionResult> OnGetUserSpecialPresentList(GrimRequest gRequest)
         {
             if (_gsOptions.GameType != GameType.GT6)
             {
@@ -226,7 +231,20 @@ namespace GTGrimServer.Controllers.Profiles
                 return BadRequest();
             }
 
+            var specialDataList = await _userSpecialDB.GetAllPresentsOfUserAsync(Player.Data.Id, 3);
             var result = new SpecialList();
+            foreach (var specialData in specialDataList)
+            {
+                var special = new UserSpecial(specialData.UserId, specialData.Type, specialData.Key, specialData.Value);
+                result.Items.Add(special);
+
+                if (specialData.Type == 3 && specialData.Key.StartsWith("CAR"))
+                {
+                    // Its a one-time car present
+                    await _userSpecialDB.RemoveAsync(specialData.Id);
+                }
+            }
+
             return Ok(result);
         }
     }

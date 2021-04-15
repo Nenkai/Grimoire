@@ -50,7 +50,7 @@ namespace GTGrimServer.Database.Controllers
             return await _con.ExecuteScalarAsync<long>(query, new { friendData.UserId, friendData.FriendId });
         }
 
-        public async Task RemoveAsync(ulong id)
+        public async Task RemoveAsync(long id)
             => await _con.ExecuteAsync(@"DELETE FROM friends WHERE id=@id", new { Id = id });
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace GTGrimServer.Database.Controllers
         /// <param name="id">Database Id of the user.</param>
         /// <param name="friendId">Database Id of the friend.</param>
         /// <returns></returns>
-        public async Task RemoveFriendAsync(ulong userId, ulong friendId)
+        public async Task RemoveFriendAsync(long userId, long friendId)
            => await _con.ExecuteAsync(@"DELETE FROM friends WHERE user_id=@UserId AND friend_id=@FriendId", new { UserId = userId, FriendId = friendId });
 
         private void CreateTable()

@@ -60,6 +60,7 @@ namespace GTGrimServer
             services.AddTransient<IDbConnection>((sp) => new NpgsqlConnection(Configuration["Database:ConnectionString"]));
             services.AddSingleton<UserDBManager>();
             services.AddSingleton<FriendDBManager>();
+            services.AddSingleton<UserSpecialDBManager>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -100,6 +101,7 @@ namespace GTGrimServer
         {
             services.GetService<UserDBManager>().CreateTableIfNeeded();
             services.GetService<FriendDBManager>().CreateTableIfNeeded();
+            services.GetService<UserSpecialDBManager>().CreateTableIfNeeded();
         }
 
         public void AddJWTAuthentication(IServiceCollection services)

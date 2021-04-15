@@ -8,17 +8,17 @@ namespace GTGrimServer.Database.Controllers
     interface IDBManager<T>
     {
         /// <summary>
-        /// Adds a new entity and saves the database.
+        /// Adds a new entityto the database.
         /// </summary>
         /// <param name="t"></param>
         /// <returns>Row ID.</returns>
         Task<long> AddAsync(T t);
 
         /// <summary>
-        /// Removes an entity and saves the database.
+        /// Removes an entity from the database.
         /// </summary>
         /// <param name="t"></param>
-        Task RemoveAsync(ulong t);
+        Task RemoveAsync(long t);
 
         /// <summary>
         /// Gets an entity by ID.
@@ -28,7 +28,7 @@ namespace GTGrimServer.Database.Controllers
         Task<T> GetByIDAsync(long id);
 
         /// <summary>
-        /// Updates and saves the entity.
+        /// Updates the entity in the database.
         /// </summary>
         /// <param name="t"></param>
         Task UpdateAsync(T t);
