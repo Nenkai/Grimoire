@@ -5,10 +5,11 @@ An Open-source, work in progress Gran Turismo 5/6 Custom Server.
 So far the server allows GT5 and GT6 to go past boot.
 
 Working/figured out list:
-[X] Logged State
-[X] GT5 News
-[X] GT6 Seasonal Events
-[ ] GT5 GTTV
+
+- [x] Logged State
+- [x] GT5 News
+- [x] GT6 Seasonal Events
+- [ ] GT5 GTTV
 ...
 
 ## Compiling
