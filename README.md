@@ -6,10 +6,17 @@ So far the server allows GT5 and GT6 to go past boot.
 
 Working/figured out list:
 
+- [x] Connection
+- [x] Server Region Redirection & Server Flags
+- [x] Authentication
 - [x] Logged State
+- [x] GT5 Museum
 - [x] GT5 News
 - [x] GT6 Seasonal Events
 - [ ] GT5 GTTV
+- [ ] All GT5 community features
+- [ ] Accessing lobbies
+- [ ] Everything else
 ...
 
 ## Compiling
