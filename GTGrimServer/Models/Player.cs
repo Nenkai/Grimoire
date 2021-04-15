@@ -7,16 +7,39 @@ using GTGrimServer.Database.Tables;
 
 namespace GTGrimServer.Models
 {
+    /// <summary>
+    /// Grim Player.
+    /// </summary>
     public class Player
     {
-        public User Data { get; init; }
+        /// <summary>
+        /// Database Object.
+        /// </summary>
+        public UserDTO Data { get; }
+
+        /// <summary>
+        /// Current Session Token.
+        /// </summary>
         public SessionToken Token { get; set; }
+
+        /// <summary>
+        /// Last Request Date.
+        /// </summary>
         public DateTime LastUpdate { get; set; }
 
+        /// <summary>
+        /// Sets the last update to now.
+        /// </summary>
         public void SetLastUpdatedNow()
             => LastUpdate = DateTime.Now;
 
         public override string ToString()
             => Data.Nickname;
+
+        public Player(UserDTO user, SessionToken token)
+        {
+            Data = user;
+            Token = token;
+        }
     }
 }

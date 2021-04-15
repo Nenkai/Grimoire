@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
+using System.Threading.Tasks;
 
 using System.Data;
-using System.Net;
-using System.Net.NetworkInformation;
+
 using Microsoft.Extensions.Logging;
 using Dapper;
 using Npgsql;
@@ -15,7 +15,7 @@ using GTGrimServer.Database.Tables;
 
 namespace GTGrimServer.Database.Controllers
 {
-    public class UserDBManager : IDBManager<User>
+    public class UserDBManager : IDBManager<UserDTO>
     {
         private ILogger<UserDBManager> _logger;
         protected IDbConnection _con;
@@ -26,30 +26,30 @@ namespace GTGrimServer.Database.Controllers
             _con = con;
         }
 
-        public User GetByID(long id)
-        {
-            return _con.QueryFirstOrDefault<User>(@"SELECT * FROM users WHERE psnid = @psnid", new { Id = id });
-        }
+        public async Task<UserDTO> GetByIDAsync(long id)
+            => await _con.QueryFirstOrDefaultAsync<UserDTO>(@"SELECT * FROM users WHERE id = @id", new { Id = id });
 
-        public void Update(User pData)
-        {
-            _con.Execute(@"UPDATE users", pData);
-        }
+        public async Task<UserDTO> GetByPSNIdAsync(long psnId)
+            => await _con.QueryFirstOrDefaultAsync<UserDTO>(@"SELECT * FROM users WHERE psnid = @psnid", new { PsnId = psnId });
 
-        public long Add(User pData)
+        public async Task UpdateAsync(UserDTO pData)
+            => await _con.ExecuteAsync(@"UPDATE users", pData);
+
+        public async Task<long> AddAsync(UserDTO pData)
         {
             var query =
 @"INSERT INTO users (psnid, nickname, ipaddress, mac)
   VALUES(@PsnId, @Nickname, @IPAddress, @MacAddress)
   returning id";
 
-            return _con.ExecuteScalar<long>(query, new { pData.PsnId, pData.Nickname, pData.IPAddress, pData.MacAddress });
+            return await _con.ExecuteScalarAsync<long>(query, new { pData.PsnId, pData.Nickname, pData.IPAddress, pData.MacAddress });
         }
 
-        public void Remove(ulong id)
-        {
-            _con.Execute(@"DELETE FROM users WHERE psnid=@Id", new { Id = id });
-        }
+        public async Task RemoveAsync(ulong id)
+            => await _con.ExecuteAsync(@"DELETE FROM users WHERE id=@Id", new { Id = id });
+
+        public async Task RemoveByPSNIdAsync(ulong psnId)
+            => await _con.ExecuteAsync(@"DELETE FROM users WHERE psnid=@Id", new { PsnId = psnId });
 
         private void CreateTable()
         {

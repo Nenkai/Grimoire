@@ -90,7 +90,7 @@ namespace GTGrimServer.Controllers.Profiles
             if (CheckAlreadyConnected(ticket.OnlineId))
                 _logger.LogTrace("Auth Request from OnlineID: {OnlineId} which was already connected", ticket.OnlineId);
 
-            User user = _users.GetByID((long)ticket.UserId) ?? CreateUser(ticket);
+            UserDTO user = await _users.GetByPSNIdAsync((long)ticket.UserId) ?? await CreateUser(ticket);
             if (user is null)
             {
                 _logger.LogError("Failed to get or create user from db: Name: {name}, PSN Id {psnId}", ticket.OnlineId, ticket.UserId);
@@ -115,12 +115,8 @@ namespace GTGrimServer.Controllers.Profiles
             var cookieOptions = new CookieOptions() { Expires = sToken.ExpiryDate };
             Response.Cookies.Append("X-gt-token", sToken.Token, cookieOptions);
 
-            var player = new Player()
-            {
-                Token = sToken,
-                Data = user,
-                LastUpdate = now,
-            };
+            var player = new Player(user, sToken);
+            player.LastUpdate = now;
             _players.AddUser(player);
 
             return Ok(resp);
@@ -168,9 +164,9 @@ namespace GTGrimServer.Controllers.Profiles
         /// <param name="ticket">NP Login ticket of the player.</param>
         /// <returns>User object from the database.</returns>
         [NonAction]
-        public User CreateUser(NPTicket ticket)
+        public async Task<UserDTO> CreateUser(NPTicket ticket)
         {
-            var user = new User()
+            var user = new UserDTO()
             {
                 PsnId = (long)ticket.UserId,
                 IPAddress = Request.Host.Host,
@@ -180,7 +176,7 @@ namespace GTGrimServer.Controllers.Profiles
             long id;
             try
             {
-                id = _users.Add(user);
+                id = await _users.AddAsync(user);
             }
             catch (Exception e)
             {
@@ -188,7 +184,9 @@ namespace GTGrimServer.Controllers.Profiles
                 return null;
             }
 
-            _logger.LogInformation("Created user {userName} - PSNId: {psnId} - ServId: {id}", ticket.OnlineId, ticket.UserId, id);
+            user.Id = id;
+
+            _logger.LogInformation("Created user {userName} - PSNId: {psnId} - UserId: {id}", ticket.OnlineId, ticket.UserId, id);
             return user;
         }
 

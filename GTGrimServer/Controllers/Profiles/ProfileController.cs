@@ -11,7 +11,8 @@ using System.Threading.Tasks;
 using System.Xml.Serialization;
 using System.IO;
 
-using GTGrimServer.Sony;
+using GTGrimServer.Database.Controllers;
+using GTGrimServer.Database.Tables;
 using GTGrimServer.Filters;
 using GTGrimServer.Models;
 using GTGrimServer.Utils;
@@ -32,19 +33,32 @@ namespace GTGrimServer.Controllers.Profiles
     {
         private readonly ILogger<ProfileController> _logger;
         private readonly GameServerOptions _gsOptions;
+        private readonly FriendDBManager _friendDB;
+        private readonly UserDBManager _userDB;
 
-        public ProfileController(PlayerManager players, 
+        public ProfileController(PlayerManager players,
+            UserDBManager userDB,
+            FriendDBManager friendDB,
             IOptions<GameServerOptions> gsOptions, 
             ILogger<ProfileController> logger)
             : base(players)
         {
             _logger = logger;
             _gsOptions = gsOptions.Value;
+            _userDB = userDB;
+            _friendDB = friendDB;
         }
 
         [HttpPost]
         public async Task<ActionResult> Post()
         {
+            var player = Player;
+            if (player is null)
+            {
+                _logger.LogWarning("Could not get current player for host {host} (command: {command})");
+                return Unauthorized();
+            }
+
             GrimRequest requestReq = await GrimRequest.Deserialize(Request.Body);
             if (requestReq is null)
             {
@@ -64,7 +78,7 @@ namespace GTGrimServer.Controllers.Profiles
                 case "profile.updatefriendlist":
                     return OnUpdateFriendList();
                 case "profile.getsimplefriendlist":
-                    return OnGetSimpleFriendList();
+                    return await OnGetSimpleFriendList(player);
                 case "profile.setpresence":
                     return SetPresence(requestReq);
                 case "profile.getSpecialList":
@@ -76,11 +90,19 @@ namespace GTGrimServer.Controllers.Profiles
             return BadRequest(res);
         }
 
-        private ActionResult OnGetSimpleFriendList()
+        private async Task<ActionResult> OnGetSimpleFriendList(Player player)
         {
-            // Param is "order"
-            var friendList = new SimpleFriendList();
-            return Ok(friendList);
+            // TODO/Note: Param is "order", where 'A' is alphabetical?
+            var friends = await _friendDB.GetAllFriendsOfUser(player.Data.Id);
+
+            var simpleFriendList = new SimpleFriendList();
+            foreach (var friend in friends)
+            {
+                var friendData = await _userDB.GetByIDAsync(friend.FriendId);
+                simpleFriendList.Items.Add(new SimpleFriend(friendData.PsnId, friendData.ASpecLevel, friendData.BSpecLevel));
+            }
+
+            return Ok(simpleFriendList);
         }
 
         private ActionResult OnProfileUpdate(GrimRequest requestReq)
@@ -140,10 +162,11 @@ namespace GTGrimServer.Controllers.Profiles
         /// <returns></returns>
         private ActionResult OnUpdateFriendList()
         {
-            if (_gsOptions.GameType != GameType.GT5)
+            var player = Player;
+            if (player is null)
             {
-                _logger.LogWarning("Got special status request on a non GT5 server");
-                return BadRequest();
+                _logger.LogWarning("Could not get current player for friend list request");
+                return Unauthorized();
             }
 
             // Param is "friend_list"

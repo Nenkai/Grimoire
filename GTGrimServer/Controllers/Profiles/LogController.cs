@@ -43,14 +43,14 @@ namespace GTGrimServer.Helpers
 
             if (Player is null)
             {
-                _logger.LogInformation("Could not get current player");
+                _logger.LogWarning("Could not get current player");
                 return BadRequest();
             }
 
             string argStr = hVal.FirstOrDefault();
             if (argStr.StartsWith("ADHOC"))
             {
-                _logger.LogInformation($"Received ADHOC crash from client: {argStr}, argStr");
+                _logger.LogInformation("[{name}] received ADHOC crash: {argStr}", Player.Data.Nickname, argStr);
                 return Ok();
             }
 
@@ -58,7 +58,7 @@ namespace GTGrimServer.Helpers
             LogHelper.Humanify(args);
 
             string humanified = string.Join(':', args);
-            _logger.LogInformation("L> {args}", humanified);
+            _logger.LogInformation("[{name}] Log: {args}", Player.Data.Nickname, humanified);
 
             return Ok();
         }

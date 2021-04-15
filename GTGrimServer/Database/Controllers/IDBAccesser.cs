@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace GTGrimServer.Database.Controllers
 {
@@ -11,25 +12,25 @@ namespace GTGrimServer.Database.Controllers
         /// </summary>
         /// <param name="t"></param>
         /// <returns>Row ID.</returns>
-        long Add(T t);
+        Task<long> AddAsync(T t);
 
         /// <summary>
         /// Removes an entity and saves the database.
         /// </summary>
         /// <param name="t"></param>
-        void Remove(ulong t);
+        Task RemoveAsync(ulong t);
 
         /// <summary>
         /// Gets an entity by ID.
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        T GetByID(long id);
+        Task<T> GetByIDAsync(long id);
 
         /// <summary>
         /// Updates and saves the entity.
         /// </summary>
         /// <param name="t"></param>
-        void Update(T t);
+        Task UpdateAsync(T t);
     }
 }
