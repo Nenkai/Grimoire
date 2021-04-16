@@ -79,6 +79,8 @@ namespace GTGrimServer.Controllers
             {
                 case "course.getlist":
                     return await OnGetList(requestReq, player);
+                case "course.update":
+                    return await OnUpdateCourse(requestReq, player);
             }
 
             _logger.LogDebug("<- Got unknown course command: {command}", requestReq.Command);
@@ -120,7 +122,7 @@ namespace GTGrimServer.Controllers
                 CourseId = 1001000,
                 Height = 4820,
                 OneWay = 1,
-                Status = 1,
+                Status = 0,
                 Straight = 10000,
                 Title = "-- title --",
                 Theme = "-- Theme --",
@@ -132,6 +134,23 @@ namespace GTGrimServer.Controllers
 
             courseList.Courses.Add(course);
             return Ok(courseList);
+        }
+
+        private async Task<ActionResult> OnUpdateCourse(GrimRequest request, Player player)
+        {
+            if (!request.TryGetParameterByKey("course_id", out var courseIdParam))
+            {
+                _logger.LogWarning("Got course getlist without 'course_id'");
+                return BadRequest();
+            }
+
+            if (!request.TryGetParameterByKey("status", out var statusParam))
+            {
+                _logger.LogWarning("Got course getlist without 'status'");
+                return BadRequest();
+            }
+
+            return Ok();
         }
     }
 }

@@ -36,7 +36,7 @@ namespace GTGrimServer.Models
         public string OwnerId { get; set; }
 
         /// <summary>
-        /// 1 = Complete, 2 = Public
+        /// 0 = Awaiting Test Drive, 1 = Complete, 2 = Public
         /// </summary>
         [XmlAttribute(AttributeName = "status")]
         public int Status { get; set; }
