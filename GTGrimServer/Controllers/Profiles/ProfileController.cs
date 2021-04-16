@@ -233,11 +233,11 @@ namespace GTGrimServer.Controllers.Profiles
                 return BadRequest();
             }
 
-            if (player.Data.NicknameChanges <= 0)
+            if (player.Data.NicknameChanges <= 0) 
                 return Ok(GrimResult.FromBool(false)); // Exceeded nickname changes
 
             if (!IsValidNickname(param.Text))
-                return Ok(GrimResult.FromBool(false)); // Exceeded nickname changes
+                return Ok(GrimResult.FromBool(false));
 
             // TODO: Swear name filter?
 
@@ -246,9 +246,8 @@ namespace GTGrimServer.Controllers.Profiles
             player.Data.NicknameChanges--;
             await _userDB.UpdateNewNickname(player.Data);
 
-            // No specific response needed
             var result = GrimResult.FromBool(true);
-            return Ok(result);
+            return BadRequest(result);
 
         }
 
