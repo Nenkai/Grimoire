@@ -60,7 +60,7 @@ namespace GTGrimServer.Controllers.Profiles
             var player = Player;
             if (player is null)
             {
-                _logger.LogWarning("Could not get current player for host {host} (command: {command})");
+                _logger.LogWarning("Could not get current player for host {host}", Request.Host);
                 return Unauthorized();
             }
 

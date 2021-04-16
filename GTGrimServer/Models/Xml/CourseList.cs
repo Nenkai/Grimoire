@@ -10,6 +10,7 @@ namespace GTGrimServer.Models
     [XmlRoot(ElementName = "course_list")]
     public class CourseList
     {
+        [XmlElement("course")]
         public List<Course> Courses { get; set; }
     }
 
@@ -28,9 +29,15 @@ namespace GTGrimServer.Models
         [XmlAttribute(AttributeName = "update_time")]
         public string UpdateTime { get; set; }
 
+        /// <summary>
+        /// PSN Name of the user that owns this course (but not the creator).
+        /// </summary>
         [XmlAttribute(AttributeName = "user_id")]
-        public long UserId { get; set; }
+        public string OwnerId { get; set; }
 
+        /// <summary>
+        /// 1 = Complete, 2 = Public
+        /// </summary>
         [XmlAttribute(AttributeName = "status")]
         public int Status { get; set; }
 
@@ -61,8 +68,14 @@ namespace GTGrimServer.Models
         [XmlAttribute(AttributeName = "one_way")]
         public int OneWay { get; set; }
 
+        [XmlAttribute(AttributeName = "corners")]
+        public int Corners { get; set; }
+
+        /// <summary>
+        /// Name of the creator that created this course.
+        /// </summary>
         [XmlAttribute(AttributeName = "source_user_id")]
-        public long SourceUserId { get; set; }
+        public string OriginalCreator { get; set; }
 
         [XmlAttribute(AttributeName = "straight")]
         public int Straight { get; set; }

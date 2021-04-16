@@ -14,8 +14,10 @@ using System.IO;
 
 using GTGrimServer.Config;
 using GTGrimServer.Utils;
+using GTGrimServer.Database.Controllers;
 using GTGrimServer.Models;
 using GTGrimServer.Filters;
+using GTGrimServer.Services;
 
 namespace GTGrimServer.Controllers
 {
@@ -25,22 +27,38 @@ namespace GTGrimServer.Controllers
     [ApiController]
     [PDIClient]
     [Authorize]
-    [Route("/ap/[controller]")]
     [Produces("application/xml")]
-    public class CourseController : ControllerBase
+    public class CourseController : GrimControllerBase
     {
         private readonly ILogger<CourseController> _logger;
         private readonly GameServerOptions _gsOptions;
+        private readonly CourseDBManager _courses;
+        private readonly UserDBManager _users;
 
-        public CourseController(IOptions<GameServerOptions> options, ILogger<CourseController> logger)
+        public CourseController(PlayerManager players, 
+            CourseDBManager courses,
+            UserDBManager users,
+            IOptions<GameServerOptions> options, 
+            ILogger<CourseController> logger)
+            : base(players)
         {
             _logger = logger;
             _gsOptions = options.Value;
+            _users = users;
+            _courses = courses;
         }
 
-        [HttpGet]
-        public async Task<ActionResult> Get()
+        [HttpPost]
+        [Route("/ap/[controller]")]
+        public async Task<ActionResult> Post()
         {
+            var player = Player;
+            if (player is null)
+            {
+                _logger.LogWarning("Could not get current player for host {host}", Request.Host);
+                return Unauthorized();
+            }
+
             if (_gsOptions.GameType != GameType.GT6)
             {
                 _logger.LogWarning("Got course getlist request on non GT6");
@@ -60,7 +78,7 @@ namespace GTGrimServer.Controllers
             switch (requestReq.Command)
             {
                 case "course.getlist":
-                    return OnGetList(requestReq);
+                    return await OnGetList(requestReq, player);
             }
 
             _logger.LogDebug("<- Got unknown course command: {command}", requestReq.Command);
@@ -68,7 +86,15 @@ namespace GTGrimServer.Controllers
             return BadRequest(badReqs);
         }
 
-        public ActionResult OnGetList(GrimRequest request)
+        [HttpGet]
+        [Route("/[controller]/data/{courseId:long}.dat")]
+        public async Task GetTrack(long courseId)
+        {
+            string tedFile = $"course/data/{courseId}.dat";
+            await this.SendFile(_gsOptions.XmlResourcePath, tedFile);
+        }
+
+        private async Task<ActionResult> OnGetList(GrimRequest request, Player player)
         {
             if (!request.TryGetParameterByKey("user_id", out var userIdParam))
             {
@@ -76,9 +102,35 @@ namespace GTGrimServer.Controllers
                 return BadRequest();
             }
 
-            _logger.LogDebug("<- course.getlist {userId}", userIdParam.Text);
+            if (!long.TryParse(userIdParam.Text, out long userIdInput))
+            {
+                _logger.LogWarning("Could not parse 'user_id' as long - got: {userIdText}", userIdParam.Text);
+                return BadRequest();
+            }
+
+            var user = await _users.GetByPSNIdAsync(userIdInput);
+            var courses = await _courses.GetAllCoursesOfUser(user.Id);
 
             var courseList = new CourseList();
+            courseList.Courses = new List<Course>();
+
+            var course = new Course()
+            {
+                Comment = "-- comment --",
+                CourseId = 1001000,
+                Height = 4820,
+                OneWay = 1,
+                Status = 1,
+                Straight = 10000,
+                Title = "-- title --",
+                Theme = "-- Theme --",
+                Length = 123456,
+                OwnerId = "Somebody",
+                Corners = 69,
+                OriginalCreator = "Somebody",
+            };
+
+            courseList.Courses.Add(course);
             return Ok(courseList);
         }
     }

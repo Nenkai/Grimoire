@@ -61,6 +61,7 @@ namespace GTGrimServer
             services.AddSingleton<UserDBManager>();
             services.AddSingleton<FriendDBManager>();
             services.AddSingleton<UserSpecialDBManager>();
+            services.AddSingleton<CourseDBManager>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -105,6 +106,7 @@ namespace GTGrimServer
             services.GetService<UserDBManager>().CreateTableIfNeeded();
             services.GetService<FriendDBManager>().CreateTableIfNeeded();
             services.GetService<UserSpecialDBManager>().CreateTableIfNeeded();
+            services.GetService<CourseDBManager>().CreateTableIfNeeded();
         }
 
         public void AddJWTAuthentication(IServiceCollection services)
@@ -131,7 +133,6 @@ namespace GTGrimServer
                         return Task.CompletedTask;
                     },
                 };
-                
             });
         }
     }

@@ -29,8 +29,21 @@ namespace GTGrimServer.Database.Controllers
         public async Task<UserDTO> GetByIDAsync(long id)
             => await _con.QueryFirstOrDefaultAsync<UserDTO>(@"SELECT * FROM users WHERE id = @id", new { Id = id });
 
+        /// <summary>
+        /// Gets an user by PSN Id.
+        /// </summary>
+        /// <param name="psnId">PSN Id of the user.</param>
+        /// <returns></returns>
         public async Task<UserDTO> GetByPSNIdAsync(long psnId)
             => await _con.QueryFirstOrDefaultAsync<UserDTO>(@"SELECT * FROM users WHERE psnid = @psnid", new { PsnId = psnId });
+
+        /// <summary>
+        /// Gets the PSN Name of an user by Id.
+        /// </summary>
+        /// <param name="id">Database Id of the user.</param>
+        /// <returns></returns>
+        public async Task<string> GetPSNNameByIdAsync(long id)
+            => await _con.QueryFirstOrDefaultAsync<string>(@"SELECT psnname FROM users WHERE id = @id", new { Id = id });
 
         public async Task UpdateAsync(UserDTO pData)
             => await _con.ExecuteAsync(@"UPDATE users", pData);
