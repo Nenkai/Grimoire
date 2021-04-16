@@ -10,13 +10,14 @@ namespace GTGrimServer.Models
     [XmlRoot(ElementName = "user_special_list")]
     public class SpecialList
     {
+        [XmlElement("user_special")]
         public List<UserSpecial> Items { get; set; } = new List<UserSpecial>();
     }
 
     /// <summary>
     /// Used by GT6 to award special presents?
     /// </summary>
-    [XmlRoot(ElementName = "user_special")]
+    [XmlRoot("user_special")]
     public class UserSpecial
     {
         [XmlAttribute(AttributeName = "user_id")]

@@ -38,9 +38,9 @@ namespace GTGrimServer.Database.Controllers
         public async Task<IEnumerable<UserSpecialDTO>> GetAllPresentsOfUserAsync(long userId, int type = -1)
         {
             if (type == -1)
-                return await _con.QueryAsync<UserSpecialDTO>(@"SELECT * FROM user_specials WHERE user_id=@Id AND type=@Type", new { UserId = userId, Type = type });
+                return await _con.QueryAsync<UserSpecialDTO>(@"SELECT * FROM user_specials WHERE userid=@UserId AND type=@Type", new { UserId = userId, Type = type });
             else
-                return await _con.QueryAsync<UserSpecialDTO>(@"SELECT * FROM user_specials WHERE user_id=@Id", new { UserId = userId });
+                return await _con.QueryAsync<UserSpecialDTO>(@"SELECT * FROM user_specials WHERE userid=@UserId", new { UserId = userId });
         }
 
         public async Task UpdateAsync(UserSpecialDTO uSpecialData)
@@ -49,7 +49,7 @@ namespace GTGrimServer.Database.Controllers
         public async Task<long> AddAsync(UserSpecialDTO uSpecialData)
         {
             var query =
-@"INSERT INTO user_specials (user_id, type, key, value)
+@"INSERT INTO user_specials (userid, type, key, value)
   VALUES(@UserId, @Type, @Key, @Value)
   returning id";
 
@@ -64,7 +64,7 @@ namespace GTGrimServer.Database.Controllers
             string query =
             @"CREATE TABLE IF NOT EXISTS user_specials (
                 id SERIAL PRIMARY KEY,
-				user_id BIGINT REFERENCES users(id),
+				userid BIGINT REFERENCES users(id),
                 type INT,
                 key TEXT,
                 value TEXT

@@ -8,7 +8,7 @@ namespace GTGrimServer.Database.Controllers
     interface IDBManager<T>
     {
         /// <summary>
-        /// Adds a new entityto the database.
+        /// Adds a new entity to the database.
         /// </summary>
         /// <param name="t"></param>
         /// <returns>Row ID.</returns>

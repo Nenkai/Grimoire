@@ -64,33 +64,33 @@ namespace GTGrimServer.Controllers.Profiles
                 return Unauthorized();
             }
 
-            GrimRequest requestReq = await GrimRequest.Deserialize(Request.Body);
-            if (requestReq is null)
+            GrimRequest gRequest = await GrimRequest.Deserialize(Request.Body);
+            if (gRequest is null)
             {
                 // Handle
                 var badReq = GrimResult.FromInt(-1);
                 return BadRequest(badReq);
             }
 
-            _logger.LogDebug("<- {command}", requestReq.Command);
+            _logger.LogDebug("<- {command}", gRequest.Command);
 
-            switch (requestReq.Command)
+            switch (gRequest.Command)
             {
                 case "profile.update":
-                    return OnProfileUpdate(requestReq);
+                    return OnProfileUpdate(gRequest);
                 case "profile.getspecialstatus":
                     return OnGetSpecialStatus();
                 case "profile.updatefriendlist":
-                    return OnUpdateFriendList();
+                    return OnUpdateFriendList(gRequest);
                 case "profile.getsimplefriendlist":
                     return await OnGetSimpleFriendList(player);
                 case "profile.setpresence":
-                    return SetPresence(requestReq);
+                    return SetPresence(gRequest);
                 case "profile.getSpecialList":
-                    return await OnGetUserSpecialPresentList(requestReq);
+                    return await OnGetUserSpecialPresentList(gRequest);
             }
 
-            _logger.LogDebug("Received unimplemented profile call: {command}", requestReq.Command);
+            _logger.LogDebug("Received unimplemented profile call: {command}", gRequest.Command);
             var res = GrimResult.FromInt(-1);
             return BadRequest(res);
         }
@@ -165,7 +165,7 @@ namespace GTGrimServer.Controllers.Profiles
         /// Fired by GT5 to get the friend list
         /// </summary>
         /// <returns></returns>
-        private ActionResult OnUpdateFriendList()
+        private ActionResult OnUpdateFriendList(GrimRequest gRequest)
         {
             var player = Player;
             if (player is null)
@@ -174,9 +174,15 @@ namespace GTGrimServer.Controllers.Profiles
                 return Unauthorized();
             }
 
+            if (!gRequest.TryGetParameterByKey("friend_list", out var param))
+            {
+                _logger.LogWarning("Got OnUpdateFriendList with missing or invalid friend_list key param");
+                return BadRequest();
+            }
+
             // Param is "friend_list"
-            // Response should be a string of comma seperated ints (ids?)
-            var res = GrimResult.FromInt(1);
+            // Response is 0/1 bool, 1 is to ask for a refresh, 0 is not
+            var res = GrimResult.FromInt(0);
             return Ok(res);
         }
 

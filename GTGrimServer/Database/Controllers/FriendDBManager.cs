@@ -38,12 +38,12 @@ namespace GTGrimServer.Database.Controllers
             => await _con.QueryAsync<FriendDTO>(@"SELECT * FROM friends WHERE id=@Id", new { Id = id });
 
         public async Task UpdateAsync(FriendDTO pData)
-            => await _con.ExecuteAsync(@"UPDATE friends WHERE id=@Id AND friend_id=@FriendId", pData);
+            => await _con.ExecuteAsync(@"UPDATE friends WHERE id=@Id AND friendid=@FriendId", pData);
 
         public async Task<long> AddAsync(FriendDTO friendData)
         {
             var query =
-@"INSERT INTO friends (user_id, friend_id)
+@"INSERT INTO friends (userid, friendid)
   VALUES(@UserId, @FriendId)
   returning id";
 
@@ -60,15 +60,15 @@ namespace GTGrimServer.Database.Controllers
         /// <param name="friendId">Database Id of the friend.</param>
         /// <returns></returns>
         public async Task RemoveFriendAsync(long userId, long friendId)
-           => await _con.ExecuteAsync(@"DELETE FROM friends WHERE user_id=@UserId AND friend_id=@FriendId", new { UserId = userId, FriendId = friendId });
+           => await _con.ExecuteAsync(@"DELETE FROM friends WHERE userid=@UserId AND friendid=@FriendId", new { UserId = userId, FriendId = friendId });
 
         private void CreateTable()
         {
             string query =
             @"CREATE TABLE IF NOT EXISTS friends (
                 id SERIAL PRIMARY KEY,
-				user_id BIGINT REFERENCES users(id),
-                friend_id BIGINT REFERENCES users(id)
+				userid BIGINT REFERENCES users(id),
+                friendid BIGINT REFERENCES users(id)
 			);";
             _con.Execute(query);
         }

@@ -13,13 +13,14 @@ namespace GTGrimServer.Models
     [XmlRoot(ElementName = "friends")]
     public class SimpleFriendList
     {
+        [XmlElement("profile")]
         public List<SimpleFriend> Items { get; set; } = new List<SimpleFriend>();
     }
 
     /// <summary>
     /// Simple friend profile.
     /// </summary>
-    [XmlRoot(ElementName = "profile")]
+    [XmlRoot("profile")]
     public class SimpleFriend
     {
         /// <summary>
