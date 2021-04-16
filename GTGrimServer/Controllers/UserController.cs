@@ -36,13 +36,30 @@ namespace GTGrimServer.Helpers
             _logger = logger;
         }
 
+        /// <summary>
+        /// GT5 user fetch
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         [HttpGet]
-        [Route("{userId}.xml")]
+        [Route("{userId:long}.xml")]
         public ActionResult Get(long userId)
         {
             var user = new UserProfile();
             return Ok(user);
         }
 
+        /// <summary>
+        /// GT6 user fetch
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("{userName}.xml")]
+        public ActionResult Get(string userName)
+        {
+            var user = new UserProfile();
+            return Ok(user);
+        }
     }
 }

@@ -70,6 +70,9 @@ namespace GTGrimServer.Database.Controllers
                 value TEXT
 			);";
             _con.Execute(query);
+
+            string query2 = @"CREATE INDEX IF NOT EXISTS user_specials_userid_idx ON user_specials (userid)";
+            _con.Execute(query2);
         }
 
         public bool CreateTableIfNeeded()

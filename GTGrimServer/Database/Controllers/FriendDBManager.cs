@@ -71,6 +71,12 @@ namespace GTGrimServer.Database.Controllers
                 friendid BIGINT REFERENCES users(id)
 			);";
             _con.Execute(query);
+
+            string query2 = @"CREATE INDEX IF NOT EXISTS friends_userid_idx ON friends (userid)";
+            _con.Execute(query2);
+
+            string query3 = @"CREATE INDEX IF NOT EXISTS friends_friendid_idx ON friends (friendid)";
+            _con.Execute(query2);
         }
 
         public bool CreateTableIfNeeded()
