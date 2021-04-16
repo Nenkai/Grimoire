@@ -6,13 +6,16 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
 
-namespace GTGrimServer.Database.Tables
+using GTGrimServer.Database.Tables;
+using GTGrimServer.Utils;
+
+namespace GTGrimServer.Models
 {
     [XmlRoot(ElementName = "user")]
     public class UserProfile
     {
         [XmlElement(ElementName = "id")]
-        public string Id { get; set; }
+        public long UserId { get; set; }
 
         [XmlElement(ElementName = "number")]
         public long Number { get; set; }
@@ -27,7 +30,7 @@ namespace GTGrimServer.Database.Tables
         public string GTFriendList { get; set; }
 
         [XmlElement(ElementName = "photo_avatar")]
-        public string PhotoAvatar { get; set; }
+        public long PhotoAvatar { get; set; }
 
         [XmlElement(ElementName = "photo_bg")]
         public string PhotoBackground { get; set; }
@@ -99,10 +102,10 @@ namespace GTGrimServer.Database.Tables
         public string WelcomeMessage { get; set; }
 
         [XmlElement(ElementName = "aspec_exp")]
-        public string ASpecExp { get; set; }
+        public int ASpecExp { get; set; }
 
         [XmlElement(ElementName = "bspec_exp")]
-        public string BSpecExp { get; set; }
+        public int BSpecExp { get; set; }
 
         [XmlElement(ElementName = "achievement")]
         public int Achievement { get; set; }
@@ -130,5 +133,65 @@ namespace GTGrimServer.Database.Tables
 
         [XmlElement(ElementName = "license_bronze")]
         public int LicenseBronze { get; set; }
+
+        [XmlElement(ElementName = "tag")]
+        public int Tag { get; set; }
+
+        [XmlElement(ElementName = "nickname_change")]
+        public int NicknameChanges { get; set; }
+
+        public static UserProfile FromDatabaseObject(UserDTO userDto)
+        {
+            var profile = new UserProfile();
+            profile.UserId = userDto.PsnId;
+            profile.Number = userDto.Id;
+            profile.Comment = userDto.Comment;
+            profile.Nickname = userDto.Nickname;
+            profile.PhotoAvatar = userDto.AvatarPhotoId;
+            profile.PhotoBackground = "";
+
+            profile.BandDown = userDto.BandDown;
+            profile.BandUp = userDto.BandUp;
+            profile.BandTest = userDto.BandTest;
+            profile.BandUpdateTime = userDto.BandUpdateTime.ToRfc3339String();
+
+            profile.Country = userDto.Country;
+            profile.Playtime = userDto.Playtime;
+
+            profile.MenuColor = userDto.MenuColor;
+            profile.MenuMatiere = userDto.MenuMatiere;
+
+            profile.Odometer = userDto.Odometer;
+            profile.Credit = userDto.Credit;
+
+            profile.ASpecExp = userDto.ASpecExp;
+            profile.BSpecExp = userDto.BSpecExp;
+            profile.ASpecLevel = userDto.ASpecLevel;
+            profile.BSpecLevel = userDto.BSpecLevel;
+
+            profile.LicenseLevel = userDto.LicenseLevel;
+            profile.CommentLevel = userDto.CommentLevel;
+            profile.PlaytimeLevel = userDto.PlaytimeLevel;
+            profile.ProfileLevel = userDto.ProfileLevel;
+
+            profile.LicenseGold = userDto.LicenseGoldCount;
+            profile.LicenseSilver = userDto.LicenseSilverCount;
+            profile.LicenseBronze = userDto.LicenseBronzeCount;
+            profile.Achievement = userDto.AchievementCount;
+            profile.Trophy = userDto.TrophyCount;
+            profile.WinCount = userDto.WinCount;
+            profile.CarCount = userDto.CarCount;
+            profile.WelcomeMessage = userDto.WelcomeMessage;
+
+
+            // TODO: Figure menu_suit out
+            profile.Helmet = userDto.HelmetId;
+            profile.HelmetColor = userDto.HelmetColorId;
+            profile.Wear = userDto.WearId;
+            profile.WearColor = userDto.WearColorId;
+
+            profile.NicknameChanges = userDto.NicknameChanges;
+            return profile;
+        }
     }
 }

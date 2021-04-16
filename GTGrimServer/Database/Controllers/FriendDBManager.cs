@@ -76,7 +76,7 @@ namespace GTGrimServer.Database.Controllers
             _con.Execute(query2);
 
             string query3 = @"CREATE INDEX IF NOT EXISTS friends_friendid_idx ON friends (friendid)";
-            _con.Execute(query2);
+            _con.Execute(query3);
         }
 
         public bool CreateTableIfNeeded()

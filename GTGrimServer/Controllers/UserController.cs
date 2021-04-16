@@ -11,10 +11,11 @@ using System.Threading.Tasks;
 using System.Xml.Serialization;
 using System.IO;
 
+using GTGrimServer.Database.Controllers;
 using GTGrimServer.Filters;
-using GTGrimServer.Sony;
+using GTGrimServer.Controllers;
+using GTGrimServer.Services;
 using GTGrimServer.Models;
-using GTGrimServer.Utils;
 using GTGrimServer.Database.Tables;
 
 namespace GTGrimServer.Helpers
@@ -27,13 +28,16 @@ namespace GTGrimServer.Helpers
     [PDIClient]
     [Route("[controller]")]
     [Produces("application/xml")]
-    public class UserController : ControllerBase
+    public class UserController : GrimControllerBase
     {
         private readonly ILogger<UserController> _logger;
+        private readonly UserDBManager _userDb;
 
-        public UserController(ILogger<UserController> logger)
+        public UserController(PlayerManager players, ILogger<UserController> logger, UserDBManager userDb)
+            : base(players)
         {
             _logger = logger;
+            _userDb = userDb;
         }
 
         /// <summary>
@@ -58,8 +62,24 @@ namespace GTGrimServer.Helpers
         [Route("{userName}.xml")]
         public ActionResult Get(string userName)
         {
-            var user = new UserProfile();
-            return Ok(user);
+            var currentPlayer = Player;
+            if (currentPlayer is null)
+            {
+                _logger.LogWarning("Unable to get current player for host '{host}'", Request.Host);
+                return Unauthorized();
+            }
+
+            if (currentPlayer?.Data?.PSNName?.Equals(userName) is true)
+            {
+                var user = UserProfile.FromDatabaseObject(currentPlayer.Data);
+                return Ok(user);
+            }
+            else
+            {
+                // TODO: Get other user
+                _logger.LogWarning("Got unexpected profile request for '{userName}'", userName);
+                return BadRequest();
+            }
         }
     }
 }

@@ -14,6 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Controllers\Profiles\AuthenticationController.cs~RF5af3ca6.TMP" />
     <None Remove="Resources\serverlist_gt5.xml" />
   </ItemGroup>
 	

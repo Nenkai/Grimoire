@@ -84,6 +84,8 @@ namespace GTGrimServer.Controllers.Profiles
                     return OnUpdateFriendList(gRequest);
                 case "profile.getsimplefriendlist":
                     return await OnGetSimpleFriendList(player);
+                case "profile.updateNickname":
+                    return await OnUpdateNickname(gRequest, player);
                 case "profile.setpresence":
                     return SetPresence(gRequest);
                 case "profile.getSpecialList":
@@ -213,6 +215,44 @@ namespace GTGrimServer.Controllers.Profiles
         }
 
         /// <summary>
+        /// Fired by GT6 to rename the user
+        /// </summary>
+        /// <param name="gRequest"></param>
+        /// <returns></returns>
+        private async Task<ActionResult> OnUpdateNickname(GrimRequest gRequest, Player player)
+        {
+            if (_gsOptions.GameType != GameType.GT6)
+            {
+                _logger.LogWarning("Got profile.updateNickname request on a non GT6 server");
+                return Forbid();
+            }
+
+            if (!gRequest.TryGetParameterByKey("nickname", out var param))
+            {
+                _logger.LogWarning("Got SetPresence with missing nickname parameter");
+                return BadRequest();
+            }
+
+            if (player.Data.NicknameChanges <= 0)
+                return Ok(GrimResult.FromBool(false)); // Exceeded nickname changes
+
+            if (!IsValidNickname(param.Text))
+                return Ok(GrimResult.FromBool(false)); // Exceeded nickname changes
+
+            // TODO: Swear name filter?
+
+            _logger.LogDebug("[{username}] updated nickname: {nickname}", player.Data.PSNName, param.Text);
+
+            player.Data.NicknameChanges--;
+            await _userDB.UpdateNewNickname(player.Data);
+
+            // No specific response needed
+            var result = GrimResult.FromBool(true);
+            return Ok(result);
+
+        }
+
+        /// <summary>
         /// Fired by GT6 - for special presents
         /// </summary>
         /// <param name="gRequest"></param>
@@ -252,6 +292,35 @@ namespace GTGrimServer.Controllers.Profiles
             }
 
             return Ok(result);
+        }
+
+        /// <summary>
+        /// Checks if the provided input is a valid nickname. A valid nickname would be 'E. xample'.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        private static bool IsValidNickname(string name)
+        {
+            if (name.Length > 12 || name.Length == 0)
+                return false;
+
+            int spaceCount = 0;
+            int dotCount = 0;
+            for (int i = 0; i < name.Length; i++)
+            {
+                if (char.IsLetterOrDigit(name[i]))
+                    continue;
+
+                if (i == '.')
+                    dotCount++;
+                else if (i == ' ')
+                    spaceCount++;
+            }
+
+            if (dotCount > 1 || spaceCount > 1)
+                return false;
+
+            return true;
         }
     }
 }

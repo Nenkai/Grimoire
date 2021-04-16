@@ -35,14 +35,23 @@ namespace GTGrimServer.Database.Controllers
         public async Task UpdateAsync(UserDTO pData)
             => await _con.ExecuteAsync(@"UPDATE users", pData);
 
+        /// <summary>
+        /// Updates the user with the current nickname and available nickname changes.
+        /// </summary>
+        /// <param name="pData"></param>
+        /// <returns></returns>
+        public async Task UpdateNewNickname(UserDTO pData)
+            => await _con.ExecuteAsync(@"UPDATE users SET nickname=@Nickname, nickname_changes=@NicknameChanges WHERE id = @Id", pData);
+
         public async Task<long> AddAsync(UserDTO pData)
         {
             var query =
-@"INSERT INTO users (psnid, nickname, ipaddress, mac)
-  VALUES(@PsnId, @Nickname, @IPAddress, @MacAddress)
+@"INSERT INTO users (psnid, psnname, ipaddress, mac, country, nickname)
+  VALUES(@PsnId, @PSNName, @IPAddress, @MacAddress, @Country, @Nickname)
   returning id";
-
-            return await _con.ExecuteScalarAsync<long>(query, new { pData.PsnId, pData.Nickname, pData.IPAddress, pData.MacAddress });
+            
+            return await _con.ExecuteScalarAsync<long>(query, new { pData.PsnId, pData.PSNName, pData.IPAddress, 
+                pData.MacAddress, pData.Country, pData.Nickname });
         }
 
         public async Task RemoveAsync(long id)
@@ -57,9 +66,11 @@ namespace GTGrimServer.Database.Controllers
             @"CREATE TABLE IF NOT EXISTS users (
                 id SERIAL PRIMARY KEY,
 				psnid BIGINT UNIQUE,
-                nickname TEXT,
+                psnname TEXT,
                 ipaddress TEXT,
+                country TEXT,
                 mac TEXT,
+                nickname_changes INTEGER DEFAULT 3,
 
                 aspec_level INTEGER DEFAULT 0,
                 aspec_exp INTEGER DEFAULT 0,
@@ -80,7 +91,24 @@ namespace GTGrimServer.Database.Controllers
                 helmet_color INTEGER DEFAULT 0,
             
                 wear INTEGER DEFAULT 0,
-                wear_color INTEGER DEFAULT 0
+                wear_color INTEGER DEFAULT 0,
+
+                comment TEXT,
+                nickname TEXT,
+                photo_id_avatar TEXT,
+                photo_bg TEXT,
+                band_test INTEGER DEFAULT 0,
+                band_up INTEGER DEFAULT 0,
+                band_down INTEGER DEFAULT 0,
+                band_update_time TIMESTAMP WITHOUT TIME ZONE,
+                
+                menu_color INTEGER DEFAULT 0,
+                menu_matiere INTEGER DEFAULT 0,
+                profile_level INTEGER DEFAULT 0,
+                playtime_level INTEGER DEFAULT 0,
+                playtime TEXT,
+                welcomemessage TEXT,
+                tag INTEGER DEFAULT 0
 			);";
 
             _con.Execute(query);

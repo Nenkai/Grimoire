@@ -67,6 +67,7 @@ namespace GTGrimServer
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             Console.WriteLine("Init: Configuring HTTP server");
+            
             InitDatabase(app.ApplicationServices);
 
             if (env.IsDevelopment())
@@ -99,6 +100,8 @@ namespace GTGrimServer
 
         public void InitDatabase(IServiceProvider services)
         {
+            Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
+
             services.GetService<UserDBManager>().CreateTableIfNeeded();
             services.GetService<FriendDBManager>().CreateTableIfNeeded();
             services.GetService<UserSpecialDBManager>().CreateTableIfNeeded();

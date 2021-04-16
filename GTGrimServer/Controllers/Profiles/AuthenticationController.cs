@@ -170,7 +170,9 @@ namespace GTGrimServer.Controllers.Profiles
             {
                 PsnId = (long)ticket.UserId,
                 IPAddress = Request.Host.Host,
-                Nickname = ticket.OnlineId,
+                PSNName = ticket.OnlineId,
+                Nickname = ticket.OnlineId,  // For the first time, the nickname will be the same as the psn name
+                Country = ticket.Region.ToString().TrimEnd('\0').Substring(0, 2),
             };
 
             long id;

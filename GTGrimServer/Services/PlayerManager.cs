@@ -51,6 +51,6 @@ namespace GTGrimServer.Services
         }
 
         public Player GetPlayerByName(string name)
-            => Players.FirstOrDefault(e => e.Value.Data.Nickname.Equals(name)).Value;
+            => Players.FirstOrDefault(e => e.Value.Data.PSNName.Equals(name)).Value;
     }
 }

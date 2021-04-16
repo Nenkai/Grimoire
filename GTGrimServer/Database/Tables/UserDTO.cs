@@ -20,12 +20,22 @@ namespace GTGrimServer.Database.Tables
         /// <summary>
         /// PSN Name of the user.
         /// </summary>
+        public string PSNName { get; set; }
+
+        /// <summary>
+        /// Nickname of the user.
+        /// </summary>
         public string Nickname { get; set; }
 
         /// <summary>
         /// IP Address of the user.
         /// </summary>
         public string IPAddress { get; set; }
+
+        /// <summary>
+        /// Country of the user.
+        /// </summary>
+        public string Country { get; set; }
 
         /// <summary>
         /// Mac address of the user.
@@ -102,10 +112,100 @@ namespace GTGrimServer.Database.Tables
         /// </summary>
         public int LicenseBronzeCount { get; set; }
 
+        /// <summary>
+        /// Color Id of the helmet that the user is wearing.
+        /// </summary>
         public int HelmetId { get; set; }
+
+        /// <summary>
+        /// Id of the helmet color that the user is using.
+        /// </summary>
         public int HelmetColorId { get; set; }
 
+        /// <summary>
+        /// Id of the suit color that the user is wearing.
+        /// </summary>
         public int WearId { get; set; }
+
+        /// <summary>
+        /// Color Id of the suit that the user is wearing.
+        /// </summary>
         public int WearColorId { get; set; }
+
+        /// <summary>
+        /// Profile comment.
+        /// </summary>
+        public string Comment { get; set; }
+
+        /// <summary>
+        /// Id of the avatar for the player.
+        /// </summary>
+        public long AvatarPhotoId { get; set; }
+
+        /// <summary>
+        /// Unknown.
+        /// </summary>
+        public int BandTest { get; set; }
+
+        /// <summary>
+        /// Unknown.
+        /// </summary>
+        public int BandUp { get; set; }
+
+        /// <summary>
+        /// Unknown.
+        /// </summary>
+        public int BandDown { get; set; }
+
+        /// <summary>
+        /// Unknown.
+        /// </summary>
+        public DateTime BandUpdateTime { get; set; }
+
+        /// <summary>
+        /// For GT5. Menu design matiere index.
+        /// </summary>
+        public int MenuMatiere { get; set; }
+
+        /// <summary>
+        /// For GT5. Menu color index.
+        /// </summary>
+        public int MenuColor { get; set; }
+
+        /// <summary>
+        /// For GT5. Unknown.
+        /// </summary>
+        public int PlaytimeLevel { get; set; }
+
+        /// <summary>
+        /// For GT5. Unknown.
+        /// </summary>
+        public int ProfileLevel { get; set; }
+
+        /// <summary>
+        /// For GT5. Unknown.
+        /// </summary>
+        public int CommentLevel { get; set; }
+
+        /// <summary>
+        /// For GT5. Unknown.
+        /// </summary>
+        public string Playtime { get; set; }
+
+        /// <summary>
+        /// GT6 only (?). Current category tag. Refer to [CommunityTag|CATEGORY_*] in RText for an overview.
+        /// </summary>
+        public int Tag { get; set; }
+
+        /// <summary>
+        /// Unknown.
+        /// </summary>
+        public string WelcomeMessage { get; set; }
+
+        /// <summary>
+        /// Remaining nickname changes available.
+        /// </summary>
+        public int NicknameChanges { get; set; } = DefaultNicknameChangeCount;
+        public const int DefaultNicknameChangeCount = 3;
     }
 }
