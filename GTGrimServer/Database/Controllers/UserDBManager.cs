@@ -56,6 +56,15 @@ namespace GTGrimServer.Database.Controllers
         public async Task UpdateNewNickname(UserDTO pData)
             => await _con.ExecuteAsync(@"UPDATE users SET nickname=@Nickname, nickname_changes=@NicknameChanges WHERE id = @Id", pData);
 
+        /// <summary>
+        /// Updates the user's game stats.
+        /// </summary>
+        /// <param name="pData"></param>
+        /// <returns></returns>
+        public async Task UpdateGameStats(UserDTO pData)
+            => await _con.ExecuteAsync("UPDATE users SET license_level=@LicenseLevel, achievement=@AchievementCount, trophy=@TrophyCount, " +
+                "car_count=@CarCount, license_gold=@LicenseGoldCount, odometer=@Odometer WHERE id = @Id", pData);
+
         public async Task<long> AddAsync(UserDTO pData)
         {
             var query =
@@ -94,7 +103,7 @@ namespace GTGrimServer.Database.Controllers
                 win_count INTEGER DEFAULT 0,
                 car_count INTEGER DEFAULT 0,
                 trophy INTEGER DEFAULT 0,
-                odometer INTEGER DEFAULT 0,
+                odometer REAL DEFAULT 0,
                 license_level INTEGER DEFAULT 0,
                 license_gold INTEGER DEFAULT 0,
                 license_silver INTEGER DEFAULT 0,

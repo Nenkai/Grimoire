@@ -77,7 +77,7 @@ namespace GTGrimServer.Controllers.Profiles
             switch (gRequest.Command)
             {
                 case "profile.update":
-                    return OnProfileUpdate(gRequest);
+                    return await OnProfileUpdate(player, gRequest);
                 case "profile.getspecialstatus":
                     return OnGetSpecialStatus();
                 case "profile.updatefriendlist":
@@ -112,9 +112,31 @@ namespace GTGrimServer.Controllers.Profiles
             return Ok(simpleFriendList);
         }
 
-        private ActionResult OnProfileUpdate(GrimRequest requestReq)
+        private async Task<ActionResult> OnProfileUpdate(Player player, GrimRequest requestReq)
         {
-            /* GT5 returns params: 
+            // Can we assume its requestUpdateGameStats?
+            if (requestReq.TryGetParameterByKey("license_level", out var licenseLevelParam) && int.TryParse(licenseLevelParam.Text, out int license_level))
+            {
+                if (!requestReq.TryGetParameterByKey("achievement", out var achievementParam) || !int.TryParse(achievementParam.Text, out int achievement))
+                    return BadRequest();
+
+                if (!requestReq.TryGetParameterByKey("trophy", out var trophyParam) || !int.TryParse(trophyParam.Text, out int trophy))
+                    return BadRequest();
+
+                if (!requestReq.TryGetParameterByKey("car_count", out var carCountParam) || !int.TryParse(carCountParam.Text, out int car_count))
+                    return BadRequest();
+
+                if (!requestReq.TryGetParameterByKey("license_gold", out var licenseGoldParam) || !int.TryParse(licenseGoldParam.Text, out int license_gold))
+                    return BadRequest();
+
+                if (!requestReq.TryGetParameterByKey("odometer", out var odometerParam) || !float.TryParse(odometerParam.Text, out float odometer))
+                    return BadRequest();
+
+                // Can we assume we have don't have more? If so, it's requestUpdateGameStats
+                if (!requestReq.TryGetParameterByKey("aspec_level", out var aspecLevelParam))
+                    return await OnRequestUpdateGameStats(player, license_level, achievement, trophy, car_count, license_gold, odometer);
+                        
+                /* GT5 returns params: 
                * aspec_level
                * aspec_exp
                * bspec_level
@@ -130,12 +152,15 @@ namespace GTGrimServer.Controllers.Profiles
                * license_silver
                * license_bronze */
 
+            }
+
+
             // requestUpdateHelmet & requestUpdateWear has some extra ones for this endpoint.
             /* helmet/helmet_color */
             /* wear/wear_color */
 
             // welcomemessage - requestUpdateAutoMessage
-            if (requestReq.TryGetParameterByKey("welcomemessage", out var param) && requestReq.Params.ParamList.Count == 1)
+            if (requestReq.TryGetParameterByKey("welcomemessage", out var welcomeMessage) && requestReq.Params.ParamList.Count == 1)
             {
                 var res = GrimResult.FromInt(0); // need_update
                 return Ok(res);
@@ -143,6 +168,22 @@ namespace GTGrimServer.Controllers.Profiles
 
             // No parsing is done.
             return Ok();
+        }
+
+        private async Task<ActionResult> OnRequestUpdateGameStats(Player player, int license_level, int achievement, int trophy, 
+            int car_count, int license_gold, float odometer)
+        {
+            // TODO: Do game stats verification
+            var data = player.Data;
+            data.LicenseLevel = license_level;
+            data.AchievementCount = achievement;
+            data.TrophyCount = trophy;
+            data.CarCount = car_count;
+            data.LicenseGoldCount = license_gold;
+            data.Odometer = odometer;
+
+            await _userDB.UpdateGameStats(data);
+            return Ok(GrimResult.FromBool(true));
         }
 
         /// <summary>

@@ -1,71 +1,71 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<!-- GT6's Seasonal Folder File -->
+<!-- GT6's Global Folder file -->
 <!-- Same as an actual folder. Just some extra additions. -->
 <!-- QuickMatch folder id has to be 8, seasonal has to be 146. -->
 <event_list>
 	<event>
 		<title>
-			<JP>The home of the finest events in Gran Turismo</JP>
-			<US>The home of the finest events in Gran Turismo</US>
-			<GB>The home of the finest events in Gran Turismo</GB>
-			<FR>The home of the finest events in Gran Turismo</FR>
-			<DE>The home of the finest events in Gran Turismo</DE>
-			<IT>The home of the finest events in Gran Turismo</IT>
-			<ES>The home of the finest events in Gran Turismo</ES>
-			<PT>The home of the finest events in Gran Turismo</PT>
-			<NL>The home of the finest events in Gran Turismo</NL>
-			<RU>The home of the finest events in Gran Turismo</RU>
-			<KR>The home of the finest events in Gran Turismo</KR>
-			<TW>The home of the finest events in Gran Turismo</TW>
-			<EL>The home of the finest events in Gran Turismo</EL>
-			<TR>The home of the finest events in Gran Turismo</TR>
-			<PL>The home of the finest events in Gran Turismo</PL>
-			<CZ>The home of the finest events in Gran Turismo</CZ>
-			<HU>The home of the finest events in Gran Turismo</HU>
-			<BP>The home of the finest events in Gran Turismo</BP>
-			<MS>The home of the finest events in Gran Turismo</MS>
+			<JP>-- quickmatch title --</JP>
+			<US>-- quickmatch title --</US>
+			<GB>-- quickmatch title --</GB>
+			<FR>-- quickmatch title --</FR>
+			<DE>-- quickmatch title --</DE>
+			<IT>-- quickmatch title --</IT>
+			<ES>-- quickmatch title --</ES>
+			<PT>-- quickmatch title --</PT>
+			<NL>-- quickmatch title --</NL>
+			<RU>-- quickmatch title --</RU>
+			<KR>-- quickmatch title --</KR>
+			<TW>-- quickmatch title --</TW>
+			<EL>-- quickmatch title --</EL>
+			<TR>-- quickmatch title --</TR>
+			<PL>-- quickmatch title --</PL>
+			<CZ>-- quickmatch title --</CZ>
+			<HU>-- quickmatch title --</HU>
+			<BP>-- quickmatch title --</BP>
+			<MS>-- quickmatch title --</MS>
 		</title>
 		<description>
-			<JP>Test Descriptions</JP>
-			<US>Test Descriptions</US>
-			<GB>Test Descriptions</GB>
-			<FR>Test Descriptions</FR>
-			<DE>Test Descriptions</DE>
-			<IT>Test Descriptions</IT>
-			<ES>Test Descriptions</ES>
-			<PT>Test Descriptions</PT>
-			<NL>Test Descriptions</NL>
-			<RU>Test Descriptions</RU>
-			<KR>Test Descriptions</KR>
-			<TW>Test Descriptions</TW>
-			<EL>Test Descriptions</EL>
-			<TR>Test Descriptions</TR>
-			<PL>Test Descriptions</PL>
-			<CZ>Test Descriptions</CZ>
-			<HU>Test Descriptions</HU>
-			<BP>Test Descriptions</BP>
-			<MS>Test Descriptions</MS>
+			<JP>-- quickmatch description -- </JP>
+			<US>-- quickmatch description -- </US>
+			<GB>-- quickmatch description -- </GB>
+			<FR>-- quickmatch description -- </FR>
+			<DE>-- quickmatch description -- </DE>
+			<IT>-- quickmatch description -- </IT>
+			<ES>-- quickmatch description -- </ES>
+			<PT>-- quickmatch description -- </PT>
+			<NL>-- quickmatch description -- </NL>
+			<RU>-- quickmatch description -- </RU>
+			<KR>-- quickmatch description -- </KR>
+			<TW>-- quickmatch description -- </TW>
+			<EL>-- quickmatch description -- </EL>
+			<TR>-- quickmatch description -- </TR>
+			<PL>-- quickmatch description -- </PL>
+			<CZ>-- quickmatch description -- </CZ>
+			<HU>-- quickmatch description -- </HU>
+			<BP>-- quickmatch description -- </BP>
+			<MS>-- quickmatch description -- </MS>
 		</description>
 		<one_line_title>
-			<JP>Test One Line Title</JP>
-			<US>Test One Line Title</US>
-			<GB>Test One Line Title</GB>
-			<FR>Test One Line Title</FR>
-			<DE>Test One Line Title</DE>
-			<IT>Test One Line Title</IT>
-			<ES>Test One Line Title</ES>
-			<PT>Test One Line Title</PT>
-			<NL>Test One Line Title</NL>
-			<RU>Test One Line Title</RU>
-			<KR>Test One Line Title</KR>
-			<TW>Test One Line Title</TW>
-			<EL>Test One Line Title</EL>
-			<TR>Test One Line Title</TR>
-			<PL>Test One Line Title</PL>
-			<CZ>Test One Line Title</CZ>
-			<HU>Test One Line Title</HU>
-			<BP>Test One Line Title</BP>
-			<MS>Test One Line Title</MS>
+			<JP>-- quickmatch one_line_title --</JP>
+			<US>-- quickmatch one_line_title --</US>
+			<GB>-- quickmatch one_line_title --</GB>
+			<FR>-- quickmatch one_line_title --</FR>
+			<DE>-- quickmatch one_line_title --</DE>
+			<IT>-- quickmatch one_line_title --</IT>
+			<ES>-- quickmatch one_line_title --</ES>
+			<PT>-- quickmatch one_line_title --</PT>
+			<NL>-- quickmatch one_line_title --</NL>
+			<RU>-- quickmatch one_line_title --</RU>
+			<KR>-- quickmatch one_line_title --</KR>
+			<TW>-- quickmatch one_line_title --</TW>
+			<EL>-- quickmatch one_line_title --</EL>
+			<TR>-- quickmatch one_line_title --</TR>
+			<PL>-- quickmatch one_line_title --</PL>
+			<CZ>-- quickmatch one_line_title --</CZ>
+			<HU>-- quickmatch one_line_title --</HU>
+			<BP>-- quickmatch one_line_title --</BP>
+			<MS>-- quickmatch one_line_title --</MS>
 		</one_line_title>
 		<ranking_list>
 			<ranking>
@@ -135,7 +135,7 @@
 				<board_id>1002268</board_id>
 			</ranking>
 		</ranking_list>
-		<id>8</id> <!-- Should be 146, for seasonals -->
+		<id>8</id> <!-- Should be 8, for quickmatch -->
 		<voucher />
 		<registration>0</registration>
 		<bg_image/>

@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
+using System.Buffers.Binary;
 using System.IO;
 
 using Syroot.BinaryData;
+using System.Text;
 namespace GTGrimServer.Sony
 {
     public class NPTicket
@@ -18,7 +19,9 @@ namespace GTGrimServer.Sony
         public ulong ExpiryDate { get; set; }
         public ulong UserId { get; set; }
         public string OnlineId { get; set; }
-        public byte[] Region { get; set; }
+        public string Region { get; set; }
+        public NPLanguage Language { get; set; }
+
         public string Domain { get; set; }
         public byte[] ServiceID { get; set; }
 
@@ -48,7 +51,11 @@ namespace GTGrimServer.Sony
             ticket.ExpiryDate = (ulong)ReadNext(bs);
             ticket.UserId = (ulong)ReadNext(bs);
             ticket.OnlineId = (string)ReadNext(bs);
-            ticket.Region = (byte[])ReadNext(bs);
+
+            byte[] localeData = (byte[])ReadNext(bs);
+            ticket.Region = Encoding.UTF8.GetString(localeData.AsSpan(0, 2));
+            ticket.Language = (NPLanguage)BinaryPrimitives.ReadInt16BigEndian(localeData.AsSpan()[2..]);
+
             ticket.Domain = (string)ReadNext(bs);
             ticket.ServiceID = (byte[])ReadNext(bs);
 
@@ -88,5 +95,20 @@ namespace GTGrimServer.Sony
         String = 4,
         Timestamp = 7,
         Binary = 8,
+    }
+
+    public enum NPLanguage
+    {
+        Japanese,
+        English,
+        French,
+        Spanish,
+        German,
+        Italian,
+        Norwegian,
+        Portugese,
+        Russian,
+        Korean,
+        Chinese
     }
 }

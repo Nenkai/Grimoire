@@ -14,8 +14,11 @@ namespace GTGrimServer.Models
     [XmlRoot(ElementName = "user")]
     public class UserProfile
     {
+        /// <summary>
+        /// User name of the player. Attribute says 'id', but its actually the user name.
+        /// </summary>
         [XmlElement(ElementName = "id")]
-        public long UserId { get; set; }
+        public string UserName { get; set; }
 
         [XmlElement(ElementName = "number")]
         public long Number { get; set; }
@@ -143,7 +146,7 @@ namespace GTGrimServer.Models
         public static UserProfile FromDatabaseObject(UserDTO userDto)
         {
             var profile = new UserProfile();
-            profile.UserId = userDto.PsnId;
+            profile.UserName = userDto.PSNName;
             profile.Number = userDto.Id;
             profile.Comment = userDto.Comment;
             profile.Nickname = userDto.Nickname;

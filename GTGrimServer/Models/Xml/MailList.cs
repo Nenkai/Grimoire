@@ -19,10 +19,10 @@ namespace GTGrimServer.Models
         public long MailId { get; set; }
 
         [XmlAttribute(AttributeName = "from")]
-        public long From { get; set; }
+        public string FromUsername { get; set; }
 
         [XmlAttribute(AttributeName = "to")]
-        public long To { get; set; }
+        public string ToUsername { get; set; }
 
         [XmlAttribute(AttributeName = "from_nickname")]
         public string FromNickname { get; set; }

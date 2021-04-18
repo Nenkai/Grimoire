@@ -58,7 +58,7 @@ namespace GTGrimServer.Controllers
             return BadRequest();
         }
 
-        public ActionResult OnGetMail(GrimRequest request)
+        private ActionResult OnGetMail(GrimRequest request)
         {
             if (!request.TryGetParameterByKey("mail_id", out var mailId))
             {
@@ -74,10 +74,10 @@ namespace GTGrimServer.Controllers
 
             var result = new Mail()
             {
-                From = 0,
-                To = 0,
-                FromNickname = "-- from --",
-                ToNickname = "-- to --",
+                FromUsername = "PSN_Name_Author",
+                ToUsername = "-- PSN_Name_Destination",
+                FromNickname = "-- from nickname --",
+                ToNickname = "-- to nickname --",
                 Body = "-- body --",
                 MailId = 0,
                 Subject = "-- subject --",
@@ -87,7 +87,7 @@ namespace GTGrimServer.Controllers
             return Ok(result);
         }
 
-        public ActionResult OnSendMail(GrimRequest request)
+        private ActionResult OnSendMail(GrimRequest request)
         {
             if (!request.TryGetParameterByKey("to", out var toParam))
             {

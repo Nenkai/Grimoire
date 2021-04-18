@@ -90,7 +90,7 @@ namespace GTGrimServer.Database.Tables
         /// <summary>
         /// Total distance driven.
         /// </summary>
-        public int Odometer { get; set; }
+        public float Odometer { get; set; }
 
         /// <summary>
         /// Current license of the user.

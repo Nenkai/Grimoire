@@ -72,6 +72,11 @@ namespace GTGrimServer.Helpers
             if (currentPlayer?.Data?.PSNName?.Equals(userName) is true)
             {
                 var user = UserProfile.FromDatabaseObject(currentPlayer.Data);
+                user.ProfileLevel = unchecked((int)0b_11111111_11111111_11111111_11111111);
+                user.BandUp = 1024;
+                user.BandDown = 1024;
+                user.BandUpdateTime = GTGrimServer.Utils.DateTimeExtensions.ToRfc3339String(DateTime.Now);
+                user.BandTest = 1024;
                 return Ok(user);
             }
             else
