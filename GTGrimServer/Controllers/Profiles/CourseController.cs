@@ -105,13 +105,7 @@ namespace GTGrimServer.Controllers
                 return BadRequest();
             }
 
-            if (!long.TryParse(userIdParam.Text, out long userIdInput))
-            {
-                _logger.LogWarning("Could not parse 'user_id' as long - got: {userIdText}", userIdParam.Text);
-                return BadRequest();
-            }
-
-            var user = await _users.GetByPSNIdAsync(userIdInput);
+            var user = await _users.GetByPSNIdAsync(player.Data.PsnId);
             var courses = await _courses.GetAllCoursesOfUser(user.Id);
 
             var courseList = new CourseList();
@@ -119,18 +113,21 @@ namespace GTGrimServer.Controllers
 
             var course = new Course()
             {
-                Comment = "-- comment --",
+                Comment = "Track Comment",
                 CourseId = 1001000,
-                Height = 4820,
-                OneWay = 1,
-                Status = 0,
-                Straight = 10000,
-                Title = "-- title --",
-                Theme = "-- Theme --",
-                Length = 123456,
-                OwnerId = "Somebody",
+                Height = 200,
+                OneWay = 0,
+                Status = 2,
+                Straight = 200,
+                Title = "Track Title",
+                Theme = "scenery_andalusia",
+                Length = 7878,
+                OwnerId = player.Data.PSNName,
                 Corners = 69,
-                OriginalCreator = "Somebody",
+                OriginalCreator = player.Data.PSNName,
+                PhotoId = 12345678,
+                UpdateTime = DateTime.Now.ToRfc3339String(),
+                PhotoHidden = 0,
             };
 
             courseList.Courses.Add(course);

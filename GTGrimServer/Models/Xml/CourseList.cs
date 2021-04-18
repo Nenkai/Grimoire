@@ -59,6 +59,9 @@ namespace GTGrimServer.Models
         [XmlAttribute(AttributeName = "photo_hidden")]
         public int PhotoHidden { get; set; }
 
+        /// <summary>
+        /// Theme name. Important: For lobbies, this has to be the scenery course code.
+        /// </summary>
         [XmlAttribute(AttributeName = "theme")]
         public string Theme { get; set; }
 
