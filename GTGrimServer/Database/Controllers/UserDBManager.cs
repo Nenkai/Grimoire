@@ -57,6 +57,30 @@ namespace GTGrimServer.Database.Controllers
             => await _con.ExecuteAsync(@"UPDATE users SET nickname=@Nickname, nickname_changes=@NicknameChanges WHERE id = @Id", pData);
 
         /// <summary>
+        /// Updates the user with a new welcome message.
+        /// </summary>
+        /// <param name="pData"></param>
+        /// <returns></returns>
+        public async Task UpdateWelcomeMessage(UserDTO pData)
+            => await _con.ExecuteAsync(@"UPDATE users SET welcomemessage=@WelcomeMessage WHERE id = @Id", pData);
+
+        /// <summary>
+        /// Updates the user with helmet data.
+        /// </summary>
+        /// <param name="pData"></param>
+        /// <returns></returns>
+        public async Task UpdateHelmet(UserDTO pData)
+            => await _con.ExecuteAsync(@"UPDATE users SET helmet=@HelmetId, helmet_color=@HelmetColorId WHERE id = @Id", pData);
+
+        /// <summary>
+        /// Updates the user with wear data.
+        /// </summary>
+        /// <param name="pData"></param>
+        /// <returns></returns>
+        public async Task UpdateWear(UserDTO pData)
+            => await _con.ExecuteAsync(@"UPDATE users SET wear=@WearId, wear_color=@WearColorId WHERE id = @Id", pData);
+
+        /// <summary>
         /// Updates the user's game stats.
         /// </summary>
         /// <param name="pData"></param>
@@ -64,6 +88,17 @@ namespace GTGrimServer.Database.Controllers
         public async Task UpdateGameStats(UserDTO pData)
             => await _con.ExecuteAsync("UPDATE users SET license_level=@LicenseLevel, achievement=@AchievementCount, trophy=@TrophyCount, " +
                 "car_count=@CarCount, license_gold=@LicenseGoldCount, odometer=@Odometer WHERE id = @Id", pData);
+
+        /// <summary>
+        /// Updates the user's general profile stats.
+        /// </summary>
+        /// <param name="pData"></param>
+        /// <returns></returns>
+        public async Task UpdateGeneralData(UserDTO pData)
+            => await _con.ExecuteAsync("UPDATE users SET license_level=@LicenseLevel, achievement=@AchievementCount, trophy=@TrophyCount, " +
+                "car_count=@CarCount, license_gold=@LicenseGoldCount, odometer=@Odometer, win_count=@WinCount, license_silver=@LicenseSilverCount, " +
+                "license_bronze=@LicenseBronzeCount, aspec_level=@ASpecLevel, bspec_level=@BSpecLevel, aspec_exp=@ASpecExp, bspec_exp=@BSpecExp, " +
+                "credit=@Credit WHERE id = @Id", pData);
 
         public async Task<long> AddAsync(UserDTO pData)
         {

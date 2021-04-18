@@ -133,41 +133,86 @@ namespace GTGrimServer.Controllers.Profiles
                     return BadRequest();
 
                 // Can we assume we have don't have more? If so, it's requestUpdateGameStats
-                if (!requestReq.TryGetParameterByKey("aspec_level", out var aspecLevelParam))
+                if (!requestReq.TryGetParameterByKey("win_count", out var winCountParam))
                     return await OnRequestUpdateGameStats(player, license_level, achievement, trophy, car_count, license_gold, odometer);
-                        
-                /* GT5 returns params: 
-               * aspec_level
-               * aspec_exp
-               * bspec_level
-               * bspec_exp
-               * achievement
-               * credit
-               * win_count
-               * car_count
-               * trophy
-               * odometer
-               * license_level
-               * license_gold
-               * license_silver
-               * license_bronze */
 
+                // Then we know its a global profile update
+                if (!int.TryParse(winCountParam.Text, out int win_count))
+                    return BadRequest();
+
+                if (!requestReq.TryGetParameterByKey("credit", out var creditParam) || !int.TryParse(creditParam.Text, out int credit))
+                    return BadRequest();
+
+                if (!requestReq.TryGetParameterByKey("license_silver", out var licenseSilverParam) || !int.TryParse(licenseSilverParam.Text, out int license_silver))
+                    return BadRequest();
+
+                if (!requestReq.TryGetParameterByKey("license_bronze", out var licenseBronzeParam) || !int.TryParse(licenseBronzeParam.Text, out int license_bronze))
+                    return BadRequest();
+
+                if (!requestReq.TryGetParameterByKey("aspec_level", out var aspecLevelParam) || !int.TryParse(aspecLevelParam.Text, out int aspec_level))
+                    return BadRequest();
+
+                if (!requestReq.TryGetParameterByKey("bspec_level", out var bspecLevelParam) || !int.TryParse(bspecLevelParam.Text, out int bspec_level))
+                    return BadRequest();
+
+                if (!requestReq.TryGetParameterByKey("aspec_exp", out var aspecExpParam) || !int.TryParse(aspecExpParam.Text, out int aspec_exp))
+                    return BadRequest();
+
+                if (!requestReq.TryGetParameterByKey("bspec_exp", out var bspecExpParam) || !int.TryParse(bspecExpParam.Text, out int bspec_exp))
+                    return BadRequest();
+
+                var data = player.Data;
+                data.WinCount = win_count;
+                data.Credit = credit;
+                data.LicenseSilverCount = license_silver;
+                data.LicenseBronzeCount = license_bronze;
+                data.ASpecLevel = aspec_level;
+                data.ASpecExp = aspec_exp;
+                data.BSpecLevel = bspec_level;
+                data.BSpecExp = bspec_exp;
+
+                await _userDB.UpdateGeneralData(data);
+                return Ok(GrimResult.FromBool(true));
             }
-
-
-            // requestUpdateHelmet & requestUpdateWear has some extra ones for this endpoint.
-            /* helmet/helmet_color */
-            /* wear/wear_color */
-
-            // welcomemessage - requestUpdateAutoMessage
-            if (requestReq.TryGetParameterByKey("welcomemessage", out var welcomeMessage) && requestReq.Params.ParamList.Count == 1)
-            {
-                var res = GrimResult.FromInt(0); // need_update
-                return Ok(res);
-            }
+            // Is it requestUpdateAutoMessage?
+            else if (requestReq.TryGetParameterByKey("welcomemessage", out var welcomeMessage) && requestReq.Params.ParamList.Count == 1)
+                return await OnUpdateAutoMessage(player, welcomeMessage.Text);
+            else if (requestReq.TryGetParameterByKey("helmet", out var helmet) && requestReq.TryGetParameterByKey("helmet_color", out var helmetColor))
+                return await OnUpdateHelmet(player, helmet.Text, helmetColor.Text);
+            else if (requestReq.TryGetParameterByKey("wear", out var wear) && requestReq.TryGetParameterByKey("wear_color", out var wear_color))
+                return await OnUpdateWear(player, wear.Text, wear_color.Text);
 
             // No parsing is done.
             return Ok();
+        }
+
+        #region Profile Updaters
+        private async Task<ActionResult> OnUpdateHelmet(Player player, string helmetParam, string helmetColorParam)
+        {
+            if (!int.TryParse(helmetParam, out int helmetId))
+                return BadRequest();
+            if (!int.TryParse(helmetColorParam, out int helmetColorId))
+                return BadRequest();
+
+            player.Data.HelmetId = helmetId;
+            player.Data.HelmetColorId = helmetColorId;
+
+            await _userDB.UpdateHelmet(player.Data);
+            return Ok(GrimResult.FromBool(true));
+        }
+
+        private async Task<ActionResult> OnUpdateWear(Player player, string wearParam, string wearColorParam)
+        {
+            if (!int.TryParse(wearParam, out int wearId))
+                return BadRequest();
+            if (!int.TryParse(wearColorParam, out int wearColorId))
+                return BadRequest();
+
+            player.Data.WearId = wearId;
+            player.Data.WearColorId = wearColorId;
+
+            await _userDB.UpdateWear(player.Data);
+            return Ok(GrimResult.FromBool(true));
         }
 
         private async Task<ActionResult> OnRequestUpdateGameStats(Player player, int license_level, int achievement, int trophy, 
@@ -185,6 +230,20 @@ namespace GTGrimServer.Controllers.Profiles
             await _userDB.UpdateGameStats(data);
             return Ok(GrimResult.FromBool(true));
         }
+
+        private async Task<ActionResult> OnUpdateAutoMessage(Player player, string message)
+        {
+            // TODO: Do game stats verification
+            if (message.Length > 30)
+                return BadRequest();
+
+            var data = player.Data;
+            data.WelcomeMessage = message;
+
+            await _userDB.UpdateWelcomeMessage(data);
+            return Ok(GrimResult.FromBool(true));
+        }
+        #endregion
 
         /// <summary>
         /// Fired by GT5 to get a special privilege

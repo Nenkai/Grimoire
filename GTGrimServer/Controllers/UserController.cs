@@ -41,19 +41,6 @@ namespace GTGrimServer.Helpers
         }
 
         /// <summary>
-        /// GT5 user fetch
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <returns></returns>
-        [HttpGet]
-        [Route("{userId:long}.xml")]
-        public ActionResult Get(long userId)
-        {
-            var user = new UserProfile();
-            return Ok(user);
-        }
-
-        /// <summary>
         /// GT6 user fetch
         /// </summary>
         /// <param name="userId"></param>
