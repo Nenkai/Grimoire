@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,12 +9,8 @@ using System.Threading.Tasks;
 using System.Xml.Serialization;
 using System.IO;
 
-using GTGrimServer.Sony;
-using GTGrimServer.Filters;
 using GTGrimServer.Models;
-using GTGrimServer.Utils;
-using GTGrimServer.Config;
-using GTGrimServer.Controllers;
+using GTGrimServer.Results;
 using GTGrimServer.Services;
 
 namespace GTGrimServer.Controllers
@@ -48,5 +42,14 @@ namespace GTGrimServer.Controllers
                 return player;
             }
         }
+
+        private BanObjectResult Ban([ActionResultObjectValue] object value)
+            => new BanObjectResult(value);
+
+        private ConsoleBanObjectResult ConsoleBan([ActionResultObjectValue] object value)
+            => new ConsoleBanObjectResult(value);
+
+        private SuspendedObjectResult Suspended([ActionResultObjectValue] object value)
+            => new SuspendedObjectResult(value);
     }
 }

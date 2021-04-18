@@ -11,5 +11,6 @@ namespace GTGrimServer.Config
 
         public GameType GameType { get; set; }
         public string XmlResourcePath { get; set; }
+        public bool EnforceGameVersion { get; set; }
     }
 }

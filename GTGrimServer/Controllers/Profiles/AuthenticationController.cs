@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Configuration;
@@ -14,7 +13,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Security.Claims;
 
-
+using GTGrimServer.Results;
 using GTGrimServer.Services;
 using GTGrimServer.Database.Controllers;
 using GTGrimServer.Database.Tables;
@@ -59,7 +58,7 @@ namespace GTGrimServer.Controllers.Profiles
             PFSType pfsType = (PFSType)pfsVersion;
             _logger.LogDebug("Login request from {host} with PFS: {pfsType} ({pfsNum})", Request.Host, pfsType, (long)pfsType);
 
-            if (!EnsureVersion(pfsType))
+            if (_gsOptions.EnforceGameVersion && !EnsureVersion(pfsType))
                 return Forbid();
 
             if (Request.ContentLength >= 0x300)
@@ -99,12 +98,13 @@ namespace GTGrimServer.Controllers.Profiles
 
             var now = DateTime.Now;
 
+
             // From this point, auth is OK
             var resp = new TicketResult()
             {
-                Result = "0", // Doesn't seem to do much.
+                Result = "1", // Doesn't seem to do much.
                 Nickname = ticket.OnlineId,
-                UserId = ticket.UserId,
+                UserId = ticket.OnlineId,
                 UserNumber = user.Id.ToString(),
                 ServerTime = now.ToRfc3339String(),
             };
@@ -149,7 +149,7 @@ namespace GTGrimServer.Controllers.Profiles
             if (ticket.OnlineId.Length > 32)
                 return false;
 
-            if (ticket.Region.Length > 4)
+            if (ticket.Region.Length > 2)
                 return false;
 
             if (ticket.Domain.Length > 4)

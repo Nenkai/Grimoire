@@ -28,6 +28,7 @@ namespace GTGrimServer.Controllers
     [PDIClient]
     [Authorize]
     [Produces("application/xml")]
+    [Route("")]
     public class CourseController : GrimControllerBase
     {
         private readonly ILogger<CourseController> _logger;

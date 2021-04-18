@@ -11,7 +11,7 @@ namespace GTGrimServer.Models
     /// <summary>
     /// Represents a NP Login Ticket result.
     /// </summary>
-    [XmlRoot("result")]
+    [XmlRoot("grim")]
     public class TicketResult
     {
         /// <summary>
@@ -24,7 +24,7 @@ namespace GTGrimServer.Models
         /// PSN User ID.
         /// </summary>
         [XmlElement(ElementName = "user_id")]
-        public ulong UserId { get; set; }
+        public string UserId { get; set; }
 
         /// <summary>
         /// Nickname.
