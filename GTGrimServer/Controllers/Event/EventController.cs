@@ -42,7 +42,8 @@ namespace GTGrimServer.Helpers
         [Route("{server}/{fileName}")]
         public async Task GetImageFile(string server, string fileName)
         {
-            if (fileName.EndsWith(".png") || fileName.EndsWith(".img"))
+
+            if (!fileName.EndsWith(".png") && !fileName.EndsWith(".img"))
             {
                 Response.StatusCode = StatusCodes.Status404NotFound;
                 return;

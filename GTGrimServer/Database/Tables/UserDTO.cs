@@ -133,7 +133,7 @@ namespace GTGrimServer.Database.Tables
         public int WearColorId { get; set; }
 
         /// <summary>
-        /// Profile comment.
+        /// Profile/Greeting (GT5) comment.
         /// </summary>
         public string Comment { get; set; }
 
@@ -173,22 +173,22 @@ namespace GTGrimServer.Database.Tables
         public int MenuColor { get; set; }
 
         /// <summary>
-        /// For GT5. Unknown.
+        /// 0 = "Usual playing hours" visible to public, 1 = friends only. (GT5)
         /// </summary>
         public int PlaytimeLevel { get; set; }
 
         /// <summary>
-        /// For GT5. Unknown.
+        /// 0 = Share with friends buttons available, 1 = friends only. (GT5)
         /// </summary>
         public int ProfileLevel { get; set; }
 
         /// <summary>
-        /// For GT5. Unknown.
+        /// 0 = Comment visible to public, 1 = friends only. (GT5)
         /// </summary>
         public int CommentLevel { get; set; }
 
         /// <summary>
-        /// For GT5. Unknown.
+        /// "Usual playing hours". GT5 only.
         /// </summary>
         public string Playtime { get; set; }
 

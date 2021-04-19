@@ -81,6 +81,14 @@ namespace GTGrimServer.Database.Controllers
             => await _con.ExecuteAsync(@"UPDATE users SET wear=@WearId, wear_color=@WearColorId WHERE id = @Id", pData);
 
         /// <summary>
+        /// Updates the user with menu data (GT5).
+        /// </summary>
+        /// <param name="pData"></param>
+        /// <returns></returns>
+        public async Task UpdateHomeDesign(UserDTO pData)
+            => await _con.ExecuteAsync(@"UPDATE users SET menu_color=@MenuColor, menu_matiere=@MenuMatiere WHERE id = @Id", pData);
+
+        /// <summary>
         /// Updates the user's game stats.
         /// </summary>
         /// <param name="pData"></param>
@@ -90,11 +98,20 @@ namespace GTGrimServer.Database.Controllers
                 "car_count=@CarCount, license_gold=@LicenseGoldCount, odometer=@Odometer WHERE id = @Id", pData);
 
         /// <summary>
-        /// Updates the user's general profile stats.
+        /// Updates the user's profile details.
         /// </summary>
         /// <param name="pData"></param>
         /// <returns></returns>
-        public async Task UpdateGeneralData(UserDTO pData)
+        public async Task UpdateOnlineProfile(UserDTO pData)
+            => await _con.ExecuteAsync("UPDATE users SET profile_level=@ProfileLevel, playtime_level=@PlaytimeLevel, comment_level=@CommentLevel, " +
+                "playtime=@Playtime, comment=@Comment WHERE id = @Id", pData);
+
+        /// <summary>
+        /// Updates the user's home profile.
+        /// </summary>
+        /// <param name="pData"></param>
+        /// <returns></returns>
+        public async Task UpdateMyHomeProfile(UserDTO pData)
             => await _con.ExecuteAsync("UPDATE users SET license_level=@LicenseLevel, achievement=@AchievementCount, trophy=@TrophyCount, " +
                 "car_count=@CarCount, license_gold=@LicenseGoldCount, odometer=@Odometer, win_count=@WinCount, license_silver=@LicenseSilverCount, " +
                 "license_bronze=@LicenseBronzeCount, aspec_level=@ASpecLevel, bspec_level=@BSpecLevel, aspec_exp=@ASpecExp, bspec_exp=@BSpecExp, " +
@@ -161,9 +178,15 @@ namespace GTGrimServer.Database.Controllers
                 
                 menu_color INTEGER DEFAULT 0,
                 menu_matiere INTEGER DEFAULT 0,
+
                 profile_level INTEGER DEFAULT 0,
-                playtime_level INTEGER DEFAULT 0,
+
                 playtime TEXT,
+                playtime_level INTEGER DEFAULT 0,
+
+                comment TEXT,
+                comment_level INTEGER DEFAULT 0,
+
                 welcomemessage TEXT,
                 tag INTEGER DEFAULT 0
 			);";

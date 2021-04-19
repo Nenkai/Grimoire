@@ -112,9 +112,15 @@ namespace GTGrimServer.Controllers.Profiles
             return Ok(simpleFriendList);
         }
 
+        /// <summary>
+        /// Fired when the player requests any kind of profile update.
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="requestReq"></param>
+        /// <returns></returns>
         private async Task<ActionResult> OnProfileUpdate(Player player, GrimRequest requestReq)
         {
-            // Can we assume its requestUpdateGameStats?
+            // requestUpdateGameStats or updateMyHomeProfile?
             if (requestReq.TryGetParameterByKey("license_level", out var licenseLevelParam) && int.TryParse(licenseLevelParam.Text, out int license_level))
             {
                 if (!requestReq.TryGetParameterByKey("achievement", out var achievementParam) || !int.TryParse(achievementParam.Text, out int achievement))
@@ -136,7 +142,7 @@ namespace GTGrimServer.Controllers.Profiles
                 if (!requestReq.TryGetParameterByKey("win_count", out var winCountParam))
                     return await OnRequestUpdateGameStats(player, license_level, achievement, trophy, car_count, license_gold, odometer);
 
-                // Then we know its a global profile update
+                // Then we know its a global profile update - UpdateMyHomeProfile
                 if (!int.TryParse(winCountParam.Text, out int win_count))
                     return BadRequest();
 
@@ -171,22 +177,51 @@ namespace GTGrimServer.Controllers.Profiles
                 data.BSpecLevel = bspec_level;
                 data.BSpecExp = bspec_exp;
 
-                await _userDB.UpdateGeneralData(data);
+                await _userDB.UpdateMyHomeProfile(data);
                 return Ok(GrimResult.FromBool(true));
             }
-            // Is it requestUpdateAutoMessage?
+            // Can we assume its requestUpdateOnlineProfile?
+            else if (requestReq.TryGetParameterByKey("profile_level", out var profileLevelParam) && requestReq.Params.ParamList.Count == 5)
+            {
+                if (!int.TryParse(profileLevelParam.Text, out int profile_level))
+                    return BadRequest();
+
+                if (!requestReq.TryGetParameterByKey("comment_level", out var commentLevelParam) || !int.TryParse(commentLevelParam.Text, out int comment_level))
+                    return BadRequest();
+
+                if (!requestReq.TryGetParameterByKey("playtime_level", out var playtimeLevelParam) || !int.TryParse(playtimeLevelParam.Text, out int playtime_level))
+                    return BadRequest();
+
+                if (!requestReq.TryGetParameterByKey("playtime", out var playtimeParam))
+                    return BadRequest();
+
+                if (!requestReq.TryGetParameterByKey("comment", out var commentParam))
+                    return BadRequest();
+
+                return await OnUpdateOnlineProfile(player, profile_level, comment_level, 
+                    playtime_level, playtimeParam.Text, commentParam.Text);
+            }
             else if (requestReq.TryGetParameterByKey("welcomemessage", out var welcomeMessage) && requestReq.Params.ParamList.Count == 1)
                 return await OnUpdateAutoMessage(player, welcomeMessage.Text);
             else if (requestReq.TryGetParameterByKey("helmet", out var helmet) && requestReq.TryGetParameterByKey("helmet_color", out var helmetColor))
                 return await OnUpdateHelmet(player, helmet.Text, helmetColor.Text);
             else if (requestReq.TryGetParameterByKey("wear", out var wear) && requestReq.TryGetParameterByKey("wear_color", out var wear_color))
                 return await OnUpdateWear(player, wear.Text, wear_color.Text);
+            else if (requestReq.TryGetParameterByKey("menu_color", out var menu_color) && requestReq.TryGetParameterByKey("menu_matiere", out var menu_matiere))
+                return await OnUpdateMyHomeDesign(player, menu_color.Text, menu_matiere.Text);
 
             // No parsing is done.
-            return Ok();
+            return BadRequest();
         }
 
         #region Profile Updaters
+        /// <summary>
+        /// Fired when the player updates their helmet data.
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="helmetParam">Helmet Id (string).</param>
+        /// <param name="helmetColorParam">Helmet Color Index (string).</param>
+        /// <returns></returns>
         private async Task<ActionResult> OnUpdateHelmet(Player player, string helmetParam, string helmetColorParam)
         {
             if (!int.TryParse(helmetParam, out int helmetId))
@@ -201,6 +236,13 @@ namespace GTGrimServer.Controllers.Profiles
             return Ok(GrimResult.FromBool(true));
         }
 
+        /// <summary>
+        /// Fired when the player updates their suit data.
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="wearParam">Wear Id (string).</param>
+        /// <param name="wearColorParam">Wear Color Index (string).</param>
+        /// <returns></returns>
         private async Task<ActionResult> OnUpdateWear(Player player, string wearParam, string wearColorParam)
         {
             if (!int.TryParse(wearParam, out int wearId))
@@ -215,6 +257,38 @@ namespace GTGrimServer.Controllers.Profiles
             return Ok(GrimResult.FromBool(true));
         }
 
+        /// <summary>
+        /// Fired when the player updates their menu design (GT5).
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="menuColorParam">Menu color index (string).</param>
+        /// <param name="menuMatiereParam">Menu matiere index (string).</param>
+        /// <returns></returns>
+        private async Task<ActionResult> OnUpdateMyHomeDesign(Player player, string menuColorParam, string menuMatiereParam)
+        {
+            if (!int.TryParse(menuColorParam, out int menuColorIndex))
+                return BadRequest();
+            if (!int.TryParse(menuMatiereParam, out int menuMatiereIndex))
+                return BadRequest();
+
+            player.Data.MenuColor = menuColorIndex;
+            player.Data.MenuMatiere = menuMatiereIndex;
+
+            await _userDB.UpdateHomeDesign(player.Data);
+            return Ok(GrimResult.FromBool(true));
+        }
+
+        /// <summary>
+        /// Fired when the player updates their progression.
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="license_level">Current license of the player.</param>
+        /// <param name="achievement">Achievement count.</param>
+        /// <param name="trophy">Trophy count.</param>
+        /// <param name="car_count">Total car count.</param>
+        /// <param name="license_gold">Total golded licenses.</param>
+        /// <param name="odometer">Total distance travelled.</param>
+        /// <returns></returns>
         private async Task<ActionResult> OnRequestUpdateGameStats(Player player, int license_level, int achievement, int trophy, 
             int car_count, int license_gold, float odometer)
         {
@@ -231,9 +305,14 @@ namespace GTGrimServer.Controllers.Profiles
             return Ok(GrimResult.FromBool(true));
         }
 
+        /// <summary>
+        /// Fired when the player updates their welcome message (GT5).
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="message">New welcome message.</param>
+        /// <returns></returns>
         private async Task<ActionResult> OnUpdateAutoMessage(Player player, string message)
         {
-            // TODO: Do game stats verification
             if (message.Length > 30)
                 return BadRequest();
 
@@ -243,6 +322,42 @@ namespace GTGrimServer.Controllers.Profiles
             await _userDB.UpdateWelcomeMessage(data);
             return Ok(GrimResult.FromBool(true));
         }
+
+        /// <summary>
+        /// Fired when the player updates their profile details.
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="profileLevel">Whether the profile buttons is restricted to friends.</param>
+        /// <param name="commentLevel">Whether if the greeting is restricted to friends.</param>
+        /// <param name="playtimeLevel">Whether if the usual play hours is restricted to friends.</param>
+        /// <param name="playtime">Usual play hours message.</param>
+        /// <param name="comment">Greeting message (GT5).</param>
+        /// <returns></returns>
+        private async Task<ActionResult> OnUpdateOnlineProfile(Player player, int profileLevel, int commentLevel, 
+            int playtimeLevel, string playtime, string comment)
+        {
+            if (comment.Length > 80 || playtime.Length > 30)
+                return BadRequest();
+            else if (profileLevel != 0 && profileLevel != 1)
+                return BadRequest();
+            else if (commentLevel != 0 && commentLevel != 1)
+                return BadRequest();
+            else if (playtimeLevel != 0 && playtimeLevel != 1)
+                return BadRequest();
+
+            // TODO: Swear filtering on profile update
+
+            var data = player.Data;
+            data.ProfileLevel = profileLevel;
+            data.CommentLevel = commentLevel;
+            data.PlaytimeLevel = playtimeLevel;
+            data.Playtime = playtime;
+            data.Comment = comment;
+
+            await _userDB.UpdateWelcomeMessage(data);
+            return Ok(GrimResult.FromBool(true));
+        }
+
         #endregion
 
         /// <summary>

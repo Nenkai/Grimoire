@@ -46,6 +46,9 @@ namespace GTGrimServer.Models
         public bool TryGetParameterByKey(string key, out GrimRequestParam param)
         {
             param = Params.ParamList.FirstOrDefault(p => p.Key == key);
+            if (param is not null && param.Text is null)
+                param.Text = string.Empty;
+
             return param is not null;
         }
     }

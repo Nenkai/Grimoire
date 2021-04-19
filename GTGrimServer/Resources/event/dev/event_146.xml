@@ -12,8 +12,8 @@
 					<drift_type value="-1" />
 					<driving_line value="-1" />
 					<enemy_tire value="-1" />
-					<limit_tire_f value="2" />
-					<limit_tire_r value="2" />
+					<limit_tire_f value="10" />
+					<limit_tire_r value="10" />
 					<need_tire_f value="-1" />
 					<need_tire_r value="-1" />
 					<simulation value="0" />
@@ -31,46 +31,46 @@
 					<logo_other_info value="" />
 					<race_info_minute value="" />
 					<title>
-						<JP>Never gonna give you up</JP>
-						<US>Never gonna give you up</US>
-						<GB>Never gonna give you up</GB>
-						<FR>Never gonna give you up</FR>
-						<ES>Never gonna give you up</ES>
-						<DE>Never gonna give you up</DE>
-						<IT>Never gonna give you up</IT>
-						<NL>Never gonna give you up</NL>
-						<PT>Never gonna give you up</PT>
-						<RU>Never gonna give you up</RU>
-						<PL>Never gonna give you up</PL>
-						<TR>Never gonna give you up</TR>
-						<KR>Never gonna give you up</KR>
-						<EL>Never gonna give you up</EL>
-						<FI>Never gonna give you up</FI>
-						<CZ>Never gonna give you up</CZ>
-						<HU>Never gonna give you up</HU>
-						<BP>Never gonna give you up</BP>
-						<MS>Never gonna give you up</MS>
+						<JP>-- test title --</JP>
+						<US>-- test title --</US>
+						<GB>-- test title --</GB>
+						<FR>-- test title --</FR>
+						<ES>-- test title --</ES>
+						<DE>-- test title --</DE>
+						<IT>-- test title --</IT>
+						<NL>-- test title --</NL>
+						<PT>-- test title --</PT>
+						<RU>-- test title --</RU>
+						<PL>-- test title --</PL>
+						<TR>-- test title --</TR>
+						<KR>-- test title --</KR>
+						<EL>-- test title --</EL>
+						<FI>-- test title --</FI>
+						<CZ>-- test title --</CZ>
+						<HU>-- test title --</HU>
+						<BP>-- test title --</BP>
+						<MS>-- test title --</MS>
 					</title>
 					<one_line_title>
-						<JP>Never gonna let you down, never gonna run around and desert you</JP>
-						<US>Never gonna let you down, never gonna run around and desert you</US>
-						<GB>Never gonna let you down, never gonna run around and desert you</GB>
-						<FR>Never gonna let you down, never gonna run around and desert you</FR>
-						<ES>Never gonna let you down, never gonna run around and desert you</ES>
-						<DE>Never gonna let you down, never gonna run around and desert you</DE>
-						<IT>Never gonna let you down, never gonna run around and desert you</IT>
-						<NL>Never gonna let you down, never gonna run around and desert you</NL>
-						<PT>Never gonna let you down, never gonna run around and desert you</PT>
-						<RU>Never gonna let you down, never gonna run around and desert you</RU>
-						<PL>Never gonna let you down, never gonna run around and desert you</PL>
-						<TR>Never gonna let you down, never gonna run around and desert you</TR>
-						<KR>Never gonna let you down, never gonna run around and desert you</KR>
-						<EL>Never gonna let you down, never gonna run around and desert you</EL>
-						<FI>Never gonna let you down, never gonna run around and desert you</FI>
-						<CZ>Never gonna let you down, never gonna run around and desert you</CZ>
-						<HU>Never gonna let you down, never gonna run around and desert you</HU>
-						<BP>Never gonna let you down, never gonna run around and desert you</BP>
-						<MS>Never gonna let you down, never gonna run around and desert you</MS>
+						<JP>-- test description --</JP>
+						<US>-- test description --</US>
+						<GB>-- test description --</GB>
+						<FR>-- test description --</FR>
+						<ES>-- test description --</ES>
+						<DE>-- test description --</DE>
+						<IT>-- test description --</IT>
+						<NL>-- test description --</NL>
+						<PT>-- test description --</PT>
+						<RU>-- test description --</RU>
+						<PL>-- test description --</PL>
+						<TR>-- test description --</TR>
+						<KR>-- test description --</KR>
+						<EL>-- test description --</EL>
+						<FI>-- test description --</FI>
+						<CZ>-- test description --</CZ>
+						<HU>-- test description --</HU>
+						<BP>-- test description --</BP>
+						<MS>-- test description --</MS>
 					</one_line_title>
 					<description>
 						<JP>Get behind the wheel of Honda's flagship compact car, the Fit RS '10! Be as quick as you can around the tricky corners and aim for a super lap! A special present awaits you if you can win the gold award!</JP>
@@ -200,7 +200,7 @@
 					</present>
 				</reward>
 				<track>
-					<course_code label="stadium" />
+					<course_code label="tsukuba" />
 					<course_layout_no value="0" />
 					<is_omedeto_difficulty value="0" />
 					<map_offset_world_x value="0" />
@@ -226,11 +226,11 @@
 					<limit_aspec_level value="-1" />
 					<limit_bspec_level value="-1" />
 					<limit_power value="-1" />
-					<limit_pp value="380" />
+					<limit_pp value="800" />
 					<limit_torque value="-1" />
 					<limit_weight value="-1" />
-					<limit_tire_f value="2" />
-					<limit_tire_r value="2" />
+					<limit_tire_f value="10" />
+					<limit_tire_r value="10" />
 					<limit_year value="-1" />
 					<need_aspec_level value="-1" />
 					<need_bspec_level value="-1" />
@@ -257,7 +257,7 @@
 					<restrictor_limit value="-1" />
 					<NOS value="0" />
 					<cars>
-						<car label="lancer_evo5_gsr_98" /> <!-- Using this will make the game generate an image with the car in the center -->
+						<car label="_787b_91" /> <!-- Using this will make the game generate an image with the car in the center -->
 					</cars>
 					<ban_cars />
 					<tuners />
@@ -266,9 +266,9 @@
 				<ai_script value="" />
 				<eval_condition>
 					<type value="TIME" />
-					<gold value="35500" />
-					<silver value="37000" />
-					<bronze value="39000" />
+					<gold value="55500" />
+					<silver value="62000" />
+					<bronze value="70000" />
 					<ghost_data_path value="" />
 				</eval_condition>
 				<inheritance value="0" />
