@@ -12,11 +12,19 @@ Working/figured out list:
 - [x] Logged State
 - [x] GT5 Museum
 - [x] GT5 News
-- [x] GT6 Seasonal Events
-- [ ] GT5 GTTV
+- [x] GT5 Greeting Cards
+- [x] GT5 Message Board 
+- [x] GT5 & GT6 Seasonal Events
+- [x] GT6 Custom Track List
+- [x] GT5 Online Car Dealership 
+- [x] Accessing GT6 Lobbies (through NP Matching 2)
 - [ ] All GT5 community features
-- [ ] Accessing lobbies
-- [ ] Everything else
+- [ ] Event Rankings
+- [ ] GT5 Remote B-Spec
+- [ ] GT6 Quick Match
+- [ ] Mail
+- [ ] Sharing GT5 Content (cars, gifts etc)
+- [ ] Everything big that's unlisted
 ...
 
 ## Compiling
