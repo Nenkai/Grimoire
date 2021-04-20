@@ -48,7 +48,7 @@ namespace GTGrimServer
 
             services.AddMvc(options =>
             {
-                var settings = new XmlWriterSettings() { OmitXmlDeclaration = false };
+                var settings = new XmlWriterSettings() { Indent = true, IndentChars = string.Empty, NewLineChars = "\n", NewLineHandling = NewLineHandling.Replace, OmitXmlDeclaration = false };
                 options.OutputFormatters.Add(new XmlSerializerOutputFormatterNamespace(settings));
             }).AddXmlSerializerFormatters();
 
@@ -63,6 +63,7 @@ namespace GTGrimServer
             services.AddSingleton<UserSpecialDBManager>();
             services.AddSingleton<BbsBoardDBManager>();
             services.AddSingleton<CourseDBManager>();
+            services.AddSingleton<ActionLogDBManager>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -109,6 +110,7 @@ namespace GTGrimServer
             services.GetService<UserSpecialDBManager>().CreateTableIfNeeded();
             services.GetService<CourseDBManager>().CreateTableIfNeeded();
             services.GetService<BbsBoardDBManager>().CreateTableIfNeeded();
+            services.GetService<ActionLogDBManager>().CreateTableIfNeeded();
         }
 
         public void AddJWTAuthentication(IServiceCollection services)
