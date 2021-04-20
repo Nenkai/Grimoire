@@ -16,7 +16,8 @@ using GTGrimServer.Filters;
 using GTGrimServer.Controllers;
 using GTGrimServer.Services;
 using GTGrimServer.Models;
-using GTGrimServer.Database.Tables;
+using GTGrimServer.Models.Xml;
+using GTGrimServer.Utils;
 
 namespace GTGrimServer.Helpers
 {
@@ -41,13 +42,13 @@ namespace GTGrimServer.Helpers
         }
 
         /// <summary>
-        /// GT6 user fetch
+        /// General user fetching.
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
         [HttpGet]
-        [Route("{userName}.xml")]
-        public ActionResult Get(string userName)
+        [Route("{userId}.xml")]
+        public ActionResult Get(string userId)
         {
             var currentPlayer = Player;
             if (currentPlayer is null)
@@ -56,20 +57,20 @@ namespace GTGrimServer.Helpers
                 return Unauthorized();
             }
 
-            if (currentPlayer?.Data?.PSNName?.Equals(userName) is true)
+            if (currentPlayer?.Data?.PSNUserId?.Equals(userId) is true)
             {
                 var user = UserProfile.FromDatabaseObject(currentPlayer.Data);
                 user.ProfileLevel = unchecked((int)0b_11111111_11111111_11111111_11111111);
                 user.BandUp = 1024;
                 user.BandDown = 1024;
-                user.BandUpdateTime = GTGrimServer.Utils.DateTimeExtensions.ToRfc3339String(DateTime.Now);
+                user.BandUpdateTime = DateTime.Now.ToRfc3339String();
                 user.BandTest = 1024;
                 return Ok(user);
             }
             else
             {
                 // TODO: Get other user
-                _logger.LogWarning("Got unexpected profile request for '{userName}'", userName);
+                _logger.LogWarning("Got unexpected profile request for '{userId}'", userId);
                 return BadRequest();
             }
         }

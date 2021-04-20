@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 using System.Xml.Serialization;
 
-namespace GTGrimServer.Models
+namespace GTGrimServer.Models.Xml
 {
-    [XmlRoot(ElementName = "user_special_list")]
+    [XmlRoot("user_special_list")]
     public class SpecialList
     {
         [XmlElement("user_special")]
@@ -20,21 +20,21 @@ namespace GTGrimServer.Models
     [XmlRoot("user_special")]
     public class UserSpecial
     {
-        [XmlAttribute(AttributeName = "user_id")]
-        public long UserId { get; set; }
+        [XmlAttribute("user_id")]
+        public string UserId { get; set; }
 
-        [XmlAttribute(AttributeName = "key")]
+        [XmlAttribute("key")]
         public string Key { get; set; }
 
-        [XmlAttribute(AttributeName = "value")]
+        [XmlAttribute("value")]
         public string Value { get; set; }
 
-        [XmlAttribute(AttributeName = "type")]
+        [XmlAttribute("type")]
         public int Type { get; set; }
 
         public UserSpecial() { }
 
-        public UserSpecial(long userId, int type, string key, string value)
+        public UserSpecial(string userId, int type, string key, string value)
         {
             UserId = userId;
             Key = key;

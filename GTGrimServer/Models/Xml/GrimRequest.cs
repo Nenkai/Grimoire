@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 using System.Xml.Serialization;
 using System.IO;
 
-namespace GTGrimServer.Models
+namespace GTGrimServer.Models.Xml
 {
     [XmlRoot(ElementName = "grim")]
     public class GrimRequest
     { 
-        [XmlElement(ElementName = "command")]
+        [XmlElement("command")]
         public string Command { get; set; }
-        [XmlElement(ElementName = "params")]
+        [XmlElement("params")]
         public GrimRequestParams Params { get; set; }
         
 
@@ -53,17 +53,17 @@ namespace GTGrimServer.Models
         }
     }
 
-    [XmlRoot(ElementName = "params")]
+    [XmlRoot("params")]
     public class GrimRequestParams
     {
-        [XmlElement(ElementName = "param")]
+        [XmlElement("param")]
         public List<GrimRequestParam> ParamList { get; set; }
     }
 
-    [XmlRoot(ElementName = "param")]
+    [XmlRoot("param")]
     public class GrimRequestParam
     {
-        [XmlAttribute(AttributeName = "key")]
+        [XmlAttribute("key")]
         public string Key { get; set; }
         [XmlText]
         public string Text { get; set; }

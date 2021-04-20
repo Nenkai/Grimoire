@@ -5,32 +5,32 @@ using System.Threading.Tasks;
 using System.ComponentModel;
 using System.Xml.Serialization;
 
-namespace GTGrimServer
+namespace GTGrimServer.Models.Xml
 {
     [XmlRoot("servers")]
     public class ServerList
     {
-        [XmlElement(ElementName = "server")]
+        [XmlElement("server")]
         public Server[] Servers { get; set; }
     }
 
     [XmlRoot("server")]
     public class Server
     {
-        [XmlElement(ElementName = "name")]
+        [XmlElement("name")]
         public string Name { get; set; }
         
-        [XmlElement(ElementName = "options")]
+        [XmlElement("options")]
         public List<ServerOption> Options { get; set; }
     }
 
     [XmlRoot("option")]
     public class ServerOption
     {
-        [XmlAttribute(AttributeName = "key")]
+        [XmlAttribute("key")]
         public string Key { get; set; }
 
-        [XmlAttribute(AttributeName = "value")]
+        [XmlAttribute("value")]
         public string Value { get; set; }
     }
 }

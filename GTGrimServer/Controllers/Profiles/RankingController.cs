@@ -16,6 +16,7 @@ using GTGrimServer.Filters;
 using GTGrimServer.Config;
 using GTGrimServer.Utils;
 using GTGrimServer.Models;
+using GTGrimServer.Models.Xml;
 
 namespace GTGrimServer.Controllers
 {

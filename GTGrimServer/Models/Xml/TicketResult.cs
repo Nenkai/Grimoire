@@ -5,8 +5,9 @@ using System.Threading.Tasks;
 
 using System.Xml;
 using System.Xml.Serialization;
+using GTGrimServer.Utils;
 
-namespace GTGrimServer.Models
+namespace GTGrimServer.Models.Xml
 {
     /// <summary>
     /// Represents a NP Login Ticket result.
@@ -17,31 +18,37 @@ namespace GTGrimServer.Models
         /// <summary>
         /// Whether it succeeded.
         /// </summary>
-        [XmlElement(ElementName = "result")]
+        [XmlElement("result")]
         public string Result { get; set; }
 
         /// <summary>
         /// PSN User ID.
         /// </summary>
-        [XmlElement(ElementName = "user_id")]
+        [XmlElement("user_id")]
         public string UserId { get; set; }
 
         /// <summary>
         /// Nickname.
         /// </summary>
-        [XmlElement(ElementName = "nickname")]
+        [XmlElement("nickname")]
         public string Nickname { get; set; }
 
         /// <summary>
-        /// User Number, for all users currently online?
+        /// Grim User Id.
         /// </summary>
-        [XmlElement(ElementName = "user_no")]
-        public string UserNumber { get; set; }
+        [XmlElement("user_no")]
+        public int UserNumber { get; set; }
 
         /// <summary>
         /// Server Time.
         /// </summary>
-        [XmlElement(ElementName = "server_time")]
-        public string ServerTime { get; set; }
+        [XmlElement("server_time")]
+        public string ServerTimeString { get; set; }
+        [XmlIgnore]
+        public DateTime ServerTime
+        {
+            get => DateTimeExtensions.FromRfc3339String(ServerTimeString);
+            set => ServerTimeString = value.ToRfc3339String();
+        }
     }
 }

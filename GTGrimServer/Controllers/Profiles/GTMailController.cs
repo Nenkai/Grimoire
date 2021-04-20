@@ -16,6 +16,7 @@ using GTGrimServer.Config;
 using GTGrimServer.Utils;
 using GTGrimServer.Models;
 using GTGrimServer.Filters;
+using GTGrimServer.Models.Xml;
 
 namespace GTGrimServer.Controllers
 {
@@ -81,7 +82,7 @@ namespace GTGrimServer.Controllers
                 Body = "-- body --",
                 MailId = 0,
                 Subject = "-- subject --",
-                CreateTime = DateTime.Now.ToRfc3339String()
+                CreateTime = DateTime.Now
             };
 
             return Ok(result);

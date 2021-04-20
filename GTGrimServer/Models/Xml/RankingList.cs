@@ -2,44 +2,53 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
 using System.Xml.Serialization;
-namespace GTGrimServer.Models
+
+using GTGrimServer.Utils;
+
+namespace GTGrimServer.Models.Xml
 {
-    [XmlRoot(ElementName = "ranking_list")]
+    [XmlRoot("ranking_list")]
     public class RankingList
     {
+        [XmlElement("ranking")]
         public List<Ranking> Rankings { get; set; }
     }
 
-    [XmlRoot(ElementName = "ranking")]
+    [XmlRoot("ranking")]
     public class Ranking
     {
-        [XmlAttribute(AttributeName = "board_id")]
+        [XmlAttribute("board_id")]
         public long BoardId { get; set; }
 
-        [XmlAttribute(AttributeName = "score")]
+        [XmlAttribute("score")]
         public int Score { get; set; } 
 
-        [XmlAttribute(AttributeName = "replay_id")]
+        [XmlAttribute("replay_id")]
         public int ReplayId { get; set; }
 
-        [XmlAttribute(AttributeName = "rank")]
+        [XmlAttribute("rank")]
         public int Rank { get; set; }
 
-        [XmlAttribute(AttributeName = "src_id")]
+        [XmlAttribute("src_id")]
         public int SourceId { get; set; }
 
-        [XmlAttribute(AttributeName = "user_id")]
+        [XmlAttribute("user_id")]
         public string UserId { get; set; }
 
-        [XmlAttribute(AttributeName = "create_time")]
-        public string CreateTime { get; set; }
+        [XmlAttribute("create_time")]
+        public string CreateTimeString { get; set; }
+        [XmlIgnore]
+        public DateTime CreateTime
+        {
+            get => DateTimeExtensions.FromRfc3339String(CreateTimeString);
+            set => CreateTimeString = value.ToRfc3339String();
+        }
 
-        [XmlAttribute(AttributeName = "stats")]
+        [XmlAttribute("stats")]
         public byte[] Stats { get; set; }
 
-        [XmlAttribute(AttributeName = "nickname")]
+        [XmlAttribute("nickname")]
         public string Nickname { get; set; }
     }
 }

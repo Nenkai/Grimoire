@@ -20,7 +20,7 @@ using GTGrimServer.Database.Tables;
 using GTGrimServer.Filters;
 using GTGrimServer.Config;
 using GTGrimServer.Models;
-using GTGrimServer.Utils;
+using GTGrimServer.Models.Xml;
 using GTGrimServer.Sony;
 
 namespace GTGrimServer.Controllers.Profiles
@@ -38,18 +38,23 @@ namespace GTGrimServer.Controllers.Profiles
         private readonly IConfiguration _config;
         private readonly PlayerManager _players;
         private readonly GameServerOptions _gsOptions;
+
         private readonly UserDBManager _users;
+        private readonly BbsBoardDBManager _bbsDb;
 
         public AuthenticationController(IConfiguration config, 
             ILogger<AuthenticationController> logger,
             PlayerManager players,
-            UserDBManager users)
+            UserDBManager users,
+            BbsBoardDBManager bbsDb)
         {
             _logger = logger;
             _config = config;
             _players = players;
             _gsOptions = _config.GetSection(GameServerOptions.GameServer).Get<GameServerOptions>();
+
             _users = users;
+            _bbsDb = _bbsDb;
         }
 
         [HttpPost]
@@ -89,10 +94,10 @@ namespace GTGrimServer.Controllers.Profiles
             if (CheckAlreadyConnected(ticket.OnlineId))
                 _logger.LogTrace("Auth Request from OnlineID: {OnlineId} which was already connected", ticket.OnlineId);
 
-            UserDTO user = await _users.GetByPSNIdAsync((long)ticket.UserId) ?? await CreateUser(ticket);
+            UserDTO user = await _users.GetByPSNUserIdAsync(ticket.OnlineId) ?? await CreateUser(ticket);
             if (user is null)
             {
-                _logger.LogError("Failed to get or create user from db: Name: {name}, PSN Id {psnId}", ticket.OnlineId, ticket.UserId);
+                _logger.LogError("Failed to get or create user from db: Name: {name}", ticket.OnlineId);
                 return Problem();    
             }
 
@@ -105,8 +110,8 @@ namespace GTGrimServer.Controllers.Profiles
                 Result = "1", // Doesn't seem to do much.
                 Nickname = ticket.OnlineId,
                 UserId = ticket.OnlineId,
-                UserNumber = user.Id.ToString(),
-                ServerTime = now.ToRfc3339String(),
+                UserNumber = user.Id,
+                ServerTime = now,
             };
 
             var expiryTime = now.AddHours(1);
@@ -168,27 +173,26 @@ namespace GTGrimServer.Controllers.Profiles
         {
             var user = new UserDTO()
             {
-                PsnId = (long)ticket.UserId,
+                PSNUserId = ticket.OnlineId,
                 IPAddress = Request.Host.Host,
-                PSNName = ticket.OnlineId,
                 Nickname = ticket.OnlineId,  // For the first time, the nickname will be the same as the psn name
                 Country = ticket.Region.ToString().TrimEnd('\0').Substring(0, 2),
             };
 
-            long id;
+            int id;
             try
             {
-                id = await _users.AddAsync(user);
+                id = (int)await _users.AddAsync(user);
             }
             catch (Exception e)
             {
-                _logger.LogError("Failed to create new user {userName} - PSNId: {psnId}", ticket.OnlineId, ticket.UserId);
+                _logger.LogError("Failed to create new user for PSN User: {userName}", ticket.OnlineId);
                 return null;
             }
 
             user.Id = id;
 
-            _logger.LogInformation("Created user {userName} - PSNId: {psnId} - UserId: {id}", ticket.OnlineId, ticket.UserId, id);
+            _logger.LogInformation("Created user: {psnUserId} (DB: {id})", ticket.OnlineId, id);
             return user;
         }
 

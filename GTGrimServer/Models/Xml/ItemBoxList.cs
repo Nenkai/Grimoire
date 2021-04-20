@@ -4,37 +4,45 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using System.Xml.Serialization;
+using GTGrimServer.Utils;
 
-namespace GTGrimServer.Models
+namespace GTGrimServer.Models.Xml
 {
-    [XmlRoot(ElementName = "items")]
+    [XmlRoot("items")]
     public class ItemBoxList
     {
+        [XmlElement("item")]
         public List<ItemBoxList> Items { get; set; }
     }
 
-    [XmlRoot(ElementName = "item")]
+    [XmlRoot("item")]
     public class ItemBox
     {
-        [XmlAttribute(AttributeName = "itembox_id")]
+        [XmlAttribute("itembox_id")]
         public long ItemBoxId { get; set; }
 
-        [XmlAttribute(AttributeName = "type")]
+        [XmlAttribute("type")]
         public byte Type { get; set; }
 
-        [XmlAttribute(AttributeName = "sender")]
+        [XmlAttribute("sender")]
         public string Sender { get; set; }
 
-        [XmlAttribute(AttributeName = "receiver")]
+        [XmlAttribute("receiver")]
         public byte Receiver { get; set; }
 
-        [XmlAttribute(AttributeName = "comment")]
+        [XmlAttribute("comment")]
         public byte Comment { get; set; }
 
-        [XmlAttribute(AttributeName = "create_time")]
-        public byte CreateTime { get; set; }
+        [XmlAttribute("create_time")]
+        public string CreateTimeString { get; set; }
+        [XmlIgnore]
+        public DateTime CreateTime
+        {
+            get => DateTimeExtensions.FromRfc3339String(CreateTimeString);
+            set => CreateTimeString = value.ToRfc3339String();
+        }
 
-        [XmlAttribute(AttributeName = "stats")]
+        [XmlAttribute("stats")]
         public byte[] Stats { get; set; }
     }
 }

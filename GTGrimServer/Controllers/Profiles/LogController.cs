@@ -50,7 +50,7 @@ namespace GTGrimServer.Helpers
             string argStr = hVal.FirstOrDefault();
             if (argStr.StartsWith("ADHOC"))
             {
-                _logger.LogInformation("[{name}] received ADHOC crash: {argStr}", Player.Data.PSNName, argStr);
+                _logger.LogInformation("[{name}] received ADHOC crash: {argStr}", Player.Data.PSNUserId, argStr);
                 return Ok();
             }
 
@@ -58,7 +58,7 @@ namespace GTGrimServer.Helpers
             LogHelper.Humanify(args);
 
             string humanified = string.Join(':', args);
-            _logger.LogInformation("[{name}] Log: {args}", Player.Data.PSNName, humanified);
+            _logger.LogInformation("[{name}] Log: {args}", Player.Data.PSNUserId, humanified);
 
             return Ok();
         }

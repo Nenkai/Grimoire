@@ -16,6 +16,7 @@ using GTGrimServer.Config;
 using GTGrimServer.Utils;
 using GTGrimServer.Database.Controllers;
 using GTGrimServer.Models;
+using GTGrimServer.Models.Xml;
 using GTGrimServer.Filters;
 using GTGrimServer.Services;
 
@@ -99,13 +100,13 @@ namespace GTGrimServer.Controllers
 
         private async Task<ActionResult> OnGetList(GrimRequest request, Player player)
         {
-            if (!request.TryGetParameterByKey("user_id", out var userIdParam))
+            if (!request.TryGetParameterByKey("user_id", out var userIdParam) || userIdParam.Text.Length > 32)
             {
                 _logger.LogWarning("Got course getlist without 'user_id'");
                 return BadRequest();
             }
 
-            var user = await _users.GetByPSNIdAsync(player.Data.PsnId);
+            var user = await _users.GetByPSNUserIdAsync(player.Data.PSNUserId);
             var courses = await _courses.GetAllCoursesOfUser(user.Id);
 
             var courseList = new CourseList();
@@ -122,11 +123,11 @@ namespace GTGrimServer.Controllers
                 Title = "Track Title",
                 Theme = "scenery_andalusia",
                 Length = 7878,
-                OwnerId = player.Data.PSNName,
+                OwnerId = player.Data.PSNUserId,
                 Corners = 69,
-                OriginalCreator = player.Data.PSNName,
+                OriginalCreator = player.Data.PSNUserId,
                 PhotoId = 12345678,
-                UpdateTime = DateTime.Now.ToRfc3339String(),
+                UpdateTime = DateTime.Now,
                 PhotoHidden = 0,
             };
 

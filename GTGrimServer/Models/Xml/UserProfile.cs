@@ -9,144 +9,144 @@ using System.Xml.Serialization;
 using GTGrimServer.Database.Tables;
 using GTGrimServer.Utils;
 
-namespace GTGrimServer.Models
+namespace GTGrimServer.Models.Xml
 {
-    [XmlRoot(ElementName = "user")]
+    [XmlRoot("user")]
     public class UserProfile
     {
         /// <summary>
-        /// User name of the player. Attribute says 'id', but its actually the user name.
+        /// PSN User Id of the profile.
         /// </summary>
-        [XmlElement(ElementName = "id")]
-        public string UserName { get; set; }
+        [XmlElement("id")]
+        public string UserId { get; set; }
 
-        [XmlElement(ElementName = "number")]
+        [XmlElement("number")]
         public long Number { get; set; }
 
-        [XmlElement(ElementName = "comment")]
+        [XmlElement("comment")]
         public string Comment { get; set; }
 
-        [XmlElement(ElementName = "nickname")]
+        [XmlElement("nickname")]
         public string Nickname { get; set; }
 
-        [XmlElement(ElementName = "gt_friend_list")]
+        [XmlElement("gt_friend_list")]
         public string GTFriendList { get; set; }
 
-        [XmlElement(ElementName = "photo_avatar")]
+        [XmlElement("photo_avatar")]
         public long PhotoAvatar { get; set; }
 
-        [XmlElement(ElementName = "photo_bg")]
+        [XmlElement("photo_bg")]
         public string PhotoBackground { get; set; }
 
-        [XmlElement(ElementName = "band_test")]
+        [XmlElement("band_test")]
         public int BandTest { get; set; }
 
-        [XmlElement(ElementName = "band_up")]
+        [XmlElement("band_up")]
         public int BandUp { get; set; }
 
-        [XmlElement(ElementName = "band_down")]
+        [XmlElement("band_down")]
         public int BandDown { get; set; }
 
-        [XmlElement(ElementName = "band_update_time")]
+        [XmlElement("band_update_time")]
         public string BandUpdateTime { get; set; }
 
-        [XmlElement(ElementName = "country")]
+        [XmlElement("country")]
         public string Country { get; set; }
 
-        [XmlElement(ElementName = "stats")]
+        [XmlElement("stats")]
         public byte[] Stats { get; set; }
 
-        [XmlElement(ElementName = "menu_color")]
+        [XmlElement("menu_color")]
         public int MenuColor { get; set; }
 
-        [XmlElement(ElementName = "menu_matiere")]
+        [XmlElement("menu_matiere")]
         public int MenuMatiere { get; set; }
 
-        [XmlElement(ElementName = "helmet")]
+        [XmlElement("helmet")]
         public int Helmet { get; set; }
 
-        [XmlElement(ElementName = "helmet_color")]
+        [XmlElement("helmet_color")]
         public int HelmetColor { get; set; }
 
-        [XmlElement(ElementName = "menu_helmet")]
+        [XmlElement("menu_helmet")]
         public int MenuHelmet { get; set; }
 
-        [XmlElement(ElementName = "wear")]
+        [XmlElement("wear")]
         public int Wear { get; set; }
 
-        [XmlElement(ElementName = "wear_color")]
+        [XmlElement("wear_color")]
         public int WearColor { get; set; }
 
-        [XmlElement(ElementName = "menu_suit")]
+        [XmlElement("menu_suit")]
         public int MenuSuit { get; set; }
 
-        [XmlElement(ElementName = "aspec_level")]
+        [XmlElement("aspec_level")]
         public int ASpecLevel { get; set; }
 
-        [XmlElement(ElementName = "bspec_level")]
+        [XmlElement("bspec_level")]
         public int BSpecLevel { get; set; }
 
-        [XmlElement(ElementName = "license_level")]
+        [XmlElement("license_level")]
         public int LicenseLevel { get; set; }
 
-        [XmlElement(ElementName = "profile_level")]
+        [XmlElement("profile_level")]
         public int ProfileLevel { get; set; }
 
-        [XmlElement(ElementName = "comment_level")]
+        [XmlElement("comment_level")]
         public int CommentLevel { get; set; }
 
-        [XmlElement(ElementName = "playtime_level")]
+        [XmlElement("playtime_level")]
         public int PlaytimeLevel { get; set; }
 
-        [XmlElement(ElementName = "playtime")]
+        [XmlElement("playtime")]
         public string Playtime { get; set; }
 
-        [XmlElement(ElementName = "welcomemessage")]
+        [XmlElement("welcomemessage")]
         public string WelcomeMessage { get; set; }
 
-        [XmlElement(ElementName = "aspec_exp")]
+        [XmlElement("aspec_exp")]
         public int ASpecExp { get; set; }
 
-        [XmlElement(ElementName = "bspec_exp")]
+        [XmlElement("bspec_exp")]
         public int BSpecExp { get; set; }
 
-        [XmlElement(ElementName = "achievement")]
+        [XmlElement("achievement")]
         public int Achievement { get; set; }
 
-        [XmlElement(ElementName = "credit")]
+        [XmlElement("credit")]
         public int Credit { get; set; }
 
-        [XmlElement(ElementName = "win_count")]
+        [XmlElement("win_count")]
         public int WinCount { get; set; }
 
-        [XmlElement(ElementName = "car_count")]
+        [XmlElement("car_count")]
         public int CarCount { get; set; }
 
-        [XmlElement(ElementName = "trophy")]
+        [XmlElement("trophy")]
         public int Trophy { get; set; }
 
-        [XmlElement(ElementName = "odometer")]
+        [XmlElement("odometer")]
         public double Odometer { get; set; }
 
-        [XmlElement(ElementName = "license_gold")]
+        [XmlElement("license_gold")]
         public int LicenseGold { get; set; }
 
-        [XmlElement(ElementName = "license_silver")]
+        [XmlElement("license_silver")]
         public int LicenseSilver { get; set; }
 
-        [XmlElement(ElementName = "license_bronze")]
+        [XmlElement("license_bronze")]
         public int LicenseBronze { get; set; }
 
-        [XmlElement(ElementName = "tag")]
+        [XmlElement("tag")]
         public int Tag { get; set; }
 
-        [XmlElement(ElementName = "nickname_change")]
+        [XmlElement("nickname_change")]
         public int NicknameChanges { get; set; }
 
         public static UserProfile FromDatabaseObject(UserDTO userDto)
         {
             var profile = new UserProfile();
-            profile.UserName = userDto.PSNName;
+            profile.UserId = userDto.PSNUserId;
             profile.Number = userDto.Id;
             profile.Comment = userDto.Comment;
             profile.Nickname = userDto.Nickname;

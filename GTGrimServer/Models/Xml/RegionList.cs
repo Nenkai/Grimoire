@@ -1,15 +1,15 @@
 using System;
 using System.Xml.Serialization;
 
-namespace GTGrimServer
+namespace GTGrimServer.Models.Xml
 {
     [XmlRoot("region")]
     public class RegionList
     {
-        [XmlAttribute(AttributeName = "key")]
+        [XmlAttribute("key")]
         public string RegionCode { get; set; }
 
-        [XmlAttribute(AttributeName = "value")]
+        [XmlAttribute("value")]
         public string RegionName { get; set; }
     }
 }

@@ -12,7 +12,7 @@ using System.IO;
 
 using GTGrimServer.Utils;
 using GTGrimServer.Sony;
-using GTGrimServer.Models;
+using GTGrimServer.Models.Xml;
 using GTGrimServer.Config;
 using GTGrimServer.Filters;
 

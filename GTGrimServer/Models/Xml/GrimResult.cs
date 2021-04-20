@@ -6,12 +6,12 @@ using System.Globalization;
 
 using System.Xml.Serialization;
 
-namespace GTGrimServer.Models
+namespace GTGrimServer.Models.Xml
 {
     [XmlRoot("grim")]
     public class GrimResult
     {
-        [XmlElement(ElementName = "result")]
+        [XmlElement("result")]
         public string Result { get; set; }
 
         public GrimResult() { }

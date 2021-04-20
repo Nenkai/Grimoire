@@ -4,8 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using System.Xml.Serialization;
+using GTGrimServer.Utils;
 
-namespace GTGrimServer.Models
+namespace GTGrimServer.Models.Xml
 {
     [XmlRoot(ElementName = "course_list")]
     public class CourseList
@@ -17,17 +18,29 @@ namespace GTGrimServer.Models
     /// <summary>
     /// GT6 Courses
     /// </summary>
-    [XmlRoot(ElementName = "course")]
+    [XmlRoot("course")]
     public class Course
     {
-        [XmlAttribute(AttributeName = "course_id")]
+        [XmlAttribute("course_id")]
         public long CourseId { get; set; }
 
-        [XmlAttribute(AttributeName = "create_time")]
-        public string CreateTime { get; set; }
+        [XmlAttribute("create_time")]
+        public string CreateTimeString { get; set; }
+        [XmlIgnore]
+        public DateTime CreateTime
+        {
+            get => DateTimeExtensions.FromRfc3339String(CreateTimeString);
+            set => CreateTimeString = value.ToRfc3339String();
+        }
 
-        [XmlAttribute(AttributeName = "update_time")]
-        public string UpdateTime { get; set; }
+        [XmlAttribute("update_time")]
+        public string UpdateTimeString { get; set; }
+        [XmlIgnore]
+        public DateTime UpdateTime
+        {
+            get => DateTimeExtensions.FromRfc3339String(UpdateTimeString);
+            set => UpdateTimeString = value.ToRfc3339String();
+        }
 
         /// <summary>
         /// PSN Name of the user that owns this course (but not the creator).
@@ -38,52 +51,52 @@ namespace GTGrimServer.Models
         /// <summary>
         /// 0 = Awaiting Test Drive, 1 = Complete, 2 = Public
         /// </summary>
-        [XmlAttribute(AttributeName = "status")]
+        [XmlAttribute("status")]
         public int Status { get; set; }
 
-        [XmlAttribute(AttributeName = "photo_id")]
+        [XmlAttribute("photo_id")]
         public long PhotoId { get; set; }
 
-        [XmlAttribute(AttributeName = "title")]
+        [XmlAttribute("title")]
         public string Title { get; set; }
 
-        [XmlAttribute(AttributeName = "comment")]
+        [XmlAttribute("comment")]
         public string Comment { get; set; }
 
-        [XmlAttribute(AttributeName = "title_hidden")]
+        [XmlAttribute("title_hidden")]
         public int TitleHidden { get; set; }
 
-        [XmlAttribute(AttributeName = "comment_hidden")]
+        [XmlAttribute("comment_hidden")]
         public int CommentHidden { get; set; }
 
-        [XmlAttribute(AttributeName = "photo_hidden")]
+        [XmlAttribute("photo_hidden")]
         public int PhotoHidden { get; set; }
 
         /// <summary>
         /// Theme name. Important: For lobbies, this has to be the scenery course code.
         /// </summary>
-        [XmlAttribute(AttributeName = "theme")]
+        [XmlAttribute("theme")]
         public string Theme { get; set; }
 
-        [XmlAttribute(AttributeName = "length")]
+        [XmlAttribute("length")]
         public int Length { get; set; }
 
-        [XmlAttribute(AttributeName = "one_way")]
+        [XmlAttribute("one_way")]
         public int OneWay { get; set; }
 
-        [XmlAttribute(AttributeName = "corners")]
+        [XmlAttribute("corners")]
         public int Corners { get; set; }
 
         /// <summary>
         /// Name of the creator that created this course.
         /// </summary>
-        [XmlAttribute(AttributeName = "source_user_id")]
+        [XmlAttribute("source_user_id")]
         public string OriginalCreator { get; set; }
 
-        [XmlAttribute(AttributeName = "straight")]
+        [XmlAttribute("straight")]
         public int Straight { get; set; }
 
-        [XmlAttribute(AttributeName = "height")]
+        [XmlAttribute("height")]
         public int Height { get; set; }
     }
 }

@@ -30,20 +30,20 @@ namespace GTGrimServer.Database.Controllers
             => await _con.QueryFirstOrDefaultAsync<UserDTO>(@"SELECT * FROM users WHERE id = @id", new { Id = id });
 
         /// <summary>
-        /// Gets an user by PSN Id.
+        /// Gets an user by PSN User Id.
         /// </summary>
-        /// <param name="psnId">PSN Id of the user.</param>
+        /// <param name="psnId">PSN User Id of the user.</param>
         /// <returns></returns>
-        public async Task<UserDTO> GetByPSNIdAsync(long psnId)
-            => await _con.QueryFirstOrDefaultAsync<UserDTO>(@"SELECT * FROM users WHERE psnid = @psnid", new { PsnId = psnId });
+        public async Task<UserDTO> GetByPSNUserIdAsync(string psnId)
+            => await _con.QueryFirstOrDefaultAsync<UserDTO>(@"SELECT * FROM users WHERE psn_user_id = @UserId", new { UserId = psnId });
 
         /// <summary>
-        /// Gets the PSN Name of an user by Id.
+        /// Gets the PSN User Id of an user by DB Id.
         /// </summary>
         /// <param name="id">Database Id of the user.</param>
         /// <returns></returns>
         public async Task<string> GetPSNNameByIdAsync(long id)
-            => await _con.QueryFirstOrDefaultAsync<string>(@"SELECT psnname FROM users WHERE id = @id", new { Id = id });
+            => await _con.QueryFirstOrDefaultAsync<string>(@"SELECT psn_user_id FROM users WHERE id = @id", new { Id = id });
 
         public async Task UpdateAsync(UserDTO pData)
             => await _con.ExecuteAsync(@"UPDATE users", pData);
@@ -120,27 +120,26 @@ namespace GTGrimServer.Database.Controllers
         public async Task<long> AddAsync(UserDTO pData)
         {
             var query =
-@"INSERT INTO users (psnid, psnname, ipaddress, mac, country, nickname)
-  VALUES(@PsnId, @PSNName, @IPAddress, @MacAddress, @Country, @Nickname)
+@"INSERT INTO users (psn_user_id, ipaddress, mac, country, nickname)
+  VALUES(@PSNUserId, @IPAddress, @MacAddress, @Country, @Nickname)
   returning id";
             
-            return await _con.ExecuteScalarAsync<long>(query, new { pData.PsnId, pData.PSNName, pData.IPAddress, 
+            return await _con.ExecuteScalarAsync<long>(query, new { pData.PSNUserId, pData.IPAddress, 
                 pData.MacAddress, pData.Country, pData.Nickname });
         }
 
         public async Task RemoveAsync(long id)
             => await _con.ExecuteAsync(@"DELETE FROM users WHERE id=@Id", new { Id = id });
 
-        public async Task RemoveByPSNIdAsync(long psnId)
-            => await _con.ExecuteAsync(@"DELETE FROM users WHERE psnid=@Id", new { PsnId = psnId });
+        public async Task RemoveByPSNUserIdAsync(string psnUserId)
+            => await _con.ExecuteAsync(@"DELETE FROM users WHERE psn_user_id=@Id", new { Id = psnUserId });
 
         private void CreateTable()
         {
             string query =
             @"CREATE TABLE IF NOT EXISTS users (
                 id SERIAL PRIMARY KEY,
-				psnid BIGINT UNIQUE,
-                psnname TEXT,
+                psn_user_id TEXT UNIQUE,
                 ipaddress TEXT,
                 country TEXT,
                 mac TEXT,
@@ -167,10 +166,10 @@ namespace GTGrimServer.Database.Controllers
                 wear INTEGER DEFAULT 0,
                 wear_color INTEGER DEFAULT 0,
 
-                comment TEXT,
                 nickname TEXT,
                 photo_id_avatar TEXT,
                 photo_bg TEXT,
+
                 band_test INTEGER DEFAULT 0,
                 band_up INTEGER DEFAULT 0,
                 band_down INTEGER DEFAULT 0,
@@ -193,7 +192,7 @@ namespace GTGrimServer.Database.Controllers
 
             _con.Execute(query);
 
-            string query2 = @"CREATE INDEX IF NOT EXISTS users_psnid_idx ON users (psnid)";
+            string query2 = @"CREATE INDEX IF NOT EXISTS users_psnuserid_idx ON users (psn_user_id)";
             _con.Execute(query2);
         }
 

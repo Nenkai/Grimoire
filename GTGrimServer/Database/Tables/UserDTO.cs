@@ -10,17 +10,12 @@ namespace GTGrimServer.Database.Tables
         /// <summary>
         /// Internal Database Id.
         /// </summary>
-        public long Id { get; set; }
-
-        /// <summary>
-        /// PSN Id of the user.
-        /// </summary>
-        public long PsnId { get; set; }
+        public int Id { get; set; }
 
         /// <summary>
         /// PSN Name of the user.
         /// </summary>
-        public string PSNName { get; set; }
+        public string PSNUserId { get; set; }
 
         /// <summary>
         /// Nickname of the user.

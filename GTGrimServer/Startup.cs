@@ -61,6 +61,7 @@ namespace GTGrimServer
             services.AddSingleton<UserDBManager>();
             services.AddSingleton<FriendDBManager>();
             services.AddSingleton<UserSpecialDBManager>();
+            services.AddSingleton<BbsBoardDBManager>();
             services.AddSingleton<CourseDBManager>();
         }
 
@@ -107,6 +108,7 @@ namespace GTGrimServer
             services.GetService<FriendDBManager>().CreateTableIfNeeded();
             services.GetService<UserSpecialDBManager>().CreateTableIfNeeded();
             services.GetService<CourseDBManager>().CreateTableIfNeeded();
+            services.GetService<BbsBoardDBManager>().CreateTableIfNeeded();
         }
 
         public void AddJWTAuthentication(IServiceCollection services)

@@ -5,12 +5,12 @@ using System.Threading.Tasks;
 
 using System.Xml.Serialization;
 
-namespace GTGrimServer.Models
+namespace GTGrimServer.Models.Xml
 {
     /// <summary>
     /// Basic list of friends.
     /// </summary>
-    [XmlRoot(ElementName = "friends")]
+    [XmlRoot("friends")]
     public class SimpleFriendList
     {
         [XmlElement("profile")]
@@ -24,26 +24,26 @@ namespace GTGrimServer.Models
     public class SimpleFriend
     {
         /// <summary>
-        /// PSN Id of the friend.
+        /// PSN User Id of the friend.
         /// </summary>
-        [XmlAttribute(AttributeName = "id")]
-        public long UserId { get; set; }
+        [XmlAttribute("id")]
+        public string UserId { get; set; }
 
         /// <summary>
         /// A-Spec Level of the friend (GT5 only).
         /// </summary>
-        [XmlAttribute(AttributeName = "aspec_level")]
+        [XmlAttribute("aspec_level")]
         public int ASpecLevel { get; set; }
 
         /// <summary>
         /// B-Spec Level of the friend (GT5 only).
         /// </summary>
-        [XmlAttribute(AttributeName = "bspec_level")]
+        [XmlAttribute("bspec_level")]
         public int BSpecLevel { get; set; }
 
         public SimpleFriend() { }
 
-        public SimpleFriend(long userId, int aspecLevel, int bspecLevel)
+        public SimpleFriend(string userId, int aspecLevel, int bspecLevel)
         {
             UserId = userId;
             ASpecLevel = aspecLevel;

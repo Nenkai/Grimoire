@@ -34,7 +34,7 @@ namespace GTGrimServer.Models
             => LastUpdate = DateTime.Now;
 
         public override string ToString()
-            => Data.PSNName;
+            => Data.PSNUserId;
 
         public Player(UserDTO user, SessionToken token)
         {

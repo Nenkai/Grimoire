@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
 using System.Xml.Serialization;
-namespace GTGrimServer.Models
+
+using GTGrimServer.Utils;
+
+namespace GTGrimServer.Models.Xml
 {
     [XmlRoot(ElementName = "gtmail_list")]
     public class MailList
@@ -37,7 +39,13 @@ namespace GTGrimServer.Models
         public string Body { get; set; }
 
         [XmlAttribute(AttributeName = "create_time")]
-        public string CreateTime { get; set; }
+        public string CreateTimeString { get; set; }
+        [XmlIgnore]
+        public DateTime CreateTime
+        {
+            get => DateTimeExtensions.FromRfc3339String(CreateTimeString);
+            set => CreateTimeString = value.ToRfc3339String();
+        }
 
     }
 }

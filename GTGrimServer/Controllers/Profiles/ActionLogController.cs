@@ -12,7 +12,7 @@ using System.IO;
 
 using GTGrimServer.Filters;
 using GTGrimServer.Sony;
-using GTGrimServer.Models;
+using GTGrimServer.Models.Xml;
 
 namespace GTGrimServer.Helpers
 {

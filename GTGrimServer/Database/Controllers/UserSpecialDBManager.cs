@@ -35,12 +35,12 @@ namespace GTGrimServer.Database.Controllers
         /// <param name="id">Database Id of the user.</param>
         /// <param name="type">Type of the special, GT6 always uses 3. -1 will retrieve all specials.</param>
         /// <returns>Special object list.</returns>
-        public async Task<IEnumerable<UserSpecialDTO>> GetAllPresentsOfUserAsync(long userId, int type = -1)
+        public async Task<IEnumerable<UserSpecialDTO>> GetAllPresentsOfUserAsync(long dbUserId, int type = -1)
         {
             if (type == -1)
-                return await _con.QueryAsync<UserSpecialDTO>(@"SELECT * FROM user_specials WHERE userid=@UserId AND type=@Type", new { UserId = userId, Type = type });
+                return await _con.QueryAsync<UserSpecialDTO>(@"SELECT * FROM user_specials WHERE userid=@UserId AND type=@Type", new { UserId = dbUserId, Type = type });
             else
-                return await _con.QueryAsync<UserSpecialDTO>(@"SELECT * FROM user_specials WHERE userid=@UserId", new { UserId = userId });
+                return await _con.QueryAsync<UserSpecialDTO>(@"SELECT * FROM user_specials WHERE userid=@UserId", new { UserId = dbUserId });
         }
 
         public async Task UpdateAsync(UserSpecialDTO uSpecialData)

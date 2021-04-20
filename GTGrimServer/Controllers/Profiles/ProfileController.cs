@@ -15,6 +15,7 @@ using GTGrimServer.Database.Controllers;
 using GTGrimServer.Database.Tables;
 using GTGrimServer.Filters;
 using GTGrimServer.Models;
+using GTGrimServer.Models.Xml;
 using GTGrimServer.Utils;
 using GTGrimServer.Config;
 using GTGrimServer.Services;
@@ -85,11 +86,11 @@ namespace GTGrimServer.Controllers.Profiles
                 case "profile.getsimplefriendlist":
                     return await OnGetSimpleFriendList(player);
                 case "profile.updateNickname":
-                    return await OnUpdateNickname(gRequest, player);
+                    return await OnUpdateNickname(player, gRequest);
                 case "profile.setpresence":
                     return SetPresence(gRequest);
                 case "profile.getSpecialList":
-                    return await OnGetUserSpecialPresentList(gRequest);
+                    return await OnGetUserSpecialPresentList(player, gRequest);
             }
 
             _logger.LogDebug("Received unimplemented profile call: {command}", gRequest.Command);
@@ -106,7 +107,7 @@ namespace GTGrimServer.Controllers.Profiles
             foreach (var friend in friends)
             {
                 var friendData = await _userDB.GetByIDAsync(friend.FriendId);
-                simpleFriendList.Items.Add(new SimpleFriend(friendData.PsnId, friendData.ASpecLevel, friendData.BSpecLevel));
+                simpleFriendList.Items.Add(new SimpleFriend(friendData.PSNUserId, friendData.ASpecLevel, friendData.BSpecLevel));
             }
 
             return Ok(simpleFriendList);
@@ -434,7 +435,7 @@ namespace GTGrimServer.Controllers.Profiles
         /// </summary>
         /// <param name="gRequest"></param>
         /// <returns></returns>
-        private async Task<ActionResult> OnUpdateNickname(GrimRequest gRequest, Player player)
+        private async Task<ActionResult> OnUpdateNickname(Player player, GrimRequest gRequest)
         {
             if (_gsOptions.GameType != GameType.GT6)
             {
@@ -456,7 +457,7 @@ namespace GTGrimServer.Controllers.Profiles
 
             // TODO: Swear name filter?
 
-            _logger.LogDebug("[{username}] updated nickname: {nickname}", player.Data.PSNName, param.Text);
+            _logger.LogDebug("[{username}] updated nickname: {nickname}", player.Data.PSNUserId, param.Text);
 
             player.Data.NicknameChanges--;
             await _userDB.UpdateNewNickname(player.Data);
@@ -471,7 +472,7 @@ namespace GTGrimServer.Controllers.Profiles
         /// </summary>
         /// <param name="gRequest"></param>
         /// <returns></returns>
-        private async Task<ActionResult> OnGetUserSpecialPresentList(GrimRequest gRequest)
+        private async Task<ActionResult> OnGetUserSpecialPresentList(Player player, GrimRequest gRequest)
         {
             if (_gsOptions.GameType != GameType.GT6)
             {
@@ -495,7 +496,7 @@ namespace GTGrimServer.Controllers.Profiles
             var result = new SpecialList();
             foreach (var specialData in specialDataList)
             {
-                var special = new UserSpecial(specialData.UserId, specialData.Type, specialData.Key, specialData.Value);
+                var special = new UserSpecial(player.Data.PSNUserId, specialData.Type, specialData.Key, specialData.Value);
                 result.Items.Add(special);
 
                 if (specialData.Type == 3 && specialData.Key.StartsWith("CAR"))

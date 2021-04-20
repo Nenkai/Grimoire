@@ -15,6 +15,7 @@ using System.IO;
 using GTGrimServer.Config;
 using GTGrimServer.Utils;
 using GTGrimServer.Models;
+using GTGrimServer.Models.Xml;
 using GTGrimServer.Filters;
 
 namespace GTGrimServer.Controllers
