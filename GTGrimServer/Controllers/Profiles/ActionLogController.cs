@@ -171,13 +171,83 @@ namespace GTGrimServer.Controllers
                 return BadRequest();
             }
 
+            if (!ActionLog.Tags.TryGetValue(value1Param.Text, out string def))
+                return Ok();
+
             // TODO: Some actionlog checks
+            LogAction(player, def, value2Param.Text, value3Param.Text, value4Param.Text, value5Param.Text);
 
             var log = new ActionLogDTO(player.Data.Id, DateTime.Now, value1Param.Text, value2Param.Text, 
                 value3Param.Text, value4Param.Text, value5Param.Text);
 
             await _actionLogDb.AddAsync(log);
             return Ok(GrimResult.FromBool(true));
+        }
+
+        private void LogAction(Player player, string def, string v2, string v3, string v4, string v5)
+        {
+            switch (def)
+            {
+                case "NEW_GAME":
+                    _logger.LogInformation("[{player}] started new game", player); break;
+                case "FRIENDCAR_RIDE":
+                    _logger.LogInformation("[{player}] borrowing friend car: {car} from {userid}", player, v2, v3); break;
+
+
+                case "CAR_BUY":
+                    _logger.LogInformation("[{player}] bought car: {car}", player, v2); break;
+                case "CAR_RIDE":
+                    _logger.LogInformation("[{player}] now using car: {car}", player, v2); break;
+
+                case "ASPEC_EVENT":
+                    if (!int.TryParse(v2, out int agame_id))
+                        return;
+                    _logger.LogInformation("[{player}] finished aspec event: game_id:{game_id} course:{v3}", player, agame_id, v3); break;
+                case "BSPEC_EVENT":
+                    if (!int.TryParse(v2, out int bgame_id))
+                        return;
+                    _logger.LogInformation("[{player}] finished bspec event: game_id:{game_id} course:{v3}", player, bgame_id, v3); break;
+
+                case "ASPEC_LEVEL":
+                    if (!int.TryParse(v2, out int alevel))
+                        return;
+                    _logger.LogInformation("[{player}] a-spec level: {old}->{new}", player, alevel - 1, alevel); break;
+                case "BSPEC_LEVEL":
+                    if (!int.TryParse(v2, out int blevel))
+                        return;
+                    _logger.LogInformation("[{player}] b-spec level: {old}->{new}", player, blevel - 1, blevel); break;
+
+                case "LICENSE_LEVEL":
+                    if (!int.TryParse(v2, out int lLevel))
+                        return;
+                    _logger.LogInformation("[{player}] new license: {level}", player, lLevel); break;
+                case "LICENSE_EVENT":
+                    if (!int.TryParse(v2, out int license_id) || !int.TryParse(v3, out int result))
+                        return;
+                    _logger.LogInformation("[{player}] finished license event: id:{v2} result:{v3}", player, license_id, result); break;
+
+                case "SPECIAL_EVENT":
+                    if (!int.TryParse(v2, out int event_id))
+                        return;
+                    _logger.LogInformation("[{player}] finished special event: event_id:{game_id} course:{v3} result:", player, event_id, v3, v4); break;
+
+                case "DRIVER_CLASS":
+                    _logger.LogInformation("[{player}] driver class: {name} class: {class)", player, v2, v3); break;
+
+                case "GIFT_MUSEUMCARD":
+                    _logger.LogInformation("[{player}] gifted museum card: id:{museum_id} dealer:{dealer} dealer_id:{dealer_id}", player, v2, v3, v4); break;
+                case "GIFT_SPECIAL":
+                    _logger.LogInformation("[{player}] gifted car ticket: gameitem_id:{gameitem_id} label:{label}", player, v2, v3); break;
+                case "GIFT_TUNEPARTS":
+                    _logger.LogInformation("[{player}] gifted tune parts: gameitem_id:{gameitem_id} horn_id:{horn_id}", player, v2, v3); break;
+                case "GIFT_OTHERPARTS":
+                    _logger.LogInformation("[{player}] gifted paint: gameitem_id:{gameitem_id} color:{color}", player, v2, v3); break;
+                case "GIFT_DRIVER_ITEM":
+                    _logger.LogInformation("[{player}] gifted driver item: gameitem_id:{gameitem_id} code:{code}, color:{v4}", player, v2, v3, v4); break;
+
+                case "TROPHY_UNLOCK":
+                    _logger.LogInformation("[{player}] unlocked trophy: {type}", player, v2); break;
+            }
         }
     }
 }
