@@ -173,15 +173,12 @@ namespace GTGrimServer.Controllers
                 return BadRequest();
             }
 
-            if (comment.Text == "cock and ball torture on wikipedia, the free encyclopedia that anyone can edit")
-                return new ConsoleBanResult();
-
             // Bbs Board ids is just the user number - get the user using it
             var user = await _userDb.GetByIDAsync(bbs_board_id);
             if (user is null)
                 BadRequest();
 
-            var newComment = new BbsDTO(bbs_board_id, comment.Text, DateTime.Now);
+            var newComment = new BbsDTO(bbs_board_id, player.Data.Id, comment.Text, DateTime.Now);
             await _bbsDb.AddAsync(newComment);
             
             return Ok(GrimResult.FromBool(true));
@@ -201,9 +198,9 @@ namespace GTGrimServer.Controllers
                 return BadRequest();
             }
 
-            // Get current user's board
+            // Get user's comment
             var comment = await _bbsDb.GetByIDAsync(bbs_comment_id);
-            if (comment is null || comment.BbsBoardId != player.Data.Id)
+            if (comment is null || (comment.BbsBoardId != player.Data.Id && comment.AuthorId != player.Data.Id))
                 return Forbid();
 
             await _bbsDb.RemoveAsync(bbs_comment_id);

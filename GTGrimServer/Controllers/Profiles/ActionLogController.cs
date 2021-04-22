@@ -107,7 +107,7 @@ namespace GTGrimServer.Controllers
 
 
             var actions = await _actionLogDb.GetAllActionsOfUser(userNumber);
-            if (actions is null || !actions.Any())
+            if (actions is null)
             {
                 Response.StatusCode = StatusCodes.Status404NotFound;
                 return;
@@ -128,9 +128,9 @@ namespace GTGrimServer.Controllers
             using var sw = new StreamWriter(ms);
             sw.NewLine = "\n";
 
-            foreach (var action in actions)
-                sw.WriteLine(@$"<actionlog create_time=""{Utils.DateTimeExtensions.ToRfc3339String(action.CreateTime)}"" value1=""{action.Value1}"" value2=""{action.Value2}"" value3=""{action.Value3}"" value4=""{action.Value4}"" value5=""{action.Value5}""/>");
-
+                foreach (var action in actions)
+                    sw.WriteLine(@$"<actionlog create_time=""{Utils.DateTimeExtensions.ToRfc3339String(action.CreateTime)}"" value1=""{action.Value1}"" value2=""{action.Value2}"" value3=""{action.Value3}"" value4=""{action.Value4}"" value5=""{action.Value5}""/>");
+            
             sw.Flush();
             ms.Position = 0;
             await ms.CopyToAsync(Response.Body);

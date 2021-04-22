@@ -82,7 +82,7 @@ namespace GTGrimServer.Controllers.Profiles
                 case "profile.getspecialstatus":
                     return OnGetSpecialStatus();
                 case "profile.updatefriendlist":
-                    return OnUpdateFriendList(gRequest);
+                    return await OnUpdateFriendList(gRequest);
                 case "profile.getsimplefriendlist":
                     return await OnGetSimpleFriendList(player);
                 case "profile.updateNickname":
@@ -380,10 +380,10 @@ namespace GTGrimServer.Controllers.Profiles
         }
 
         /// <summary>
-        /// Fired by GT5 to get the friend list
+        /// Fired by GT5 to update the current friend list based on the PSN to the grim side.
         /// </summary>
         /// <returns></returns>
-        private ActionResult OnUpdateFriendList(GrimRequest gRequest)
+        private async Task<ActionResult> OnUpdateFriendList(GrimRequest gRequest)
         {
             var player = Player;
             if (player is null)
@@ -397,6 +397,10 @@ namespace GTGrimServer.Controllers.Profiles
                 _logger.LogWarning("Got OnUpdateFriendList with missing or invalid friend_list key param");
                 return BadRequest();
             }
+
+            string[] userIds = param.Text.Split(",").Distinct().ToArray();
+
+            await _friendDB.UpdateFriendList(player.Data.Id, userIds);
 
             // Param is "friend_list"
             // Response is 0/1 bool, 1 is to ask for a refresh, 0 is not

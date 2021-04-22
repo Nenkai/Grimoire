@@ -12,6 +12,7 @@ using System.Xml.Serialization;
 using System.IO;
 
 using GTGrimServer.Database.Controllers;
+using GTGrimServer.Database.Tables;
 using GTGrimServer.Filters;
 using GTGrimServer.Controllers;
 using GTGrimServer.Services;
@@ -33,12 +34,17 @@ namespace GTGrimServer.Helpers
     {
         private readonly ILogger<UserController> _logger;
         private readonly UserDBManager _userDb;
+        private readonly FriendDBManager _friendsDb;
 
-        public UserController(PlayerManager players, ILogger<UserController> logger, UserDBManager userDb)
+        public UserController(PlayerManager players, 
+            ILogger<UserController> logger, 
+            UserDBManager userDb,
+            FriendDBManager friendsDb)
             : base(players)
         {
             _logger = logger;
             _userDb = userDb;
+            _friendsDb = friendsDb;
         }
 
         /// <summary>
@@ -48,7 +54,7 @@ namespace GTGrimServer.Helpers
         /// <returns></returns>
         [HttpGet]
         [Route("{userId}.xml")]
-        public ActionResult Get(string userId)
+        public async Task<ActionResult> Get(string userId)
         {
             var currentPlayer = Player;
             if (currentPlayer is null)
@@ -57,22 +63,28 @@ namespace GTGrimServer.Helpers
                 return Unauthorized();
             }
 
+            UserProfile userProfile;
+
+            // Is it self?
             if (currentPlayer?.Data?.PSNUserId?.Equals(userId) is true)
             {
-                var user = UserProfile.FromDatabaseObject(currentPlayer.Data);
-                user.ProfileLevel = unchecked((int)0b_11111111_11111111_11111111_11111111);
-                user.BandUp = 1024;
-                user.BandDown = 1024;
-                user.BandUpdateTime = DateTime.Now.ToRfc3339String();
-                user.BandTest = 1024;
-                return Ok(user);
+                userProfile = UserProfile.FromDatabaseObject(currentPlayer.Data);
             }
             else
             {
-                // TODO: Get other user
-                _logger.LogWarning("Got unexpected profile request for '{userId}'", userId);
-                return BadRequest();
+                // Possible friend - Check if they're a friend before allowing to get their profile
+                UserDTO userData = await _userDb.GetByPSNUserIdAsync(userId);
+                if (!await _friendsDb.IsFriendedToUser(currentPlayer.Data.Id, userData.Id))
+                    return Forbid();
+
+                userProfile = UserProfile.FromDatabaseObject(userData);
             }
+
+            userProfile.BandUp = 1024;
+            userProfile.BandDown = 1024;
+            userProfile.BandUpdateTime = DateTime.Now.ToRfc3339String();
+            userProfile.BandTest = 1024;
+            return Ok(userProfile);
         }
     }
 }

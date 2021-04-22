@@ -38,6 +38,14 @@ namespace GTGrimServer.Database.Controllers
             => await _con.QueryFirstOrDefaultAsync<UserDTO>(@"SELECT * FROM users WHERE psn_user_id = @UserId", new { UserId = psnId });
 
         /// <summary>
+        /// Gets the internal database id of a psn user id.
+        /// </summary>
+        /// <param name="psnId">PSN User Id of the user.</param>
+        /// <returns></returns>
+        public async Task<int?> GetInternalIdOfUserAsync(string psnId)
+            => await _con.QueryFirstOrDefaultAsync<int?>(@"SELECT id FROM users WHERE psn_user_id = @UserId", new { UserId = psnId });
+
+        /// <summary>
         /// Gets the PSN User Id of an user by DB Id.
         /// </summary>
         /// <param name="id">Database Id of the user.</param>

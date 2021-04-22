@@ -47,7 +47,7 @@ namespace GTGrimServer.Database.Controllers
   VALUES(@BbsBoardId, @AuthorId, @Comment, @CreateTime)
   returning id";
             
-            return await _con.ExecuteScalarAsync<long>(query, new { bbs.BbsBoardId, bbs.Comment, bbs.AuthorId, bbs.CreateTime });
+            return await _con.ExecuteScalarAsync<long>(query, new { bbs.BbsBoardId, bbs.AuthorId, bbs.Comment, bbs.CreateTime });
         }
 
         public async Task RemoveAsync(long id)

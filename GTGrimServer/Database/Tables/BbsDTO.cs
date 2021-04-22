@@ -25,9 +25,10 @@ namespace GTGrimServer.Database.Tables
 
         public BbsDTO() { }
 
-        public BbsDTO(int boardId, string comment, DateTime createTime)
+        public BbsDTO(int boardId, int authorId, string comment, DateTime createTime)
         {
             BbsBoardId = boardId;
+            AuthorId = authorId;
             Comment = comment;
             CreateTime = createTime;
         }
