@@ -17,7 +17,7 @@ using GTGrimServer.Services;
 using GTGrimServer.Models;
 using GTGrimServer.Models.Xml;
 using GTGrimServer.Filters;
-using GTGrimServer.Results;
+using GTGrimServer.Utils;
 using GTGrimServer.Database.Controllers;
 using GTGrimServer.Database.Tables;
 
@@ -116,7 +116,7 @@ namespace GTGrimServer.Controllers
             /* Alright, time for a "Here's the deal." time in a typical GT5 dudu situation
              * GT5 has two list requests - requestGetActionLogList and requestGetActionLogList2.
              * The former, just fetches the list and decodes it directly, like any other request to grim.
-             * The second, which is what GT5 uses, fetches the response, doesn't decode it, just puts it in the grim cache line any other request.
+             * The second, which is what GT5 uses, fetches the response, doesn't decode it, just puts it in the grim cache like any other request.
              *   - It then reads the cached file RAW, splits the lines by '\n', THEN parsing it using REGEX with the FOLLOWING SHIT:
              *     '<actionlog create_time="([^"]*)" value1="([^"]*)" value2="([^"]*)" value3="([^"]*)" value4="([^"]*)" value5="([^"]*)"/>'
              *   As such, XmlSerializer has to be dirty configured to only print new lines and remove any indentation.
@@ -124,16 +124,17 @@ namespace GTGrimServer.Controllers
              * So yeah, do that shit manually. If you want to witness that horror, it's located in gtmode.adc:requestActionLogList (Line 2421), Version 2.11.
              */
 
-            using var ms = new MemoryStream();
+            using var ms = Program.StreamManager.GetStream();
             using var sw = new StreamWriter(ms);
             sw.NewLine = "\n";
 
                 foreach (var action in actions)
-                    sw.WriteLine(@$"<actionlog create_time=""{Utils.DateTimeExtensions.ToRfc3339String(action.CreateTime)}"" value1=""{action.Value1}"" value2=""{action.Value2}"" value3=""{action.Value3}"" value4=""{action.Value4}"" value5=""{action.Value5}""/>");
+                    sw.WriteLine(@$"<actionlog create_time=""{action.CreateTime.ToRfc3339String()}"" value1=""{action.Value1}"" value2=""{action.Value2}"" value3=""{action.Value3}"" value4=""{action.Value4}"" value5=""{action.Value5}""/>");
             
             sw.Flush();
             ms.Position = 0;
             await ms.CopyToAsync(Response.Body);
+
             return;
         }
 

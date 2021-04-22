@@ -67,15 +67,25 @@ namespace GTGrimServer
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IHostApplicationLifetime applicationLifetime)
         {
             Console.WriteLine("Init: Configuring HTTP server");
-            
-            InitDatabase(app.ApplicationServices);
+
+            try
+            {
+                InitDatabase(app.ApplicationServices);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Init: Unable to init database.");
+                throw;
+            }
 
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                VerifyDevSecrets();
+                    
             }
 
             app.UseAuthentication();
@@ -98,7 +108,8 @@ namespace GTGrimServer
             {
                 endpoints.MapControllers();
             });
- 
+
+            Console.WriteLine("Init: Done configuring host.");
         }
 
         public void InitDatabase(IServiceProvider services)
@@ -138,6 +149,31 @@ namespace GTGrimServer
                     },
                 };
             });
+        }
+
+        private void VerifyDevSecrets()
+        {
+            if (!string.IsNullOrEmpty(Configuration["Database:ConnectionString"]))
+            {
+                throw new ArgumentException("Init: Db connection string missing in user secrets. (Database:ConnectionString)");
+            }
+
+            if (!string.IsNullOrEmpty(Configuration["Jwt:Key"]))
+            {
+                throw new ArgumentException("Init:Jwt encryption key missing in user secrets. (Jwt:Key)");
+            }
+
+            if (!string.IsNullOrEmpty(Configuration["Jwt:Issuer"]))
+            {
+                throw new ArgumentException("Init:Jwt issuer missing in user secrets. (Jwt:Issuer)");
+            }
+
+            if (!string.IsNullOrEmpty(Configuration["Jwt:Audience"]))
+            {
+                throw new ArgumentException("Init:Jwt audience key missing in user secrets. (Jwt:Audience)");
+            }
+
+            Console.WriteLine("Init: User Secrets OK");
         }
     }
 }

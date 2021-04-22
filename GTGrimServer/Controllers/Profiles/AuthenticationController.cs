@@ -40,13 +40,11 @@ namespace GTGrimServer.Controllers.Profiles
         private readonly GameServerOptions _gsOptions;
 
         private readonly UserDBManager _users;
-        private readonly BbsBoardDBManager _bbsDb;
 
         public AuthenticationController(IConfiguration config, 
             ILogger<AuthenticationController> logger,
             PlayerManager players,
-            UserDBManager users,
-            BbsBoardDBManager bbsDb)
+            UserDBManager users)
         {
             _logger = logger;
             _config = config;
@@ -54,7 +52,6 @@ namespace GTGrimServer.Controllers.Profiles
             _gsOptions = _config.GetSection(GameServerOptions.GameServer).Get<GameServerOptions>();
 
             _users = users;
-            _bbsDb = _bbsDb;
         }
 
         [HttpPost]
@@ -140,6 +137,14 @@ namespace GTGrimServer.Controllers.Profiles
                 if (pfs < PFSType.GT6_V1_22)
                 {
                     _logger.LogInformation("Client Fail: Received PFS type {type} (num) - expected GT6 1.22.", pfs, (long)pfs);
+                    return false;
+                }
+            }
+            else if (_gsOptions.GameType == GameType.GT5)
+            {
+                if (pfs < PFSType.GT5_JP_V2_11)
+                {
+                    _logger.LogInformation("Client Fail: Received PFS type {type} (num) - expected GT5 2.11.", pfs, (long)pfs);
                     return false;
                 }
             }
