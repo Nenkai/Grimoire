@@ -153,22 +153,22 @@ namespace GTGrimServer
 
         private void VerifyDevSecrets()
         {
-            if (!string.IsNullOrEmpty(Configuration["Database:ConnectionString"]))
+            if (string.IsNullOrEmpty(Configuration["Database:ConnectionString"]))
             {
                 throw new ArgumentException("Init: Db connection string missing in user secrets. (Database:ConnectionString)");
             }
 
-            if (!string.IsNullOrEmpty(Configuration["Jwt:Key"]))
+            if (string.IsNullOrEmpty(Configuration["Jwt:Key"]))
             {
                 throw new ArgumentException("Init:Jwt encryption key missing in user secrets. (Jwt:Key)");
             }
 
-            if (!string.IsNullOrEmpty(Configuration["Jwt:Issuer"]))
+            if (string.IsNullOrEmpty(Configuration["Jwt:Issuer"]))
             {
                 throw new ArgumentException("Init:Jwt issuer missing in user secrets. (Jwt:Issuer)");
             }
 
-            if (!string.IsNullOrEmpty(Configuration["Jwt:Audience"]))
+            if (string.IsNullOrEmpty(Configuration["Jwt:Audience"]))
             {
                 throw new ArgumentException("Init:Jwt audience key missing in user secrets. (Jwt:Audience)");
             }
