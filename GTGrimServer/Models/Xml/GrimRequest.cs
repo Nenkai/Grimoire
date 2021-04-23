@@ -31,6 +31,15 @@ namespace GTGrimServer.Models.Xml
             return requestReq;
         }
 
+        public static GrimRequest Deserialize(string inputXml)
+        {
+            var grimSerializer = new XmlSerializer(typeof(GrimRequest));
+            using var reader = new StringReader(inputXml);
+
+            GrimRequest requestReq = grimSerializer.Deserialize(reader) as GrimRequest;
+            return requestReq;
+        }
+
         public bool TryGetParameterByIndex(int index, out GrimRequestParam param)
         {
             if (index < 0 || index >= Params.ParamList.Count)
@@ -50,6 +59,24 @@ namespace GTGrimServer.Models.Xml
                 param.Text = string.Empty;
 
             return param is not null;
+        }
+
+        public bool TryGetParameterIntByKey(string key, out int value)
+        {
+            value = 0;
+            if (TryGetParameterByKey(key, out var param) && int.TryParse(param.Text, out value))
+                return true;
+
+            return false;
+        }
+
+        public bool TryGetParameterLongByKey(string key, out long value)
+        {
+            value = 0;
+            if (TryGetParameterByKey(key, out var param) && long.TryParse(param.Text, out value))
+                return true;
+
+            return false;
         }
     }
 

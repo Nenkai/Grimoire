@@ -65,7 +65,7 @@ title, comment, title_hidden, comment_hidden, photo_hidden, theme, length, one_w
         public async Task RemoveCourseAsync(long userId, long courseId)
            => await _con.ExecuteAsync(@"DELETE FROM courses WHERE userid=@UserId AND id=@Id", new { UserId = userId, Id = courseId });
 
-        private void CreateTable()
+        public void CreateTable()
         {
             string query =
             @"CREATE TABLE IF NOT EXISTS courses (
@@ -91,21 +91,6 @@ title, comment, title_hidden, comment_hidden, photo_hidden, theme, length, one_w
 
             string query2 = @"CREATE INDEX IF NOT EXISTS courses_user_id_idx ON courses (user_id)";
             _con.Execute(query2);
-        }
-
-        public bool CreateTableIfNeeded()
-        {
-            try
-            {
-                CreateTable();
-                return true;
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, "Unable to create table if needed");
-            }
-
-            return false;
         }
     }
 }

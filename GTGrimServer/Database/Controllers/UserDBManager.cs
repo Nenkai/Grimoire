@@ -142,7 +142,7 @@ namespace GTGrimServer.Database.Controllers
         public async Task RemoveByPSNUserIdAsync(string psnUserId)
             => await _con.ExecuteAsync(@"DELETE FROM users WHERE psn_user_id=@Id", new { Id = psnUserId });
 
-        private void CreateTable()
+        public void CreateTable()
         {
             string query =
             @"CREATE TABLE IF NOT EXISTS users (
@@ -202,21 +202,6 @@ namespace GTGrimServer.Database.Controllers
 
             string query2 = @"CREATE INDEX IF NOT EXISTS users_psnuserid_idx ON users (psn_user_id)";
             _con.Execute(query2);
-        }
-
-        public bool CreateTableIfNeeded()
-        {
-            try
-            {
-                CreateTable();
-                return true;
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, "Unable to create table if needed");
-            }
-
-            return false;
         }
     }
 }

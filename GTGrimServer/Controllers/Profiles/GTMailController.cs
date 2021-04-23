@@ -73,6 +73,7 @@ namespace GTGrimServer.Controllers
                 return BadRequest();
             }
 
+            /*
             var result = new Mail()
             {
                 FromUsername = "PSN_Name_Author",
@@ -84,8 +85,8 @@ namespace GTGrimServer.Controllers
                 Subject = "-- subject --",
                 CreateTime = DateTime.Now
             };
-
-            return Ok(result);
+            */
+            return Ok();
         }
 
         private ActionResult OnSendMail(GrimRequest request)

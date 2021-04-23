@@ -59,7 +59,7 @@ namespace GTGrimServer.Database.Controllers
         public async Task RemoveAsync(long id)
             => await _con.ExecuteAsync(@"DELETE FROM user_specials WHERE id=@id", new { Id = id });
 
-        private void CreateTable()
+        public void CreateTable()
         {
             string query =
             @"CREATE TABLE IF NOT EXISTS user_specials (
@@ -73,21 +73,6 @@ namespace GTGrimServer.Database.Controllers
 
             string query2 = @"CREATE INDEX IF NOT EXISTS user_specials_userid_idx ON user_specials (userid)";
             _con.Execute(query2);
-        }
-
-        public bool CreateTableIfNeeded()
-        {
-            try
-            {
-                CreateTable();
-                return true;
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, "Unable to create table if needed");
-            }
-
-            return false;
         }
     }
 }

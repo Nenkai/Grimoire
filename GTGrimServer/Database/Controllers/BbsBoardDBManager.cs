@@ -56,7 +56,7 @@ namespace GTGrimServer.Database.Controllers
         public async Task RemoveByBoardIdAsync(int boardId)
             => await _con.ExecuteAsync(@"DELETE FROM bbs WHERE bbs_board_id=@Id", new { Id = boardId });
 
-        private void CreateTable()
+        public void CreateTable()
         {
             string query =
             @"CREATE TABLE IF NOT EXISTS bbs (
@@ -72,21 +72,6 @@ namespace GTGrimServer.Database.Controllers
 
             string query2 = @"CREATE INDEX IF NOT EXISTS bbs_bbsboardid_idx ON bbs (bbs_board_id)";
             _con.Execute(query2);
-        }
-
-        public bool CreateTableIfNeeded()
-        {
-            try
-            {
-                CreateTable();
-                return true;
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, "Unable to create table if needed");
-            }
-
-            return false;
         }
     }
 }

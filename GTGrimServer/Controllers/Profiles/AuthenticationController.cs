@@ -179,7 +179,7 @@ namespace GTGrimServer.Controllers.Profiles
             var user = new UserDTO()
             {
                 PSNUserId = ticket.OnlineId,
-                IPAddress = Request.Host.Host,
+                IPAddress = Request.HttpContext.Connection.RemoteIpAddress.ToString(),
                 Nickname = ticket.OnlineId,  // For the first time, the nickname will be the same as the psn name
                 Country = ticket.Region.ToString().TrimEnd('\0').Substring(0, 2),
             };

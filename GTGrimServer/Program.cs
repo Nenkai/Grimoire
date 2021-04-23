@@ -13,7 +13,7 @@ namespace GTGrimServer
 {
     public class Program
     {
-        public static readonly RecyclableMemoryStreamManager StreamManager = new RecyclableMemoryStreamManager();
+        public static readonly RecyclableMemoryStreamManager StreamManager = new();
 
         public static void Main(string[] args)
         {
@@ -21,7 +21,6 @@ namespace GTGrimServer
             Console.WriteLine("Init: Starting host");
 
             CreateHostBuilder(args).Build().Run();
-
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>

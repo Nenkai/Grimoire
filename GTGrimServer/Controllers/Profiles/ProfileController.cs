@@ -430,7 +430,7 @@ namespace GTGrimServer.Controllers.Profiles
             _logger.LogDebug("<- SetPresence - {param}", param.Text);
 
             // No specific response needed
-            var result = GrimResult.FromInt(0);
+            var result = GrimResult.FromInt(1);
             return Ok(result);
         }
 

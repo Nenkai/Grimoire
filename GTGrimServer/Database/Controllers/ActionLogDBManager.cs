@@ -54,7 +54,7 @@ namespace GTGrimServer.Database.Controllers
             => await _con.ExecuteAsync(@"DELETE FROM actionlogs WHERE id=@Id", new { Id = id });
 
 
-        private void CreateTable()
+        public void CreateTable()
         {
             string query =
             @"CREATE TABLE IF NOT EXISTS actionlogs (
@@ -73,21 +73,6 @@ namespace GTGrimServer.Database.Controllers
 
             string query2 = @"CREATE INDEX IF NOT EXISTS actionlogs_user_id_idx ON actionlogs (user_id)";
             _con.Execute(query2);
-        }
-
-        public bool CreateTableIfNeeded()
-        {
-            try
-            {
-                CreateTable();
-                return true;
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, "Unable to create table if needed");
-            }
-
-            return false;
         }
     }
 }

@@ -1,23 +1,21 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Formatters;
-using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Diagnostics;
 
 using Microsoft.IdentityModel.Tokens;
-
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 using System;
-using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Data;
+using System.Threading;
 
 using Npgsql;
 
@@ -37,7 +35,7 @@ namespace GTGrimServer
         }
 
         public IConfiguration Configuration { get; }
-
+        public ILogger<Startup> Logger { get; private set; }
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
@@ -64,12 +62,14 @@ namespace GTGrimServer
             services.AddSingleton<BbsBoardDBManager>();
             services.AddSingleton<CourseDBManager>();
             services.AddSingleton<ActionLogDBManager>();
+            services.AddSingleton<PhotoDBManager>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IHostApplicationLifetime applicationLifetime)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<Startup> logger)
         {
-            Console.WriteLine("Init: Configuring HTTP server");
+            Logger = logger;
+            Logger.LogInformation("Init: Configuring HTTP server");
 
             try
             {
@@ -77,7 +77,7 @@ namespace GTGrimServer
             }
             catch (Exception e)
             {
-                Console.WriteLine($"Init: Unable to init database.");
+                Logger.LogCritical($"Init: Unable to init database. Make sure that the SQL service is running, and a connection to it is possible.");
                 throw;
             }
 
@@ -109,19 +109,53 @@ namespace GTGrimServer
                 endpoints.MapControllers();
             });
 
-            Console.WriteLine("Init: Done configuring host.");
+            app.UseStatusCodePages(async context =>
+            {
+                if (context.HttpContext.Response.StatusCode == StatusCodes.Status404NotFound)
+                    logger.LogWarning($"Unimplemented endpoint: {context.HttpContext.Request.Path}");
+            });
+
+            Logger.LogInformation("Init: Done configuring host.");
         }
 
         public void InitDatabase(IServiceProvider services)
         {
             Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
 
-            services.GetService<UserDBManager>().CreateTableIfNeeded();
-            services.GetService<FriendDBManager>().CreateTableIfNeeded();
-            services.GetService<UserSpecialDBManager>().CreateTableIfNeeded();
-            services.GetService<CourseDBManager>().CreateTableIfNeeded();
-            services.GetService<BbsBoardDBManager>().CreateTableIfNeeded();
-            services.GetService<ActionLogDBManager>().CreateTableIfNeeded();
+            int attempts = 3;
+            bool initialized = false;
+            do
+            {
+                try
+                {
+                    CreateTables(services);
+                    initialized = true;
+                    break;
+                }
+                catch (Exception e)
+                {
+                    attempts--;
+                    if (attempts > 0)
+                    {
+                        Logger.LogError(e, "Could not initialize database, trying {count} more times...", attempts);
+                        Thread.Sleep(TimeSpan.FromSeconds(5));
+                    }
+                }
+            } while (!initialized && attempts != 0);
+
+            if (!initialized)
+                throw new Exception("Unable to initialize database.");
+        }
+
+        private void CreateTables(IServiceProvider services)
+        {
+            services.GetService<UserDBManager>().CreateTable();
+            services.GetService<FriendDBManager>().CreateTable();
+            services.GetService<UserSpecialDBManager>().CreateTable();
+            services.GetService<CourseDBManager>().CreateTable();
+            services.GetService<BbsBoardDBManager>().CreateTable();
+            services.GetService<ActionLogDBManager>().CreateTable();
+            services.GetService<PhotoDBManager>().CreateTable();
         }
 
         public void AddJWTAuthentication(IServiceCollection services)
@@ -173,7 +207,7 @@ namespace GTGrimServer
                 throw new ArgumentException("Init:Jwt audience key missing in user secrets. (Jwt:Audience)");
             }
 
-            Console.WriteLine("Init: User Secrets OK");
+            Logger.LogInformation("Init: User Secrets OK");
         }
     }
 }

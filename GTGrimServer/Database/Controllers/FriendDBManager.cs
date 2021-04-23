@@ -101,7 +101,7 @@ SELECT @UserId, id FROM users WHERE psn_user_id = ANY(@FriendListUserIds) AND id
         public async Task RemoveFriendAsync(long userId, long friendId)
            => await _con.ExecuteAsync(@"DELETE FROM friends WHERE userid=@UserId AND friendid=@FriendId", new { UserId = userId, FriendId = friendId });
 
-        private void CreateTable()
+        public void CreateTable()
         {
             string query =
             @"CREATE TABLE IF NOT EXISTS friends (
@@ -117,21 +117,6 @@ SELECT @UserId, id FROM users WHERE psn_user_id = ANY(@FriendListUserIds) AND id
 
             string query3 = @"CREATE INDEX IF NOT EXISTS friends_friendid_idx ON friends (friendid)";
             _con.Execute(query3);
-        }
-
-        public bool CreateTableIfNeeded()
-        {
-            try
-            {
-                CreateTable();
-                return true;
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, "Unable to create table if needed");
-            }
-
-            return false;
         }
     }
 }
