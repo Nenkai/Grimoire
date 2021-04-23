@@ -9,6 +9,11 @@ namespace GTGrimServer
     {
         public const string PDIUserAgent = "pdistd-http library";
         public const string GT6ServiceID_EU = "EP9001-BCES01893_00";
+
+        public const int MaxPhotoWidth = 3840;
+        public const int MaxPhotoHeight = 2160;
+        public const int MaxPhotoSize = 6_000_000;
+        public const int MaxPhotos = 8;
     }
 
     public enum PFSType

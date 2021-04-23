@@ -10,8 +10,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.IO;
-using System.Xml;
-using System.Xml.Serialization;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Formats.Jpeg;
 
 using GTGrimServer.Config;
 using GTGrimServer.Services;
@@ -25,7 +25,7 @@ using GTGrimServer.Database.Tables;
 namespace GTGrimServer.Controllers
 {
     /// <summary>
-    /// Handles logging made by the game for the server to keep track of what the player is doing.
+    /// Handles sharing photos between friends.
     /// </summary>
     [ApiController]
     [PDIClient]
@@ -120,11 +120,48 @@ namespace GTGrimServer.Controllers
             return Ok(list);
         }
 
+        [HttpGet]
+        [Route("/photo/image/{args}.jpg")]
+        public async Task<ActionResult> GetPhoto(string args)
+        {
+            Player player = Player;
+            if (player is null)
+            {
+                _logger.LogWarning("Could not get current player for host {host}", Request.Host);
+                return Unauthorized();
+            }
+
+            string[] spl = args.Split('_');
+            if (spl.Length != 2)
+                return BadRequest();
+
+            if (!long.TryParse(spl[0], out long photoId) || !int.TryParse(spl[1], out int type)) // 0 is actual image, 1 is thumbnail - for now we just send the same for both
+                return BadRequest();
+
+            if (type is not 0 or 1)
+                return BadRequest();
+
+            int? authorId = await _photoDb.GetAuthorIdOfPhotoAsync(photoId);
+            if (authorId is null)
+                return NotFound();
+
+            if (!await _friendsDb.IsFriendedToUser(player.Data.Id, authorId.Value))
+                return Forbid();
+
+            if (!System.IO.File.Exists($"{_gsOptions.XmlResourcePath}/photo/image/{photoId}_0.jpg"))
+                return NotFound();
+
+            using var fs = new FileStream($"{_gsOptions.XmlResourcePath}/photo/image/{photoId}_0.jpg", FileMode.Open);
+            return File(fs, "image/jpeg");
+        }
+
         [HttpPost]
+        [RequestSizeLimit(GTConstants.MaxPhotoSize)]
         [Route("/ap/[controller]/upload")]
         public async Task<ActionResult> OnRequestUploadImage()
         {
-            if (Player is null)
+            Player player = Player;
+            if (player is null)
             {
                 _logger.LogWarning("Could not get current player for host {host}", Request.Host);
                 return Unauthorized();
@@ -133,9 +170,6 @@ namespace GTGrimServer.Controllers
             var value = Request.Headers["X-gt-xml"];
             if (value.Count != 1)
                 return BadRequest();
-
-            if (Request.ContentLength > 1_024_000)
-                return StatusCode(StatusCodes.Status413PayloadTooLarge);
 
             string xml = value[0];
             if (string.IsNullOrEmpty(xml))
@@ -177,20 +211,42 @@ namespace GTGrimServer.Controllers
                 return BadRequest();
             }
 
+            // Make sure they don't already have more photos that we allow, gets big quick
+            if (await _photoDb.GetPhotoCountOfUserAsync(player.Data.Id) >= GTConstants.MaxPhotos)
+                return Forbid();
+
+            using var ms = Program.StreamManager.GetStream();
+            await Request.Body.CopyToAsync(ms);
+            ms.Position = 0;
+
+            // Check the image itself
+            if (!await VerifyImage(ms, GTConstants.MaxPhotoWidth, GTConstants.MaxPhotoHeight))
+                return BadRequest();
+
             if (type != 3)
                 return BadRequest();
 
             PhotoDTO photo = new PhotoDTO(Player.Data.Id, DateTime.Now, comment.Text, car_name.Text, place.Text);
             long newId = await _photoDb.AddAsync(photo);
 
-            using (var fs = new FileStream($"Resources/photo/image/{newId}.jpg", FileMode.Create))
-                await Response.Body.CopyToAsync(fs);
+            Directory.CreateDirectory($"{_gsOptions.XmlResourcePath}/photo/image");
+
+            ms.Position = 0;
+            using (var fs = new FileStream($"{_gsOptions.XmlResourcePath}/photo/image/{newId}_0.jpg", FileMode.Create))
+                await ms.CopyToAsync(fs);
 
             // To let the client aware of the photo's online id
             var result = GrimResult.FromLong(newId);
             return Ok(result);
         }
 
+        /// <summary>
+        /// Fired when the player deletes an image, or can also be used for the player 
+        /// to sync their local images to the server and removing the ones that the player no longer has.
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="gRequest"></param>
+        /// <returns></returns>
         private async Task<ActionResult> OnRequestDeleteImage(Player player, GrimRequest gRequest)
         {
             if (Player is null)
@@ -215,6 +271,28 @@ namespace GTGrimServer.Controllers
             await _photoDb.RemoveAsync(photo_id);
 
             return Ok(GrimResult.FromBool(true));
+        }
+
+        /// <summary>
+        /// Verifies that the image being uploaded is suitable to be.
+        /// </summary>
+        /// <param name="stream">Stream containing the image.</param>
+        /// <param name="maxWidth">Max photo width.</param>
+        /// <param name="maxHeight">Max photo height.</param>
+        /// <returns></returns>
+        private async Task<bool> VerifyImage(Stream stream, int maxWidth, int maxHeight)
+        {
+            var image = await Image.IdentifyWithFormatAsync(stream);
+            if (image.Format is null)
+                return false;
+
+            if (image.Format is not JpegFormat)
+                return false;
+
+            if (image.ImageInfo.Width > maxWidth || image.ImageInfo.Height > maxHeight)
+                return false;
+
+            return true;
         }
     }
 }

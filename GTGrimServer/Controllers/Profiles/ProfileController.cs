@@ -339,11 +339,11 @@ namespace GTGrimServer.Controllers.Profiles
         {
             if (comment.Length > 80 || playtime.Length > 30)
                 return BadRequest();
-            else if (profileLevel != 0 && profileLevel != 1)
+            else if (profileLevel is not 0 and 1)
                 return BadRequest();
-            else if (commentLevel != 0 && commentLevel != 1)
+            else if (commentLevel is not 0 and 1)
                 return BadRequest();
-            else if (playtimeLevel != 0 && playtimeLevel != 1)
+            else if (playtimeLevel is not 0 and 1)
                 return BadRequest();
 
             // TODO: Swear filtering on profile update

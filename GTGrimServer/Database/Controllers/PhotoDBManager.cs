@@ -30,6 +30,22 @@ namespace GTGrimServer.Database.Controllers
             => await _con.QueryFirstOrDefaultAsync<PhotoDTO>(@"SELECT * FROM photos WHERE id = @Id", new { Id = id });
 
         /// <summary>
+        /// Gets the database id of the user that created an image by id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<int?> GetAuthorIdOfPhotoAsync(long id)
+            => await _con.QueryFirstOrDefaultAsync<int?>(@"SELECT user_id FROM photos WHERE id = @Id", new { Id = id });
+
+        /// <summary>
+        /// Gets the count of photos that an user has.
+        /// </summary>
+        /// <param name="id">Database id of the user's id.</param>
+        /// <returns></returns>
+        public async Task<int?> GetPhotoCountOfUserAsync(long id)
+            => await _con.QueryFirstOrDefaultAsync<int?>(@"SELECT COUNT(id) FROM photos WHERE user_id = @UserId", new { UserId = id });
+
+        /// <summary>
         /// Gets all the photos of an user.
         /// </summary>
         /// <param name="id">Database Id of the user.</param>

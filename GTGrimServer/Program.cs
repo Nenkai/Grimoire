@@ -28,6 +28,7 @@ namespace GTGrimServer
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                    webBuilder.ConfigureKestrel(options => options.Limits.MaxRequestBodySize = 100_000);
                 });
     }
 }
