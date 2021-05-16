@@ -1,4 +1,4 @@
-# GTGrimServer
+# Grimoire
 An Open-source, work in progress Gran Turismo 5/6 Custom Server.
 
 ## State of the project
