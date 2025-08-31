@@ -19,7 +19,7 @@ I tried to contact the owner of this project for a compromise (for instance, usi
 
 ---
 
-This person in particular was well aware that I was working on my own and I have kindly asked not to host theirs using this proof-of-concept to avoid any potential problems with Sony. They could in fact, revoke the NP commnunication key for either games at any given time, which would severly hamper any  reverse-engineering efforts (they have no reverse-engineering knowledge).
+This person in particular was well aware that I was working on my own and I have kindly asked not to host theirs using this proof-of-concept to avoid any potential problems with Sony. They could in fact, revoke the NP commnunication key for either games at any given time, which would severly hamper any  reverse-engineering efforts (they have no reverse-engineering knowledge). Unfortunately they still proceeded and I've seen them first hand host servers with their friends, and then it grew out of proportion into an actual 'project'.
 
 This whole deal has been fueled by what seems to be a lack of patience from the south-american Gran Turismo community which was blindly used to ensure some level of presence and advertisement. To this day I am still seeing this project advertised without any credit whatsoever. Any broken or unimplemented feature that you might see on there are solely because no one knows how to get them working.
 
