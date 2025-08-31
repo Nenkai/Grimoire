@@ -26,3 +26,5 @@ This whole deal has been fueled by what seems to be a lack of patience from the 
 The actual server I was working on was in fact, for the most part, complete (yes, including [Gran Turismo TV](https://www.youtube.com/watch?v=CR6LR0b2_ZE&t=79s) and GT6 Quickmatching). I've put it aside due to a lack of motivation from this incident. 
 
 **Until a project can be created in a responsible manner, this repository (and my other, actual server), will remain this way.**
+
+[Some conversations here.](https://imgur.com/a/xl9qgpK)
