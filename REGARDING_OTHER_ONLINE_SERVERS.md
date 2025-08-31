@@ -23,7 +23,7 @@ This person in particular was well aware that I was working on my own and I have
 
 This whole deal has been fueled by what seems to be a lack of patience from the south-american Gran Turismo community which was blindly used to ensure some level of presence and advertisement. To this day I am still seeing this project advertised without any credit whatsoever. Any broken or unimplemented feature that you might see on there are solely because no one knows how to get them working.
 
-The actual server I was working on was in fact, for the most part, complete (yes, including [Gran Turismo TV](https://www.youtube.com/watch?v=CR6LR0b2_ZE&t=79s) and GT6 Quickmatching). I've put it aside due to a lack of motivation from this incident. 
+The actual server I was working on was in fact, for the most part, complete (yes, including [Gran Turismo TV](https://www.youtube.com/watch?v=CR6LR0b2_ZE&t=79s), Online BSpec, all community features, GT6 Quickmatching, Clubs, and more). I've put it aside due to a lack of motivation from this incident. 
 
 **Until a project can be created in a responsible manner, this repository (and my other, actual server), will remain this way.**
 
