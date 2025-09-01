@@ -1,6 +1,6 @@
 # Regarding "Other" Online Servers
 
-This repository is the first and only implementation of a custom server for either GT5, or GT6 back in 2021. If you're here from the GT5 MM/GT6 Spec II mod, note that this was only written to spread awareness for people potentially wanting to use online servers (aside from the LAN capabilities), neither mods block ability to use online servers.
+This repository is the first and only implementation of a custom server for either GT5, or GT6 back in 2021. If you're here from the GT5 MM/GT6 Spec II mod, note that this was only written to spread awareness for people potentially wanting to use online servers (aside from the LAN capabilities), neither mods block ability to use online servers. This is a statement I wish I did not have to make, but as it stands my mods (and especially Master Mod) stands in the middle of something I did not want to happen for the sake of the community.
 
 I've been aware that other projects have been using this very source project **out of my will**, such as projects run by a certain 'Irekej'.
 
