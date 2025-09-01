@@ -15,7 +15,7 @@ This proof-of-concept, is, well, a PoC, and absolutely not suitable for wide usa
 
 Most importantly **it still requires PSN and a jailbroken console**, which is a big no-no. It's essentially hijacking sony's servers and playing with other users on hacked hardware, meaning your account can be banned at any given time, whether by detection, or by other user reports.
 
-I tried to contact the owner of this project for a compromise (for instance, using RPCS3's RPCN, or using the game's built-in no-PSN features), but I was faced with constant childish remarks, **little credit**, and pretended to agree in taking proper actions to host such a project.
+I tried to contact the owner of this project for a compromise (for instance, using RPCS3's RPCN, or using the game's built-in no-PSN features), but I was faced with constant childish remarks, **little credit**, and they simply pretended to agree in taking proper actions to host such a project.
 
 ---
 
