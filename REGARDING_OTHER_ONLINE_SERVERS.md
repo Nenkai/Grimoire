@@ -1,8 +1,8 @@
 # Regarding "Other" Online Servers
 
-This repository is the first and only implementation of a custom server for either GT5, or GT6.
+This repository is the first and only implementation of a custom server for either GT5, or GT6 back in 2021. If you're here from the GT5 MM/GT6 Spec II mod, note that this was only written to spread awareness for people potentially wanting to use online servers (aside from the LAN capabilities), neither mods block ability to use online servers.
 
-I've been aware that other projects have been using this very source **out of my will**, such as projects run by a certain 'Irekej'.
+I've been aware that other projects have been using this very source project **out of my will**, such as projects run by a certain 'Irekej'.
 
 I initially released a proof of concept (in the event that I am unable to release anything, just incase), while working on an actual server.
 
@@ -25,6 +25,6 @@ This whole deal has been fueled by what seems to be a lack of patience from the 
 
 The actual server I was working on was in fact, for the most part, complete (yes, including [Gran Turismo TV](https://www.youtube.com/watch?v=CR6LR0b2_ZE&t=79s), Online BSpec, all community features, GT6 Quickmatching, Clubs, and more). I've put it aside due to a lack of motivation from this incident. 
 
-**Until a project can be created in a responsible manner, this repository (and my other, actual server), will remain this way.**
+**Until a project can be created in a responsible manner, this repository (and my other, actual server), will remain this way.** If you're experienced and well minded to resume this project, feel free to reach out.
 
 [Some conversations here.](https://imgur.com/a/xl9qgpK)
